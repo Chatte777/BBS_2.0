@@ -62,14 +62,14 @@
         <%
             if(pageNumber!= 1){
         %>
-        <a href="mountain.jsp?boardName=mountain&pageNumber=<%=pageNumber-1%>" class="btn btn-successs btn-arrow-left">이전</a>
+        <a href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=pageNumber-1%>" class="btn btn-successs btn-arrow-left">이전</a>
         <%
             } if(boardDAO.nextPage(pageNumber+1)) {
         %>
-        <a href="mountain.jsp?boardName=mountain&pageNumber=<%=pageNumber+1%>" class="btn btn-successs btn-arrow-right">다음</a>
+        <a href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=pageNumber+1%>" class="btn btn-successs btn-arrow-right">다음</a>
         <%
             }
         %>
-        <a href="mountainWrite.jsp?boardName=mountain" class="btn btn-primary pull-right">글쓰기</a>
+        <a href="boardWrite.jsp?boardName=<%=boardName%>" class="btn btn-primary pull-right">글쓰기</a>
     </div>
 </div>

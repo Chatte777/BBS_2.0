@@ -5,10 +5,6 @@
 <%@ page import = "reply.ReplyDAO" %>
 <%@ page import = "java.io.PrintWriter" %>
 
-<jsp:useBean id="replyVO" class="reply.ReplyVO" scope="page"/>
-<jsp:setProperty name="replyVO" property="replyNo"/>
-<jsp:setProperty name="replyVO" property="boardNo"/>
-
 <% request.setCharacterEncoding("UTF-8"); %>
 
 
@@ -21,6 +17,9 @@
 <body>
 	<%
 		String userId = null;
+		String boardName = request.getParameter("boardName");
+		int boardNo = Integer.parseInt(request.getParameter("boardNo"));
+
 		if(session.getAttribute("userID") != null){
 			userId = (String) session.getAttribute("userID");
 		}
@@ -34,7 +33,7 @@
 		
 			int replyNo = 0;
 			if(request.getParameter("replyNo") != null){
-				replyNo = replyVO.getReplyNo();
+				replyNo = Integer.parseInt(request.getParameter("replyNo"));
 			}
 		
 			if(replyNo == 0){
@@ -45,16 +44,17 @@
 				script.println("</script>"); 
 			}
 
-			if(!userId.equals(replyVO.getReplyMakeUser())){
+		ReplyVO replyVO = new ReplyVO();
+		ReplyDAO replyDAO = new ReplyDAO(boardName);
+		replyVO = replyDAO.getReply(boardNo, replyNo);
+
+		if(!userId.equals(replyVO.getReplyMakeUser())){
 				PrintWriter script = response.getWriter();
 				script.println("<script>");
 				script.println("alert('권한이 없습니다.')");
 				script.println("location.href = 'login.jsp'");
 				script.println("</script>"); 
 			} else {
-				String boardName = request.getParameter("boardName");
-
-				ReplyDAO replyDAO = new ReplyDAO(boardName);
 				int result = replyDAO.delete(replyVO.getBoardNo(), replyNo);
 					
 					if(result == -1){

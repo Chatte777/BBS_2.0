@@ -107,7 +107,7 @@
 					if (successFlag == 1) {
 						PrintWriter script = response.getWriter();
 						script.println("<script>");
-						script.println("location.href='bbs.jsp'");
+						script.println("location.href='board.jsp?boardName="+boardName+"'");
 						script.println("</script>");
 
 					}

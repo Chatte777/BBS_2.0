@@ -64,16 +64,10 @@
 					{
 						PrintWriter script = response.getWriter();
 						script.println("<script>");
-						script.println("location.href='board.jsp'");
+						script.println("location.href='board.jsp?boardName="+boardName+"'");
 						script.println("</script>");
 					}
-			
-		
-		
 		}
-	
-
-			
 	%>
 </body>
 </html>

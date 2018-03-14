@@ -12,15 +12,6 @@
 <%@ page import="reReply.ReReplyVO" %>
 
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width" , initial-scale="1">
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <title>DREAMY CAT</title>
-</head>
-<body>
 <%
     String userId = null;
     String boardName = request.getParameter("boardName");
@@ -105,17 +96,18 @@
                 ArrayList<ReplyVO> list = replyDAO.getList(boardNo);
 
                 for (int i = 0; i < list.size(); i++) {
+                    int replyNo = list.get(i).getReplyNo();
             %>
             <tr>
-                <td align="center"><a onclick="reReplyClick('<%=list.get(i).getReplyNo()%>')" style="text-decoration: none; color: #000000;"><%=list.get(i).getReplyNo()%></a></td>
+                <td align="center"><a onclick="reReplyClick('<%=replyNo%>')" style="text-decoration: none; color: #000000;"><%=replyNo%></a></td>
                 <td align="left" style="word-break: break-all;"><%=list.get(i).getReplyContent().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;")
                         .replaceAll(">", "&gt;").replaceAll("\n", "<br>")%></td>
                 <td align="center" style="width: 5%;">
                     <%
                         if (userId != null && userId.equals(list.get(i).getReplyMakeUser())) {
                     %>
-                    <a onclick="modifyClick('<%=list.get(i).getReplyContent()%>', '<%=list.get(i).getReplyNo()%>')" type="button" class="glyphicon glyphicon-pencil" style="color: #cccccc"/>
-                    <a onclick="return confirm('정말로 삭제하시겠습니까?')" a href="replyDeleteAction.jsp?boardName=<%=boardName%>" type="button" class="close" aria-label="close"/> <span aria-hidden="true">&times;</span> <%
+                    <a onclick="modifyClick('<%=list.get(i).getReplyContent()%>', '<%=replyNo%>')" type="button" class="glyphicon glyphicon-pencil" style="color: #cccccc"/>
+                    <a onclick="return confirm('정말로 삭제하시겠습니까?')" a href="replyDeleteAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>&replyNo=<%=replyNo%>" type="button" class="close" aria-label="close"/> <span aria-hidden="true">&times;</span> <%
                     }
                 %>
                 </td>
@@ -125,7 +117,7 @@
             </tr>
             <%
                 ReReplyDAO reReplyDAO = new ReReplyDAO(boardName);
-                ArrayList<ReReplyVO> listReReply = reReplyDAO.getList(boardNo,list.get(i).getReplyNo());
+                ArrayList<ReReplyVO> listReReply = reReplyDAO.getList(boardNo,replyNo);
 
                 for (int j = 0; j < listReReply.size(); j++) {
             %>
@@ -210,5 +202,3 @@
         }
     }
 </script>
-</body>
-</html>
