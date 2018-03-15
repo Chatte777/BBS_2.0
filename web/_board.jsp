@@ -11,6 +11,7 @@
             <thead>
             <tr>
                 <th style="background-color: #eeeeee; text-align: center;">댓글</th>
+                <th style="background-color: #eeeeee; text-align: center;">조회수</th>
                 <th style="background-color: #eeeeee; text-align: center;">제목</th>
                 <th style="background-color: #eeeeee; text-align: center;">작성자</th>
                 <th style="background-color: #eeeeee; text-align: center;">작성일</th>
@@ -49,6 +50,7 @@
                 else if(replyColorFlag==6){%> style="color:black;"<%}
                 %>>
                     <%if(replyCnt!=0){%><%=replyCnt%><%}%></td>
+                <td><%= list.get(i).getBoardReadCount() %></td>
                 <td><a href="boardView.jsp?boardName=<%=boardName%>&boardNo=<%= list.get(i).getBoardNo() %>"><%= list.get(i).getBoardTitle() %></a></td>
                 <td><%= list.get(i).getBoardMakeUser() %></td>
                 <td><%= list.get(i).getBoardMakeDt().substring(0,11)+list.get(i).getBoardMakeDt().substring(11,13)+"시"+list.get(i).getBoardMakeDt().substring(14,16)+"분" %></td>

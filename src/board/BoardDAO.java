@@ -26,6 +26,8 @@ public class BoardDAO {
     private String colDisLikeCnt;
     private String colDeleteYn;
     private String colAuthorize;
+    private String colReadCount;
+
     private String replyTableName;
 
     public BoardDAO(String boardName) {
@@ -42,6 +44,7 @@ public class BoardDAO {
         this.colDisLikeCnt = boardName+"_dislike_cnt";
         this.colDeleteYn = boardName+"_delete_yn";
         this.colAuthorize = boardName+"_authorize";
+        this.colReadCount = boardName+"_read_count";
         this.replyTableName = boardName+"_reply";
 
         try {
@@ -142,11 +145,13 @@ public class BoardDAO {
                 boardVO.setBoardContent(rs.getString(4));
                 boardVO.setBoardMakeUser(rs.getString(5));
                 boardVO.setBoardMakeDt(rs.getString(6));
-                boardVO.setBoardReadCnt(rs.getInt(7));
+                boardVO.setBoardReplyCnt(rs.getInt(7));
                 boardVO.setBoardLikeCnt(rs.getInt(8));
                 boardVO.setBoardDislikeCnt(rs.getInt(9));
                 boardVO.setBoardDeleteYn(rs.getInt(10));
                 boardVO.setBoardAuthorize(rs.getInt(11));
+                boardVO.setBoardReadCount(rs.getInt(12));
+
                 list.add(boardVO);
             }
         } catch(Exception e){
@@ -190,12 +195,22 @@ public class BoardDAO {
                 boardVO.setBoardContent(rs.getString(4));
                 boardVO.setBoardMakeUser(rs.getString(5));
                 boardVO.setBoardMakeDt(rs.getString(6));
-                boardVO.setBoardReadCnt(rs.getInt(7));
+                boardVO.setBoardReplyCnt(rs.getInt(7));
                 boardVO.setBoardLikeCnt(rs.getInt(8));
                 boardVO.setBoardDislikeCnt(rs.getInt(9));
                 boardVO.setBoardDeleteYn(rs.getInt(10));
                 boardVO.setBoardAuthorize(rs.getInt(11));
+                boardVO.setBoardReadCount(rs.getInt(12));
 
+                String countSQL = "UPDATE " + this.tableName + " SET " + this.colReadCount + " = " + rs.getInt(12)+1 + " WHERE "+ this.colNo +" = ?";
+                try{
+                    PreparedStatement innerPstmt = conn.prepareStatement(countSQL);
+                    innerPstmt.setInt(1, boardNo);
+
+                    innerPstmt.executeUpdate();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
                 return boardVO;
             }
         } catch(Exception e){

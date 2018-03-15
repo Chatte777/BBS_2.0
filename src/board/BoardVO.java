@@ -7,11 +7,12 @@ public class BoardVO {
     private String boardContent;
     private String boardMakeUser;
     private String boardMakeDt;
-    private int boardReadCnt;
+    private int boardReplyCnt;
     private int boardLikeCnt;
     private int boardDislikeCnt;
     private int boardDeleteYn;
     private int boardAuthorize;
+    private int boardReadCount;
 
     public int getBoardNo() {
         return boardNo;
@@ -49,11 +50,11 @@ public class BoardVO {
     public void setBoardMakeDt(String boardMakeDt) {
         this.boardMakeDt = boardMakeDt;
     }
-    public int getBoardReadCnt() {
-        return boardReadCnt;
+    public int getBoardReplyCnt() {
+        return boardReplyCnt;
     }
-    public void setBoardReadCnt(int boardReadCnt) {
-        this.boardReadCnt = boardReadCnt;
+    public void setBoardReplyCnt(int boardReplyCnt) {
+        this.boardReplyCnt = boardReplyCnt;
     }
     public int getBoardLikeCnt() {
         return boardLikeCnt;
@@ -78,5 +79,12 @@ public class BoardVO {
     }
     public void setBoardAuthorize(int boardAuthorize) {
         this.boardAuthorize = boardAuthorize;
+    }
+    public int getBoardReadCount() {
+        return boardReadCount;
+    }
+
+    public void setBoardReadCount(int boardReadCount) {
+        this.boardReadCount = boardReadCount;
     }
 }
