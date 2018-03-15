@@ -36,6 +36,7 @@
             <li><a href="main.jsp">메인</a></li>
             <li><a href="board.jsp?boardName=notify">공지 및 건의</a></li>
             <li><a href="board.jsp?boardName=mountain">산악일기</a></li>
+            <li><a href="test.jsp">서기원</a></li>
             <%
                 if (userID != null && (userID.equals("slop1434") || userID.equals("chatte777") || userID.equals("test"))) {
             %>
