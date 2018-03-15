@@ -189,6 +189,8 @@ public class BoardDAO {
 
             if (rs.next()){
                 BoardVO boardVO = new BoardVO();
+                int readCount = rs.getInt(12);
+
                 boardVO.setBoardNo(rs.getInt(1));
                 boardVO.setBoardTitle(rs.getString(2));
                 boardVO.setBoardTm(rs.getInt(3));
@@ -200,9 +202,10 @@ public class BoardDAO {
                 boardVO.setBoardDislikeCnt(rs.getInt(9));
                 boardVO.setBoardDeleteYn(rs.getInt(10));
                 boardVO.setBoardAuthorize(rs.getInt(11));
-                boardVO.setBoardReadCount(rs.getInt(12));
+                boardVO.setBoardReadCount(readCount);
+                readCount++;
 
-                String countSQL = "UPDATE " + this.tableName + " SET " + this.colReadCount + " = " + rs.getInt(12)+1 + " WHERE "+ this.colNo +" = ?";
+                String countSQL = "UPDATE " + this.tableName + " SET " + this.colReadCount + " = " + readCount + " WHERE "+ this.colNo +" = ?";
                 try{
                     PreparedStatement innerPstmt = conn.prepareStatement(countSQL);
                     innerPstmt.setInt(1, boardNo);
