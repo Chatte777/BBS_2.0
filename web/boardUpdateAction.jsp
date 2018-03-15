@@ -1,31 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<%@ page import="bbs.BbsDAO"%>
-<%@ page import="bbs.Bbs"%>
+
 <%@ page import="java.io.PrintWriter"%>
 <%@ page import="file.FileDAO"%>
 <%@ page import="java.io.File"%>
 <%@ page import="com.oreilly.servlet.multipart.DefaultFileRenamePolicy"%>
 <%@ page import="com.oreilly.servlet.MultipartRequest"%>
 <%@ page import="java.util.Enumeration"%>
+<%@ page import="board.BoardDAO" %>
+<%@ page import="board.BoardVO" %>
 
 
 <%
 	request.setCharacterEncoding("UTF-8");
-%>
 
-
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>DREAMY CAT</title>
-</head>
-<body>
-	<%
 		String userID = null;
-		String threadTitle = null;
-		String threadContent = null;
 
 		String tmpDirDesktop = "E:/Dropbox/Workspace/Eclipse/BBS/WebContent/images/uploadFile/mountainFile/";
 		String tmpDirLaptop = "C:/Workspace/Eclipse/BBS/WebContent/images/uploadFile/mountainFile/";
@@ -47,12 +36,12 @@
 			script.println("</script>");
 		}
 
-		int bbsID = 0;
-		if (request.getParameter("bbsID") != null) {
-			bbsID = Integer.parseInt(request.getParameter("bbsID"));
+		int boardNo = 0;
+		if (request.getParameter("boardNo") != null) {
+			boardNo = Integer.parseInt(request.getParameter("boardNo"));
 		}
 
-		if (bbsID == 0) {
+		if (boardNo == 0) {
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
 			script.println("alert('유효하지 않은 글입니다.')");
@@ -60,27 +49,30 @@
 			script.println("</script>");
 		}
 
-		Bbs bbs = new BbsDAO().getBbs(bbsID);
-		if (!userID.equals(bbs.getUserID())) {
+		String boardName = request.getParameter("boardName");
+
+		BoardDAO boardDAO = new BoardDAO(boardName);
+		BoardVO boardVO = boardDAO.getBoardVO(boardNo);
+
+		if (!userID.equals(boardVO.getBoardMakeUser())) {
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
 			script.println("alert('권한이 없습니다.')");
 			script.println("location.href = 'login.jsp'");
 			script.println("</script>");
 		} else {
-			if (multipartRequest.getParameterValues("bbsTitle")[0] == null
-					|| multipartRequest.getParameterValues("bbsContent")[0] == null) {
+			if (multipartRequest.getParameterValues("boardTitle")[0] == null
+					|| multipartRequest.getParameterValues("boardContent")[0] == null) {
 				PrintWriter script = response.getWriter();
 				script.println("<script>");
 				script.println("alert('입력이 안된 사항이 있습니다.')");
 				script.println("history.back()");
 				script.println("</script>");
 			} else {
-				BbsDAO bbsDAO = new BbsDAO();
-
-				int result = bbsDAO.update(Integer.parseInt(multipartRequest.getParameterValues("bbsID")[0]),
-						multipartRequest.getParameterValues("bbsTitle")[0],
-						multipartRequest.getParameterValues("bbsContent")[0]);
+				int result = boardDAO.update(Integer.parseInt(multipartRequest.getParameterValues("boardNo")[0]),
+						multipartRequest.getParameterValues("boardTitle")[0],
+						multipartRequest.getParameterValues("boardContent")[0],
+						Integer.parseInt(multipartRequest.getParameterValues("boardAuthorize")[0]));
 
 				if (result == -1) {
 					PrintWriter script = response.getWriter();
@@ -118,7 +110,7 @@
 							script.println("</script>");
 							break;
 						} else {
-							new FileDAO().upload(fileClientName, fileServerName, result);
+							new FileDAO(boardName).upload(fileClientName, fileServerName, result);
 							//out.write("파일명: " + fileName + "<br>");
 							//out.write("실제파일명: " + fileRealName + "<br>");
 
@@ -128,12 +120,10 @@
 						PrintWriter script = response.getWriter();
 						script.println("<script>");
 						script.println("alert('수정 되었습니다..')");
-						script.println("location.href='bbs.jsp'");
+						script.println("location.href='boardView.jsp?boardName="+boardName+"&boardNo="+boardNo+"'");
 						script.println("</script>");
 					}
 				}
 			}
 		}
 	%>
-</body>
-</html>

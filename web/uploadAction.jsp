@@ -8,14 +8,6 @@
 <%@ page import="java.io.PrintWriter"%>
 <%@ page import="java.util.Enumeration"%>
 
-
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>DREAMY CAT</title>
-</head>
-<body>
 	<%
 	/*
 	//String directory = application.getRealPath("/upload/");
@@ -58,5 +50,3 @@
 	}
 	*/
 	%>
-</body>
-</html>

@@ -5,13 +5,6 @@
 <%@ page import="file.FileDAO"%>
 <%@ page import="java.util.ArrayList"%>
 
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>DREAMY CAT</title>
-</head>
-<body>
 	<!-- 
 	<%
 	/*
@@ -25,5 +18,3 @@
 	*/
 	%>
 	 -->
-</body>
-</html>

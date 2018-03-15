@@ -10,14 +10,6 @@
 <jsp:setProperty name="replyVO" property="replyNo"/>
 <jsp:setProperty name="replyVO" property="boardNo"/>
 
-
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>DREAMY CAT</title>
-</head>
-<body>
 	<%
 		String userId = null;
 		if(session.getAttribute("userID") != null){
@@ -54,5 +46,3 @@
 		}
 		}
 	%>
-</body>
-</html>

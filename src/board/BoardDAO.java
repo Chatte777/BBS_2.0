@@ -95,7 +95,7 @@ public class BoardDAO {
     }
 
     public int write(String boardTitle, String boardMakeUser, String boardContent, int boardAuthorize){
-        String SQL = "INSERT INTO "+ this.tableName +" VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+        String SQL = "INSERT INTO "+ this.tableName +" VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
         int tmpNextNo = getNext();
 
         try{
@@ -111,6 +111,7 @@ public class BoardDAO {
             pstmt.setInt(9, 1);
             pstmt.setInt(10, 1);
             pstmt.setInt(11, boardAuthorize);
+            pstmt.setInt(12, 0);
 
             pstmt.executeUpdate();
 

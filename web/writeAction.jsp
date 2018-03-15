@@ -17,14 +17,6 @@
 <jsp:setProperty name="bbs" property="bbsTitle" />
 <jsp:setProperty name="bbs" property="bbsContent" />
 
-
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>DREAMY CAT</title>
-</head>
-<body>
 	<%
 		String userID = null;
 		String bbsTitle = null;
@@ -116,14 +108,3 @@
 			}
 		}
 	%>
-</body>
-</html>
-
-
-
-
-
-
-
-
-

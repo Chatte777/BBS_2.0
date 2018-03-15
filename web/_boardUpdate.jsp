@@ -42,7 +42,7 @@
 
 	<div class="container">
 		<div class="row">
-			<form method="post" action="boardUpdateAction.jsp?boardNo=<%=boardNo%>" enctype="multipart/form-data">
+			<form method="post" action="boardUpdateAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>" enctype="multipart/form-data">
 				<table class="table table-striped"
 					style="text-align: center; border: 1px solid #dddddd">
 					<thead>
@@ -57,12 +57,13 @@
 						<tr>
 						<tr>
 							<td><input type="text" class="form-control"
-								placeholder="글 제목" name="bbsTitle" maxlength="50"
+								placeholder="글 제목" name="boardTitle" maxlength="50"
 								value="<%=boardVO.getBoardTitle()%>"></td>
+							<td><select class="form-control" name="boardAuthorize"><option value="1" selected>전체공개</option><option value="2">나만보기</option></select></td>
 						</tr>
 						<tr>
-							<td><textarea type="text" class="form-control"
-									placeholder="글 내용" name="bbsContent" maxlength="2048"
+							<td colspan="2"><textarea type="text" class="form-control"
+									placeholder="글 내용" name="boardContent" maxlength="2048"
 									style="height: 350px;"><%=boardVO.getBoardContent()%></textarea></td>
 						</tr>
 						<jsp:include page="_fileUpload.jsp" flush="false"/>

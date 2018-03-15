@@ -11,14 +11,14 @@ public class ReReplyDAO {
 
     private Connection conn;
     private ResultSet rs;
-    private String reReplyTableName;
-    private String replyTableName;
-    private String colNo;
+    private String tableName;
+    private String colBoardNo;
+    private String colReplyNo;
+    private String colReReplyNo;
 
     public ReReplyDAO(String boardName) {
-        this.reReplyTableName = boardName+"_re_reply";
-        this.replyTableName = boardName+"_reply";
-        this.colNo = boardName+"_no";
+        this.tableName = boardName+"_re_reply";
+        this.colBoardNo = boardName+"_no";
 
         try {
             String ipStr;
@@ -54,7 +54,7 @@ public class ReReplyDAO {
     }
 
     public int getNext(int boardNo, int replyNo) {
-        String SQL = "SELECT count(1) FROM "+ this.reReplyTableName +" WHERE "+ this.colNo +" = ? and reply_no=?";
+        String SQL = "SELECT count(1) FROM "+ this.tableName +" WHERE "+ this.colBoardNo +" = ? and reply_no=?";
         try {
             PreparedStatement pstmt = conn.prepareStatement(SQL);
             pstmt.setInt(1, boardNo);
@@ -72,7 +72,7 @@ public class ReReplyDAO {
     }
 
     public int write(int boardNo, int replyNo, String replyMakeUser, String replyContent) {
-        String SQL = "INSERT INTO "+ this.reReplyTableName +" VALUES(?,?,?,?,?,?,?,?,?)";
+        String SQL = "INSERT INTO "+ this.tableName +" VALUES(?,?,?,?,?,?,?,?,?)";
         try {
             PreparedStatement pstmt = conn.prepareStatement(SQL);
             pstmt.setInt(1, boardNo);
@@ -94,7 +94,7 @@ public class ReReplyDAO {
     }
 
     public ArrayList<ReReplyVO> getList(int boardNo, int replyNo) {
-        String innerSQL = "SELECT * from "+ this.reReplyTableName +" WHERE "+ this.colNo +" =? and reply_no=? and reply_delete_yn=1";
+        String innerSQL = "SELECT * from "+ this.tableName +" WHERE "+ this.colBoardNo +" =? and reply_no=? and re_reply_delete_yn=1";
         ArrayList<ReReplyVO> innerList = new ArrayList<ReReplyVO>();
 
         try {
@@ -156,7 +156,7 @@ public class ReReplyDAO {
      */
 
     public int update(int boardNo, int replyNo, int reReplyNo, String replyContent) {
-        String SQL = "UPDATE "+ this.reReplyTableName +" SET reply_content=? WHERE "+ this.colNo +" =? and reply_no=? and re_reply_no = ?";
+        String SQL = "UPDATE "+ this.tableName +" SET re_reply_content=? WHERE "+ this.colBoardNo +" =? and reply_no=? and re_reply_no = ?";
         try {
             PreparedStatement pstmt = conn.prepareStatement(SQL);
             pstmt.setString(1, replyContent);

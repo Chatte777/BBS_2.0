@@ -1,13 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-<%@ page import = "reply.ReplyDAO" %>
+<%@ page import = "reReply.ReReplyDAO" %>
 <%@ page import = "java.io.PrintWriter" %>
 <% request.setCharacterEncoding("UTF-8"); %>
 
-<jsp:useBean id="replyVO" class="reply.ReplyVO" scope="page"/>
-<jsp:setProperty name="replyVO" property="replyContent"/>
-<jsp:setProperty name="replyVO" property="boardNo"/>
+<jsp:useBean id="reReplyVO" class="reReply.ReReplyVO" scope="page"/>
+<jsp:setProperty name="reReplyVO" property="boardNo"/>
+<jsp:setProperty name="reReplyVO" property="replyNo"/>
 
 	<%
 		String userId = null;
@@ -21,12 +21,14 @@
 			script.println("location.href = 'login.jsp'");
 			script.println("</script>");
 		} else{
-			if(replyVO.getReplyContent()==null){
+			if(request.getParameter("replyContent")==null){
 				
 			} else {
 			    String boardName = request.getParameter("boardName");
-				ReplyDAO replyDAO = new ReplyDAO(boardName);
-				int result = replyDAO.write(replyVO.getBoardNo(), userId, replyVO.getReplyContent());
+			    String reReplyContent = request.getParameter("replyContent");
+
+				ReReplyDAO reReplyDAO = new ReReplyDAO(boardName);
+				int result = reReplyDAO.write(reReplyVO.getBoardNo(), reReplyVO.getReplyNo(), userId, reReplyContent);
 				
 				if(result == -1){
 					PrintWriter script = response.getWriter();
@@ -39,7 +41,7 @@
 				{
 					PrintWriter script = response.getWriter();
 					script.println("<script>");
-					script.println("location.href='boardView.jsp?boardName="+boardName+"&boardNo=" + replyVO.getBoardNo() + "'");
+					script.println("location.href='boardView.jsp?boardName="+boardName+"&boardNo=" + reReplyVO.getBoardNo() + "'");
 					script.println("</script>");
 				}
 		}

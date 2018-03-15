@@ -137,8 +137,8 @@
                 </td>
                 <td><%=listReReply.get(j).getReReplyMakeUser()%></td>
                 <td><%=listReReply.get(j).getReReplyMakeDt().substring(0, 11)
-                        + listReReply.get(i).getReReplyMakeDt().substring(11, 13) + "시"
-                        + listReReply.get(i).getReReplyMakeDt().substring(14, 16) + "분"%></td>
+                        + listReReply.get(j).getReReplyMakeDt().substring(11, 13) + "시"
+                        + listReReply.get(j).getReReplyMakeDt().substring(14, 16) + "분"%></td>
             </tr>
             <%
                     }
@@ -175,28 +175,32 @@
 <script src="js/bootstrap.js"></script>
 
 <script>
-    var updateFlag=1;
+    var _updateFlag=1;
     var _replyNo=0;
 
     function modifyClick(replyContent, replyNo) {
-        updateFlag=2;
+        _updateFlag=2;
         _replyNo=replyNo;
         document.getElementById("replyContent").value = replyContent;
     }
 
     function reReplyClick(replyNo) {
-        updateFlag=3;
+        _updateFlag=3;
         _replyNo=replyNo;
         document.getElementById("replyContent").value = replyNo+"번 리플에 대한 대댓글을 작성하세요.";
     }
 
     function replySubmit(boardName){
-        if(updateFlag==1){
+        if(_updateFlag==1){
             document.replyForm.action="replyAction.jsp?boardName="+boardName;
             document.replyForm.method="post";
             document.replyForm.submit();
-        } else if(updateFlag==2) {
+        } else if(_updateFlag==2) {
             document.replyForm.action="replyUpdateAction.jsp?boardName="+boardName+"&board_no=<%=boardNo%>&replyNo=" + _replyNo;
+            document.replyForm.method="post";
+            document.replyForm.submit();
+        } else if(_updateFlag==3) {
+            document.replyForm.action="reReplyAction.jsp?boardName="+boardName+"&board_no=<%=boardNo%>&replyNo=" + _replyNo;
             document.replyForm.method="post";
             document.replyForm.submit();
         }

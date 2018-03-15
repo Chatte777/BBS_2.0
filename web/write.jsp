@@ -43,7 +43,6 @@
 				</table>
 				<input type="submit" class="btn btn-primary pull-right" value="작성완료">
 			</form>
-
 		</div>
 	</div>
 

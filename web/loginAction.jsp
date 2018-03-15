@@ -9,13 +9,6 @@
 <jsp:setProperty name="user" property="userID"/>
 <jsp:setProperty name="user" property="userPassword"/>
 
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>DREAMY CAT</title>
-</head>
-<body>
 	<%
 		String userID = null;
 		if(session.getAttribute("userID") != null){
@@ -63,5 +56,3 @@
 		}
 			
 	%>
-</body>
-</html>
