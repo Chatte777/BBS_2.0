@@ -15,7 +15,7 @@ public class BoardDAO {
     private ResultSet rs;
     private String boardName;
     private String tableName;
-    private String colNo;
+    private String boardNo;
     private String colTitle;
     private String colTm;
     private String colContent;
@@ -33,7 +33,7 @@ public class BoardDAO {
     public BoardDAO(String boardName) {
         this.boardName = boardName;
         this.tableName = boardName+"_master";
-        this.colNo = boardName+"_no";
+        this.boardNo = boardName+"_no";
         this.colTitle = boardName+"_title";
         this.colTm = boardName+"_tm";
         this.colContent = boardName+"_content";
@@ -79,7 +79,7 @@ public class BoardDAO {
     }
 
     public int getNext(){
-        String SQL = "SELECT " + this.colNo + " FROM "+ this.tableName +" ORDER BY "+ this.colNo +" DESC";
+        String SQL = "SELECT " + this.boardNo + " FROM "+ this.tableName +" ORDER BY "+ this.boardNo +" DESC";
         try{
             PreparedStatement pstmt = conn.prepareStatement(SQL);
             rs = pstmt.executeQuery();
@@ -122,19 +122,60 @@ public class BoardDAO {
         return -1; //Database error
     }
 
+    //count가 아니라 index인 이유 : 전체공개 or (비공개&&내가쓴 글)등 조건에 맞는 게시글들에 대해서만 counting해야하므로 실제 갯수를 나타내는 count보다는 참조주소값을 의미하는 index로 네이밍하였음.
+    public int getTotalBoardIndex(String makeUser){
+        String SQL = "SELECT COUNT(1) FROM " + this.tableName
+                + " WHERE " + this.colDeleteYn + " = 1"
+                + " AND ("+ this.colAuthorize +"= 1 OR ("+ this.colAuthorize +"=2 and "+ this.colMakeUser +"=?))";
 
-    public ArrayList<BoardVO> getList(int pageNumber, String userId){
+        try{
+            //조건에 맞는 전체 게시글 갯수
+            int totalBoardCount =1;
+
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setString(1, makeUser);
+
+            rs = pstmt.executeQuery();
+
+            while(rs.next()){
+                totalBoardCount = rs.getInt(1);
+            }
+            return totalBoardCount;
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public ArrayList<BoardVO> getList(int pageNumber, String makeUser){
+        //한 페이지에 출력될 게시글 갯수
+        int boardCountPerPage = 15;
+
+        //전체 개시글 인덱스(갯수)
+        int totalBoardIndex=getTotalBoardIndex(makeUser);
+
+        /*
+        //전체 페이지 갯수(전체 게시글 수가 페이지당 게시글 수로 나누어떨어지지 않으면 나눈 몫에다가 +1
+        int totalPageNo;
+        if((totalBoardIndex%boardCountPerPage)==0) {totalPageNo = totalBoardIndex/boardCountPerPage;}
+        else {totalPageNo = (totalBoardIndex/boardCountPerPage)+1;}
+        */
+
+        //해당 페이지에 불러올 첫 게시글의 index (boardNo가 아니라 query결과의 rowNum)
+        //0부터 시작하여 페이지 넘어갈 때 마다 페이지당 게시글 갯수만큼 증가한다.
+        int startBoardIndex = 0+((pageNumber-1)*boardCountPerPage);
+
         String SQL = "SELECT * from "+ this.tableName
-                + " WHERE "+ this.colNo +" < ? "
-                + " AND "+ this.colDeleteYn +"=1 "
+                + " WHERE " + this.colDeleteYn +"=1 "
                 + " AND ("+ this.colAuthorize +"= 1 OR ("+ this.colAuthorize +"=2 and "+ this.colMakeUser +"=?))"
-                + " ORDER BY "+ this.colNo +" DESC LIMIT 10";
+                + " ORDER BY "+ this.boardNo +"  DESC LIMIT ?,?";
         ArrayList<BoardVO> list = new ArrayList<BoardVO>();
 
         try{
             PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setInt(1, getNext()-(pageNumber-1)*10);
-            pstmt.setString(2, userId);
+            pstmt.setString(1, makeUser);
+            pstmt.setInt(2, startBoardIndex);
+            pstmt.setInt(3, boardCountPerPage);
 
             rs = pstmt.executeQuery();
 
@@ -161,8 +202,64 @@ public class BoardDAO {
         return list; //Database error
     }
 
+    /*
+    **********왜인지는 모르겠는데 '다음'버튼 누를 때 마다 기존의 list에 다음 list가 계속 추가되어 나옴
+    **********나중에 쓸 일이 있을 것 같아서 소스 보존함.
+     public ArrayList<BoardVO> getList(int pageNumber, String makeUser){
+        int boardCountPerPage = 5;
+
+        int totalBoardIndex=getTotalBoardIndex(makeUser);
+
+        int totalPageNo = 1;
+        if((totalBoardIndex%boardCountPerPage)==0) {totalPageNo = totalBoardIndex/boardCountPerPage;}
+        else {totalPageNo = (totalBoardIndex/boardCountPerPage)+1;}
+
+        int startBoardIndex = totalBoardIndex-(boardCountPerPage*(pageNumber-1));
+
+        int endBoardNo = 1;
+        if(pageNumber != totalPageNo) endBoardNo = startBoardIndex - (boardCountPerPage-1);
+
+        String SQL = "SELECT * from "+ this.tableName
+                + " WHERE " + this.colDeleteYn +"=1 "
+                + " AND ("+ this.colAuthorize +"= 1 OR ("+ this.colAuthorize +"=2 and "+ this.colMakeUser +"=?))"
+                + " ORDER BY "+ this.boardNo +"  LIMIT ?,?";
+        ArrayList<BoardVO> list = new ArrayList<BoardVO>();
+
+        try{
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setString(1, makeUser);
+            pstmt.setInt(2, endBoardNo);
+            pstmt.setInt(3, startBoardIndex);
+
+            rs = pstmt.executeQuery();
+            rs.afterLast();
+
+            while (rs.previous()){
+                BoardVO boardVO = new BoardVO();
+                boardVO.setBoardNo(rs.getInt(1));
+                boardVO.setBoardTitle(rs.getString(2));
+                boardVO.setBoardTm(rs.getInt(3));
+                boardVO.setBoardContent(rs.getString(4));
+                boardVO.setBoardMakeUser(rs.getString(5));
+                boardVO.setBoardMakeDt(rs.getString(6));
+                boardVO.setBoardReplyCnt(rs.getInt(7));
+                boardVO.setBoardLikeCnt(rs.getInt(8));
+                boardVO.setBoardDislikeCnt(rs.getInt(9));
+                boardVO.setBoardDeleteYn(rs.getInt(10));
+                boardVO.setBoardAuthorize(rs.getInt(11));
+                boardVO.setBoardReadCount(rs.getInt(12));
+
+                list.add(boardVO);
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return list; //Database error
+    }
+    */
+
     public boolean nextPage(int pageNumber){
-        String SQL = "SELECT * from "+ this.tableName +" WHERE "+ this.colNo +" < ? AND "+ this.colDeleteYn +" = 1";
+        String SQL = "SELECT * from "+ this.tableName +" WHERE "+ this.boardNo +" < ? AND "+ this.colDeleteYn +" = 1";
 
         try{
             PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -180,7 +277,7 @@ public class BoardDAO {
     }
 
     public BoardVO getBoardVO(int boardNo){
-        String SQL = "SELECT * from "+ this.tableName +" WHERE "+ this.colNo +" = ?";
+        String SQL = "SELECT * from "+ this.tableName +" WHERE "+ this.boardNo +" = ?";
 
         try{
             PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -206,7 +303,7 @@ public class BoardDAO {
                 boardVO.setBoardReadCount(readCount);
                 readCount++;
 
-                String countSQL = "UPDATE " + this.tableName + " SET " + this.colReadCount + " = " + readCount + " WHERE "+ this.colNo +" = ?";
+                String countSQL = "UPDATE " + this.tableName + " SET " + this.colReadCount + " = " + readCount + " WHERE "+ this.boardNo +" = ?";
                 try{
                     PreparedStatement innerPstmt = conn.prepareStatement(countSQL);
                     innerPstmt.setInt(1, boardNo);
@@ -224,7 +321,7 @@ public class BoardDAO {
     }
 
     public int update(int boardNo, String boardTitle, String boardContent, int boardAuthorize){
-        String SQL = "UPDATE "+ this.tableName +" SET "+ this.colTitle +" =?, "+ this.colContent +" =?, "+ this.colAuthorize +" =? WHERE "+ this.colNo +" =?";
+        String SQL = "UPDATE "+ this.tableName +" SET "+ this.colTitle +" =?, "+ this.colContent +" =?, "+ this.colAuthorize +" =? WHERE "+ this.boardNo +" =?";
         try{
             PreparedStatement pstmt = conn.prepareStatement(SQL);
             pstmt.setString(1, boardTitle);
@@ -242,7 +339,7 @@ public class BoardDAO {
     }
 
     public int delete(int boardNo){
-        String SQL = "UPDATE "+ this.tableName +" SET "+ this.colDeleteYn +" =2 WHERE "+ this.colNo +" = ?";
+        String SQL = "UPDATE "+ this.tableName +" SET "+ this.colDeleteYn +" =2 WHERE "+ this.boardNo +" = ?";
         try{
             PreparedStatement pstmt = conn.prepareStatement(SQL);
             pstmt.setInt(1, boardNo);
@@ -255,7 +352,7 @@ public class BoardDAO {
     }
 
     public int getReplyCnt(int boardNo) {
-        String SQL = "SELECT COUNT(1) from "+ this.replyTableName +" WHERE "+ this.colNo +" =? and reply_delete_yn=1";
+        String SQL = "SELECT COUNT(1) from "+ this.replyTableName +" WHERE "+ this.boardNo +" =? and reply_delete_yn=1";
 
         try {
             PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -275,7 +372,7 @@ public class BoardDAO {
     }
 
     public int getReplyColor(int boardNo) {
-        String SQL = "SELECT reply_make_dt from "+ this.replyTableName +" WHERE "+ this.colNo +"=? and reply_delete_yn=1 ORDER BY reply_no DESC LIMIT 1";
+        String SQL = "SELECT reply_make_dt from "+ this.replyTableName +" WHERE "+ this.boardNo +"=? and reply_delete_yn=1 ORDER BY reply_no DESC LIMIT 1";
 
         try {
             PreparedStatement pstmt = conn.prepareStatement(SQL);
