@@ -79,6 +79,6 @@
         %>
         <a href="#" class="btn btn-primary btn-arrow-right" style="background: gray;">다음</a>
         <% } %>
-        <a href="boardWrite.jsp?boardName=<%=boardName%>" class="btn btn-primary.disabled pull-right">글쓰기</a>
+        <a href="boardWrite.jsp?boardName=<%=boardName%>" class="btn btn-primary pull-right">글쓰기</a>
     </div>
 </div>
