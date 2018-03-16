@@ -38,17 +38,26 @@
                     for(int i=0; i<list.size(); i++){
                         int replyCnt = boardDAO.getReplyCnt(list.get(i).getBoardNo());
                         int replyColorFlag = boardDAO.getReplyColor(list.get(i).getBoardNo());
+                        int boardColorFlag = boardDAO.getBoardColor(list.get(i).getBoardNo());
             %>
             <tr>
                 <td><%= list.get(i).getBoardReadCount() %></td>
-                <td align="left"><a href="boardView.jsp?boardName=<%=boardName%>&boardNo=<%= list.get(i).getBoardNo() %>"><%= list.get(i).getBoardTitle() %></a></td>
+                <td align="left">
+                    <a href="boardView.jsp?boardName=<%=boardName%>&boardNo=<%= list.get(i).getBoardNo() %>"
+                            <%
+                                if(boardColorFlag==1){%> style="color: #DE2A45;"<%}
+                    else if(boardColorFlag==2){%> style="color:#10BF00;"<%}
+                    else if(boardColorFlag==3){%> style="color:#2865BF;"<%}
+                    else if(boardColorFlag==4){%> style="color:black;"<%}%>>
+                        <%= list.get(i).getBoardTitle() %></a>
+                </td>
                 <td
                         <%
-                            if(replyColorFlag==1){%> style="color:#873286;"<%}
-                else if(replyColorFlag==2){%> style="color:#DE2A45;"<%}
-                else if(replyColorFlag==3){%> style="color:#F5762C;"<%}
-                else if(replyColorFlag==4){%> style="color:#10BF00;"<%}
-                else if(replyColorFlag==5){%> style="color:#2865BF;"<%}
+                            if(replyColorFlag==1){%> style="color: #7A447A; font-weight: bold; font-size:1.2em;"<%}
+                else if(replyColorFlag==2){%> style="color:#DE2A45; font-weight: bold; font-size:1.2em;"<%}
+                else if(replyColorFlag==3){%> style="color:#F5762C; font-weight: bold; font-size:1.2em;"<%}
+                else if(replyColorFlag==4){%> style="color:#10BF00; font-weight: bold; font-size:1.2em;"<%}
+                else if(replyColorFlag==5){%> style="color:#2865BF; font-weight: bold; font-size:1.2em;"<%}
                 else if(replyColorFlag==6){%> style="color:black;"<%}
                 %>>
                     <%if(replyCnt!=0){%><%=replyCnt%><%}%></td>

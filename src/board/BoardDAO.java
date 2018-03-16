@@ -13,9 +13,10 @@ public class BoardDAO {
 
     private Connection conn;
     private ResultSet rs;
+    
     private String boardName;
     private String tableName;
-    private String boardNo;
+    private String colBoardNo;
     private String colTitle;
     private String colTm;
     private String colContent;
@@ -35,7 +36,7 @@ public class BoardDAO {
     public BoardDAO(String boardName) {
         this.boardName = boardName;
         this.tableName = boardName+"_master";
-        this.boardNo = boardName+"_no";
+        this.colBoardNo = boardName+"_no";
         this.colTitle = boardName+"_title";
         this.colTm = boardName+"_tm";
         this.colContent = boardName+"_content";
@@ -81,7 +82,7 @@ public class BoardDAO {
     }
 
     public int getNext(){
-        String SQL = "SELECT " + this.boardNo + " FROM "+ this.tableName +" ORDER BY "+ this.boardNo +" DESC";
+        String SQL = "SELECT " + this.colBoardNo + " FROM "+ this.tableName +" ORDER BY "+ this.colBoardNo +" DESC";
         try{
             PreparedStatement pstmt = conn.prepareStatement(SQL);
             rs = pstmt.executeQuery();
@@ -169,7 +170,7 @@ public class BoardDAO {
         String SQL = "SELECT * from "+ this.tableName
                 + " WHERE " + this.colDeleteYn +"=1 "
                 + " AND ("+ this.colAuthorize +"= 1 OR ("+ this.colAuthorize +"=2 and "+ this.colMakeUser +"=?))"
-                + " ORDER BY "+ this.boardNo +"  DESC LIMIT ?,?";
+                + " ORDER BY "+ this.colBoardNo +"  DESC LIMIT ?,?";
         ArrayList<BoardVO> list = new ArrayList<BoardVO>();
 
         try{
@@ -218,7 +219,7 @@ public class BoardDAO {
     }
 
     public BoardVO getBoardVO(int boardNo){
-        String SQL = "SELECT * from "+ this.tableName +" WHERE "+ this.boardNo +" = ?";
+        String SQL = "SELECT * from "+ this.tableName +" WHERE "+ this.colBoardNo +" = ?";
 
         try{
             PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -244,7 +245,7 @@ public class BoardDAO {
                 boardVO.setBoardReadCount(readCount);
                 readCount++;
 
-                String countSQL = "UPDATE " + this.tableName + " SET " + this.colReadCount + " = " + readCount + " WHERE "+ this.boardNo +" = ?";
+                String countSQL = "UPDATE " + this.tableName + " SET " + this.colReadCount + " = " + readCount + " WHERE "+ this.colBoardNo +" = ?";
                 try{
                     PreparedStatement innerPstmt = conn.prepareStatement(countSQL);
                     innerPstmt.setInt(1, boardNo);
@@ -262,7 +263,7 @@ public class BoardDAO {
     }
 
     public int update(int boardNo, String boardTitle, String boardContent, int boardAuthorize){
-        String SQL = "UPDATE "+ this.tableName +" SET "+ this.colTitle +" =?, "+ this.colContent +" =?, "+ this.colAuthorize +" =? WHERE "+ this.boardNo +" =?";
+        String SQL = "UPDATE "+ this.tableName +" SET "+ this.colTitle +" =?, "+ this.colContent +" =?, "+ this.colAuthorize +" =? WHERE "+ this.colBoardNo +" =?";
         try{
             PreparedStatement pstmt = conn.prepareStatement(SQL);
             pstmt.setString(1, boardTitle);
@@ -280,7 +281,7 @@ public class BoardDAO {
     }
 
     public int delete(int boardNo){
-        String SQL = "UPDATE "+ this.tableName +" SET "+ this.colDeleteYn +" =2 WHERE "+ this.boardNo +" = ?";
+        String SQL = "UPDATE "+ this.tableName +" SET "+ this.colDeleteYn +" =2 WHERE "+ this.colBoardNo +" = ?";
         try{
             PreparedStatement pstmt = conn.prepareStatement(SQL);
             pstmt.setInt(1, boardNo);
@@ -293,7 +294,7 @@ public class BoardDAO {
     }
 
     public int getReplyCnt(int boardNo) {
-        String SQL = "SELECT COUNT(1) from "+ this.replyTableName +" WHERE "+ this.boardNo +" =? and reply_delete_yn=1";
+        String SQL = "SELECT COUNT(1) from "+ this.replyTableName +" WHERE "+ this.colBoardNo +" =? and reply_delete_yn=1";
 
         try {
             PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -313,7 +314,7 @@ public class BoardDAO {
     }
 
     public int getReplyColor(int boardNo) {
-        String SQL = "SELECT reply_make_dt from "+ this.replyTableName +" WHERE "+ this.boardNo +"=? and reply_delete_yn=1 ORDER BY reply_no DESC LIMIT 1";
+        String SQL = "SELECT reply_make_dt from "+ this.replyTableName +" WHERE "+ this.colBoardNo +"=? and reply_delete_yn=1 ORDER BY reply_no DESC LIMIT 1";
 
         try {
             PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -338,6 +339,7 @@ public class BoardDAO {
 
                 int gapFlag = 0;
 
+                /*
                 if (hourGap < 1) {
                     if (minuteGap < 1) {
                         if (secondGap <= 30) gapFlag = 1; // 30초-보라색
@@ -348,6 +350,57 @@ public class BoardDAO {
                     else gapFlag = 5;
                 } else if (hourGap <= 2) gapFlag = 5; // 2시간-파란색
                 else gapFlag = 6; // 검정색
+                */
+
+                if (hourGap < 1) {
+                    if (minuteGap < 1) {
+                        if (secondGap <= 30) gapFlag = 1; // 30초-보라색
+                        else gapFlag = 2;
+                    } else if (minuteGap <= 3)  gapFlag = 2; // 3분-빨간색
+                    else if (minuteGap <= 10) gapFlag = 3; // 10분-주황색
+                    else if (minuteGap <= 30) gapFlag = 4; // 30분-초록색
+                    else gapFlag = 5;
+                } else if (hourGap <= 2) gapFlag = 5; // 2시간-파란색
+                else gapFlag = 6; // 검정색
+
+                return gapFlag;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public int getBoardColor(int boardNo) {
+        String SQL = "SELECT "+ this.colMakeDt +" from "+ this.tableName +" WHERE "+ this.colBoardNo +"=? and "+ this.colDeleteYn +" =1 ORDER BY "+ this.colBoardNo +" DESC LIMIT 1";
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setInt(1, boardNo);
+
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                String boardMakeTime = rs.getString(1);
+                Date boardMakeTimeDt = formatter.parse(boardMakeTime);
+
+                Date nowTimeDt = new Date();
+
+                long gap = (nowTimeDt.getTime() - boardMakeTimeDt.getTime()) / 1000;
+
+                long hourGap = gap / 60 / 60;
+                long reminder = ((long) (gap / 60) % 60);
+                long minuteGap = reminder;
+                long secondGap = gap % 60;
+
+                int gapFlag = 0;
+
+                if (hourGap < 2) {gapFlag=1;} // 2시간-빨간색
+                else if (hourGap < 10) gapFlag = 2; // 10시간-초록색
+                else if (hourGap < 24) gapFlag = 3; // 24시간-파란색
+                else gapFlag = 4; // 검정색
 
                 return gapFlag;
             }
