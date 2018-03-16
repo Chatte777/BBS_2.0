@@ -30,6 +30,8 @@ public class BoardDAO {
 
     private String replyTableName;
 
+    private int boardCountPerPage=15;
+
     public BoardDAO(String boardName) {
         this.boardName = boardName;
         this.tableName = boardName+"_master";
@@ -148,11 +150,10 @@ public class BoardDAO {
     }
 
     public ArrayList<BoardVO> getList(int pageNumber, String makeUser){
-        //한 페이지에 출력될 게시글 갯수
-        int boardCountPerPage = 15;
-
+        /*
         //전체 개시글 인덱스(갯수)
         int totalBoardIndex=getTotalBoardIndex(makeUser);
+        */
 
         /*
         //전체 페이지 갯수(전체 게시글 수가 페이지당 게시글 수로 나누어떨어지지 않으면 나눈 몫에다가 +1
@@ -202,78 +203,18 @@ public class BoardDAO {
         return list; //Database error
     }
 
-    /*
-    **********왜인지는 모르겠는데 '다음'버튼 누를 때 마다 기존의 list에 다음 list가 계속 추가되어 나옴
-    **********나중에 쓸 일이 있을 것 같아서 소스 보존함.
-     public ArrayList<BoardVO> getList(int pageNumber, String makeUser){
-        int boardCountPerPage = 5;
-
+    public boolean isNextPage(int pageNumber, String makeUser){
         int totalBoardIndex=getTotalBoardIndex(makeUser);
 
-        int totalPageNo = 1;
+        //전체 페이지 갯수(전체 게시글 수가 페이지당 게시글 수로 나누어떨어지지 않으면 나눈 몫에다가 +1
+        int totalPageNo;
         if((totalBoardIndex%boardCountPerPage)==0) {totalPageNo = totalBoardIndex/boardCountPerPage;}
         else {totalPageNo = (totalBoardIndex/boardCountPerPage)+1;}
 
-        int startBoardIndex = totalBoardIndex-(boardCountPerPage*(pageNumber-1));
-
-        int endBoardNo = 1;
-        if(pageNumber != totalPageNo) endBoardNo = startBoardIndex - (boardCountPerPage-1);
-
-        String SQL = "SELECT * from "+ this.tableName
-                + " WHERE " + this.colDeleteYn +"=1 "
-                + " AND ("+ this.colAuthorize +"= 1 OR ("+ this.colAuthorize +"=2 and "+ this.colMakeUser +"=?))"
-                + " ORDER BY "+ this.boardNo +"  LIMIT ?,?";
-        ArrayList<BoardVO> list = new ArrayList<BoardVO>();
-
-        try{
-            PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setString(1, makeUser);
-            pstmt.setInt(2, endBoardNo);
-            pstmt.setInt(3, startBoardIndex);
-
-            rs = pstmt.executeQuery();
-            rs.afterLast();
-
-            while (rs.previous()){
-                BoardVO boardVO = new BoardVO();
-                boardVO.setBoardNo(rs.getInt(1));
-                boardVO.setBoardTitle(rs.getString(2));
-                boardVO.setBoardTm(rs.getInt(3));
-                boardVO.setBoardContent(rs.getString(4));
-                boardVO.setBoardMakeUser(rs.getString(5));
-                boardVO.setBoardMakeDt(rs.getString(6));
-                boardVO.setBoardReplyCnt(rs.getInt(7));
-                boardVO.setBoardLikeCnt(rs.getInt(8));
-                boardVO.setBoardDislikeCnt(rs.getInt(9));
-                boardVO.setBoardDeleteYn(rs.getInt(10));
-                boardVO.setBoardAuthorize(rs.getInt(11));
-                boardVO.setBoardReadCount(rs.getInt(12));
-
-                list.add(boardVO);
-            }
-        } catch(Exception e){
-            e.printStackTrace();
-        }
-        return list; //Database error
-    }
-    */
-
-    public boolean nextPage(int pageNumber){
-        String SQL = "SELECT * from "+ this.tableName +" WHERE "+ this.boardNo +" < ? AND "+ this.colDeleteYn +" = 1";
-
-        try{
-            PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setInt(1, getNext()-(pageNumber-1)*10);
-
-            rs = pstmt.executeQuery();
-
-            if (rs.next()){
-                return true;
-            }
-        } catch(Exception e){
-            e.printStackTrace();
-        }
-        return false;
+        //변수로 받은 pageNumber가 totalPageNumber보다 작으면 다음 페이지가 있다.(true)
+        //같아질 때 부터(같거나 크면) 다음 페이지가 없다.(false)
+        if(pageNumber<totalPageNo) return true;
+        else return false;
     }
 
     public BoardVO getBoardVO(int boardNo){

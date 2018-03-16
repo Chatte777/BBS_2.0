@@ -66,12 +66,19 @@
         %>
         <a href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=pageNumber-1%>" class="btn btn-successs btn-arrow-left">이전</a>
         <%
-            } if(boardDAO.nextPage(pageNumber+1)) {
+            } else { %>
+        <a href="#" class="btn btn-primary.disabled btn-arrow-left">이전</a>
+        <%
+            }
+
+            if(boardDAO.isNextPage(pageNumber, userId)) {
         %>
         <a href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=pageNumber+1%>" class="btn btn-successs btn-arrow-right">다음</a>
         <%
-            }
+            } else {
         %>
-        <a href="boardWrite.jsp?boardName=<%=boardName%>" class="btn btn-primary pull-right">글쓰기</a>
+        <a href="#" class="btn btn-arrow-right" style="color:gray;">다음</a>
+        <% } %>
+        <a href="boardWrite.jsp?boardName=<%=boardName%>" class="btn btn-primary.disabled pull-right">글쓰기</a>
     </div>
 </div>
