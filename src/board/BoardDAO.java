@@ -98,23 +98,24 @@ public class BoardDAO {
     }
 
     public int write(String boardTitle, String boardMakeUser, String boardContent, int boardAuthorize){
-        String SQL = "INSERT INTO "+ this.tableName +" VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+        String SQL = "INSERT INTO "+ this.tableName +" VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
         int tmpNextNo = getNext();
 
         try{
             PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setInt(1, tmpNextNo);
-            pstmt.setString(2, boardTitle);
-            pstmt.setInt(3, 1);
-            pstmt.setString(4, boardContent);
-            pstmt.setString(5, boardMakeUser);
-            pstmt.setString(6, getDate());
-            pstmt.setInt(7, 1);
+            pstmt.setString(1,this.tableName);
+            pstmt.setInt(2, tmpNextNo);
+            pstmt.setString(3, boardTitle);
+            pstmt.setInt(4, 1);
+            pstmt.setString(5, boardContent);
+            pstmt.setString(6, boardMakeUser);
+            pstmt.setString(7, getDate());
             pstmt.setInt(8, 1);
             pstmt.setInt(9, 1);
             pstmt.setInt(10, 1);
-            pstmt.setInt(11, boardAuthorize);
-            pstmt.setInt(12, 0);
+            pstmt.setInt(11, 1);
+            pstmt.setInt(12, boardAuthorize);
+            pstmt.setInt(13, 0);
 
             pstmt.executeUpdate();
 
@@ -232,17 +233,18 @@ public class BoardDAO {
                 BoardVO boardVO = new BoardVO();
                 int readCount = rs.getInt(12);
 
-                boardVO.setBoardNo(rs.getInt(1));
-                boardVO.setBoardTitle(rs.getString(2));
-                boardVO.setBoardTm(rs.getInt(3));
-                boardVO.setBoardContent(rs.getString(4));
-                boardVO.setBoardMakeUser(rs.getString(5));
-                boardVO.setBoardMakeDt(rs.getString(6));
-                boardVO.setBoardReplyCnt(rs.getInt(7));
-                boardVO.setBoardLikeCnt(rs.getInt(8));
-                boardVO.setBoardDislikeCnt(rs.getInt(9));
-                boardVO.setBoardDeleteYn(rs.getInt(10));
-                boardVO.setBoardAuthorize(rs.getInt(11));
+                boardVO.setTableName(rs.getString(1));
+                boardVO.setBoardNo(rs.getInt(2));
+                boardVO.setBoardTitle(rs.getString(3));
+                boardVO.setBoardTm(rs.getInt(4));
+                boardVO.setBoardContent(rs.getString(5));
+                boardVO.setBoardMakeUser(rs.getString(6));
+                boardVO.setBoardMakeDt(rs.getString(7));
+                boardVO.setBoardReplyCnt(rs.getInt(8));
+                boardVO.setBoardLikeCnt(rs.getInt(9));
+                boardVO.setBoardDislikeCnt(rs.getInt(10));
+                boardVO.setBoardDeleteYn(rs.getInt(11));
+                boardVO.setBoardAuthorize(rs.getInt(12));
                 boardVO.setBoardReadCount(readCount);
                 readCount++;
 
