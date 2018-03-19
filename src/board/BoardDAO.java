@@ -103,7 +103,7 @@ public class BoardDAO {
 
         try{
             PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setString(1,this.tableName);
+            pstmt.setString(1,this.boardName);
             pstmt.setInt(2, tmpNextNo);
             pstmt.setString(3, boardTitle);
             pstmt.setInt(4, 1);
@@ -444,18 +444,19 @@ public class BoardDAO {
 
             while (rs.next()){
                 BoardVO boardVO = new BoardVO();
-                boardVO.setBoardNo(rs.getInt(1));
-                boardVO.setBoardTitle(rs.getString(2));
-                boardVO.setBoardTm(rs.getInt(3));
-                boardVO.setBoardContent(rs.getString(4));
-                boardVO.setBoardMakeUser(rs.getString(5));
-                boardVO.setBoardMakeDt(rs.getString(6));
-                boardVO.setBoardReplyCnt(rs.getInt(7));
-                boardVO.setBoardLikeCnt(rs.getInt(8));
-                boardVO.setBoardDislikeCnt(rs.getInt(9));
-                boardVO.setBoardDeleteYn(rs.getInt(10));
-                boardVO.setBoardAuthorize(rs.getInt(11));
-                boardVO.setBoardReadCount(rs.getInt(12));
+                boardVO.setTableName(rs.getString(1));
+                boardVO.setBoardNo(rs.getInt(2));
+                boardVO.setBoardTitle(rs.getString(3));
+                boardVO.setBoardTm(rs.getInt(4));
+                boardVO.setBoardContent(rs.getString(5));
+                boardVO.setBoardMakeUser(rs.getString(6));
+                boardVO.setBoardMakeDt(rs.getString(7));
+                boardVO.setBoardReplyCnt(rs.getInt(8));
+                boardVO.setBoardLikeCnt(rs.getInt(9));
+                boardVO.setBoardDislikeCnt(rs.getInt(10));
+                boardVO.setBoardDeleteYn(rs.getInt(11));
+                boardVO.setBoardAuthorize(rs.getInt(12));
+                boardVO.setBoardReadCount(rs.getInt(13));
 
                 list.add(boardVO);
             }
