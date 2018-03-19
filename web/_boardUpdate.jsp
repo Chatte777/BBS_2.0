@@ -59,7 +59,7 @@
 							<td><input type="text" class="form-control"
 								placeholder="글 제목" name="boardTitle" maxlength="50"
 								value="<%=boardVO.getBoardTitle()%>"></td>
-							<td><select class="form-control" name="threadAuthorize"><option value="1" <%if (boardVO.getBoardAuthorize()==1){ %>selected <%}%>>전체공개</option><option value="2"  <%if (boardVO.getBoardAuthorize()==2){ %>selected <%}%>>나만보기</option></select></td>
+							<td><select class="form-control" name="boardAuthorize"><option value="1" <%if (boardVO.getBoardAuthorize()==1){ %>selected <%}%>>전체공개</option><option value="2"  <%if (boardVO.getBoardAuthorize()==2){ %>selected <%}%>>나만보기</option></select></td>
 						</tr>
 						<tr>
 							<td colspan="2"><textarea type="text" class="form-control"
