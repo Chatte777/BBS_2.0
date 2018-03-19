@@ -183,18 +183,19 @@ public class BoardDAO {
 
             while (rs.next()){
                 BoardVO boardVO = new BoardVO();
-                boardVO.setBoardNo(rs.getInt(1));
-                boardVO.setBoardTitle(rs.getString(2));
-                boardVO.setBoardTm(rs.getInt(3));
-                boardVO.setBoardContent(rs.getString(4));
-                boardVO.setBoardMakeUser(rs.getString(5));
-                boardVO.setBoardMakeDt(rs.getString(6));
-                boardVO.setBoardReplyCnt(rs.getInt(7));
-                boardVO.setBoardLikeCnt(rs.getInt(8));
-                boardVO.setBoardDislikeCnt(rs.getInt(9));
-                boardVO.setBoardDeleteYn(rs.getInt(10));
-                boardVO.setBoardAuthorize(rs.getInt(11));
-                boardVO.setBoardReadCount(rs.getInt(12));
+                boardVO.setTableName(rs.getString(1));
+                boardVO.setBoardNo(rs.getInt(2));
+                boardVO.setBoardTitle(rs.getString(3));
+                boardVO.setBoardTm(rs.getInt(4));
+                boardVO.setBoardContent(rs.getString(5));
+                boardVO.setBoardMakeUser(rs.getString(6));
+                boardVO.setBoardMakeDt(rs.getString(7));
+                boardVO.setBoardReplyCnt(rs.getInt(8));
+                boardVO.setBoardLikeCnt(rs.getInt(9));
+                boardVO.setBoardDislikeCnt(rs.getInt(10));
+                boardVO.setBoardDeleteYn(rs.getInt(11));
+                boardVO.setBoardAuthorize(rs.getInt(12));
+                boardVO.setBoardReadCount(rs.getInt(13));
 
                 list.add(boardVO);
             }
@@ -408,5 +409,57 @@ public class BoardDAO {
             e.printStackTrace();
         }
         return -1;
+    }
+
+    public ArrayList<BoardVO> getMyList(int pageNumber, String makeUser){
+               //해당 페이지에 불러올 첫 게시글의 index (boardNo가 아니라 query결과의 rowNum)
+        //0부터 시작하여 페이지 넘어갈 때 마다 페이지당 게시글 갯수만큼 증가한다.
+        int startBoardIndex = 0+((pageNumber-1)*boardCountPerPage);
+
+        String SQL = "SELECT *, notify_make_dt as make_dt FROM notify_master"
+                + " WHERE notify_make_user=?" +
+                " AND notify_delete_yn = 1" +
+                " UNION" +
+                " SELECT *, mountain_make_dt as make_dt FROM mountain_master" +
+                " WHERE mountain_make_user=?" +
+                " AND mountain_delete_yn = 1" +
+                " UNION" +
+                " SELECT *, thread_make_dt as make_dt FROM thread_master" +
+                " WHERE thread_make_user=?" +
+                " AND thread_delete_yn = 1"
+                + " ORDER BY make_dt DESC LIMIT ?,?";
+        ArrayList<BoardVO> list = new ArrayList<BoardVO>();
+
+        try{
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setString(1, makeUser);
+            pstmt.setString(2, makeUser);
+            pstmt.setString(3, makeUser);
+            pstmt.setInt(4, startBoardIndex);
+            pstmt.setInt(5, boardCountPerPage);
+
+            rs = pstmt.executeQuery();
+
+            while (rs.next()){
+                BoardVO boardVO = new BoardVO();
+                boardVO.setBoardNo(rs.getInt(1));
+                boardVO.setBoardTitle(rs.getString(2));
+                boardVO.setBoardTm(rs.getInt(3));
+                boardVO.setBoardContent(rs.getString(4));
+                boardVO.setBoardMakeUser(rs.getString(5));
+                boardVO.setBoardMakeDt(rs.getString(6));
+                boardVO.setBoardReplyCnt(rs.getInt(7));
+                boardVO.setBoardLikeCnt(rs.getInt(8));
+                boardVO.setBoardDislikeCnt(rs.getInt(9));
+                boardVO.setBoardDeleteYn(rs.getInt(10));
+                boardVO.setBoardAuthorize(rs.getInt(11));
+                boardVO.setBoardReadCount(rs.getInt(12));
+
+                list.add(boardVO);
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return list; //Database error
     }
 }

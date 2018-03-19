@@ -20,7 +20,7 @@
         <%
             if (userID != null && (userID.equals("slop1434") || userID.equals("chatte777"))) {
         %>
-        <a class="navbar-brand" href="main.jsp">DREAMY CAT</a>
+        <a class="navbar-brand" href="main.jsp">DREAMY KAT</a>
         <%
         } else {
         %>
@@ -37,6 +37,7 @@
             <li><a href="board.jsp?boardName=notify">공지 및 건의</a></li>
             <li><a href="board.jsp?boardName=mountain">산악일기</a></li>
             <li><a href="test.jsp">서기원</a></li>
+            <%if (userID != null) {%> <li><a href="board.jsp?boardName=myBoard">내가쓴글</a></li> <%}%>
             <%
                 if (userID != null && (userID.equals("slop1434") || userID.equals("chatte777") || userID.equals("test"))) {
             %>

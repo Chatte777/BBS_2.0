@@ -32,10 +32,18 @@
 
                     String boardName = request.getParameter("boardName");
 
-                    BoardDAO boardDAO = new BoardDAO(boardName);
-                    ArrayList<BoardVO> list = boardDAO.getList(pageNumber, userId);
+                BoardDAO boardDAO = new BoardDAO(boardName);
+                ArrayList<BoardVO> list;
+                String tableName;
+
+                if("myBoard".equals(boardName)){
+                        list = boardDAO.getMyList(pageNumber, userId);
+                    } else {
+                        list = boardDAO.getList(pageNumber, userId);
+                    }
 
                     for(int i=0; i<list.size(); i++){
+                        if("myBoard".equals(boardName)) tableName=list.get(i).getTableName();
                         int replyCnt = boardDAO.getReplyCnt(list.get(i).getBoardNo());
                         int replyColorFlag = boardDAO.getReplyColor(list.get(i).getBoardNo());
                         int boardColorFlag = boardDAO.getBoardColor(list.get(i).getBoardNo());

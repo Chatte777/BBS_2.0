@@ -1,6 +1,7 @@
 package board;
 
 public class BoardVO {
+    private String tableName;
     private int boardNo;
     private String boardTitle;
     private int boardTm;
@@ -14,6 +15,13 @@ public class BoardVO {
     private int boardAuthorize;
     private int boardReadCount;
 
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
     public int getBoardNo() {
         return boardNo;
     }
