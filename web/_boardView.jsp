@@ -48,7 +48,7 @@
             <tbody>
             <tr>
                 <td style="width: 20%;">글제목</td>
-                <td colspan="3">
+                <td colspan="3" align="left">
                     <%
                         if(boardVO.getBoardAuthorize()==2){
                     %><span class="glyphicon glyphicon-lock" style="color: #bbbbbb;">&nbsp;</span><%
@@ -59,11 +59,11 @@
             </tr>
             <tr>
                 <td>작성자</td>
-                <td colspan="3"><%=boardVO.getBoardMakeUser()%></td>
+                <td colspan="3" align="left"><%=boardVO.getBoardMakeUser()%></td>
             </tr>
             <tr>
                 <td>작성일자</td>
-                <td colspan="3"><%=boardVO.getBoardMakeDt().substring(0, 11)
+                <td colspan="3" align="left"><%=boardVO.getBoardMakeDt().substring(0, 11)
                         + boardVO.getBoardMakeDt().substring(11, 13) + "시"
                         + boardVO.getBoardMakeDt().substring(14, 16) + "분"%></td>
             </tr>
