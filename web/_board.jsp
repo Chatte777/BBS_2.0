@@ -15,7 +15,7 @@
             <tr>
                 <th style="background-color: #eeeeee; text-align: center;">조회수</th>
                 <th style="background-color: #eeeeee; text-align: center;">제목</th>
-                <%if(!("myBoard".equals(boardName))) {%><th style="background-color: #eeeeee; text-align: center;">댓글</th><%}%>
+                <th style="background-color: #eeeeee; text-align: center;">댓글</th>
                 <th style="background-color: #eeeeee; text-align: center;">작성자</th>
                 <th style="background-color: #eeeeee; text-align: center;">작성일</th>
             </tr>
@@ -42,10 +42,20 @@
                         list = boardDAO.getList(pageNumber, userId);
                     }
 
+                    int replyCnt;
+                    int replyColorFlag;
+                    int boardColorFlag;
+
                     for(int i=0; i<list.size(); i++){
-                        int replyCnt = boardDAO.getReplyCnt(list.get(i).getBoardNo());
-                        int replyColorFlag = boardDAO.getReplyColor(list.get(i).getBoardNo());
-                        int boardColorFlag = boardDAO.getBoardColor(list.get(i).getBoardNo());
+
+                        if("myBoard".equals(boardName)){
+                            replyCnt = boardDAO.getMyReplyCnt(list.get(i).getTableName(), list.get(i).getBoardNo());
+                            replyColorFlag = boardDAO.getMyReplyColor(list.get(i).getTableName(), list.get(i).getBoardNo());
+                        } else {
+                            replyCnt = boardDAO.getReplyCnt(list.get(i).getBoardNo());
+                            replyColorFlag = boardDAO.getReplyColor(list.get(i).getBoardNo());
+                        }
+                        boardColorFlag = boardDAO.getBoardColor(list.get(i).getBoardNo());
             %>
             <tr>
                 <td><%= list.get(i).getBoardReadCount() %></td>
@@ -63,7 +73,6 @@
                     else if(boardColorFlag==4){%> style="color:black;"<%}%>>
                         <%= list.get(i).getBoardTitle() %></a>
                 </td>
-                <%if(!("myBoard".equals(boardName))){%>
                 <td
                         <%
                             if(replyColorFlag==1){%> style="color: #7A447A; font-weight: bold; font-size:1.2em;"<%}
@@ -73,7 +82,7 @@
                 else if(replyColorFlag==5){%> style="color:#2865BF; font-weight: bold; font-size:1.2em;"<%}
                 else if(replyColorFlag==6){%> style="color:black;"<%}
                 %>>
-                    <%if(replyCnt!=0){%><%=replyCnt%><%}%></td> <%}%>
+                    <%if(replyCnt!=0){%><%=replyCnt%><%}%></td>
                 <td><%= list.get(i).getBoardMakeUser() %></td>
                 <td><%= list.get(i).getBoardMakeDt().substring(5,7)+"/"+list.get(i).getBoardMakeDt().substring(8,13)+":"+list.get(i).getBoardMakeDt().substring(14,16) %></td>
             </tr>

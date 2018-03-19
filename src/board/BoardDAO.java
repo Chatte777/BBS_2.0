@@ -316,8 +316,73 @@ public class BoardDAO {
         return -1;
     }
 
+    public int getMyReplyCnt(String tableName, int boardNo) {
+        String SQL = "SELECT COUNT(1) from "+ tableName +"_reply WHERE "+ tableName + "_no =? and reply_delete_yn=1";
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setInt(1, boardNo);
+
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                int replyCnt = rs.getInt(1);
+
+                return replyCnt;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
     public int getReplyColor(int boardNo) {
         String SQL = "SELECT reply_make_dt from "+ this.replyTableName +" WHERE "+ this.colBoardNo +"=? and reply_delete_yn=1 ORDER BY reply_no DESC LIMIT 1";
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setInt(1, boardNo);
+
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                String replyTime = rs.getString(1);
+                Date replyTimeDt = formatter.parse(replyTime);
+
+                Date nowTimeDt = new Date();
+
+                long gap = (nowTimeDt.getTime() - replyTimeDt.getTime()) / 1000;
+
+                long hourGap = gap / 60 / 60;
+                long reminder = ((long) (gap / 60) % 60);
+                long minuteGap = reminder;
+                long secondGap = gap % 60;
+
+                int gapFlag = 0;
+
+                if (hourGap < 1) {
+                    if (minuteGap < 1) {
+                        if (secondGap <= 30) gapFlag = 1; // 30초-보라색
+                        else gapFlag = 2;
+                    } else if (minuteGap <= 3)  gapFlag = 2; // 3분-빨간색
+                    else if (minuteGap <= 10) gapFlag = 3; // 10분-주황색
+                    else if (minuteGap <= 30) gapFlag = 4; // 30분-초록색
+                    else gapFlag = 5;
+                } else if (hourGap <= 2) gapFlag = 5; // 2시간-파란색
+                else gapFlag = 6; // 검정색
+
+                return gapFlag;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public int getMyReplyColor(String tableName, int boardNo) {
+        String SQL = "SELECT reply_make_dt from "+ tableName +"_reply WHERE "+ tableName + "_no=? and reply_delete_yn=1 ORDER BY reply_no DESC LIMIT 1";
 
         try {
             PreparedStatement pstmt = conn.prepareStatement(SQL);
