@@ -48,7 +48,13 @@
             <tbody>
             <tr>
                 <td style="width: 20%;">글제목</td>
-                <td colspan="3"><%=boardVO.getBoardTitle().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;")
+                <td colspan="3">
+                    <%
+                        if(boardVO.getBoardAuthorize()==2){
+                    %><span class="glyphicon glyphicon-lock" style="color: #bbbbbb;">&nbsp;</span><%
+                    }
+                %>
+                    <%=boardVO.getBoardTitle().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;")
                         .replaceAll(">", "&gt;").replaceAll("\n", "<br>")%></td>
             </tr>
             <tr>
