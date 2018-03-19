@@ -43,6 +43,11 @@
             <tr>
                 <td><%= list.get(i).getBoardReadCount() %></td>
                 <td align="left">
+                    <%
+                        if(list.get(i).getBoardAuthorize()==2){
+                    %><span class="glyphicon glyphicon-lock" style="color: #bbbbbb;">&nbsp;</span><%
+                    }
+                %>
                     <a href="boardView.jsp?boardName=<%=boardName%>&boardNo=<%= list.get(i).getBoardNo() %>"
                             <%
                                 if(boardColorFlag==1){%> style="color: #DE2A45;"<%}

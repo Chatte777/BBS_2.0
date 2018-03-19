@@ -27,7 +27,8 @@
 		
 		if(result == 1){
 			session.setAttribute("userID", user.getUserID());
-			
+			session.setMaxInactiveInterval(60*60*24*7);
+
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
 			script.println("location.href = 'main.jsp'");
