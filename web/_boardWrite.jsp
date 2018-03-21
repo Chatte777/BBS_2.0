@@ -11,8 +11,7 @@
                 <thead>
                 <tr>
                     <th colspan="2"
-                        style="background-color: #eeeeee; text-align: center;">게시판
-                        글쓰기 양식</th>
+                        style="background-color: #eeeeee; text-align: center;">게시판 글쓰기 양식</th>
                 </tr>
                 </thead>
 

@@ -194,6 +194,7 @@
     var _replyNo=0;
 
     function modifyClick(replyContent, replyNo) {
+        alert("dd");
         _updateFlag=2;
         _replyNo=replyNo;
         document.getElementById("replyContent").value = replyContent;
