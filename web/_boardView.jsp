@@ -88,7 +88,7 @@
                 %>
 
                     <p class="text-left">
-                        <%=boardVO.getBoardContent().replaceAll("\n", "<br>")%></p>
+                        <%=boardVO.getBoardContent().replaceAll("\n", "<br>").replaceAll(" ", "&nbsp;")%></p>
                 </td>
             </tr>
             </tbody>
