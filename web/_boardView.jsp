@@ -69,7 +69,7 @@
             </tr>
             <tr>
                 <td>내용</td>
-                <td colspan="3" style="min-height: 200px; text-align: center;">
+                <td colspan="3" style="min-height: 200px; text-align: left;">
                     <%
                         FileDAO fileDAO = new FileDAO(boardName);
                         ArrayList<FileVO> fileList = fileDAO.getList(boardVO.getBoardNo());
@@ -88,8 +88,7 @@
                 %>
 
                     <p class="text-left">
-                        <%=boardVO.getBoardContent().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;")
-                                .replaceAll(">", "&gt;").replaceAll("\n", "<br>")%></p>
+                        <%=boardVO.getBoardContent()%></p>
                 </td>
             </tr>
             </tbody>
