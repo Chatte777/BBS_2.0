@@ -72,7 +72,7 @@
 						<jsp:include page="_fileUpload.jsp" flush="false"/>
 					</tbody>
 				</table>
-				<input type="submit" class="btn btn-primary pull-right" value="글수정">
+				<input type="button" onclick="contentSubmit()" class="btn btn-primary pull-right" value="글수정">
 			</form>
 
 		</div>
