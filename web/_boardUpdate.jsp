@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+
+<script type="text/javascript" src="smartEditor\js\HuskyEZCreator.js" charset="utf-8"></script>
+
 <%@ page import="java.io.PrintWriter"%>
 <%@ page import="board.BoardVO"%>
 <%@ page import="board.BoardDAO"%>
@@ -42,7 +45,7 @@
 
 	<div class="container">
 		<div class="row">
-			<form method="post" action="boardUpdateAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>" enctype="multipart/form-data">
+			<form method="post" name="boardForm">
 				<table class="table table-striped"
 					style="text-align: center; border: 1px solid #dddddd">
 					<thead>
@@ -62,9 +65,9 @@
 							<td><select class="form-control" name="boardAuthorize"><option value="1" <%if (boardVO.getBoardAuthorize()==1){ %>selected <%}%>>전체공개</option><option value="2"  <%if (boardVO.getBoardAuthorize()==2){ %>selected <%}%>>나만보기</option></select></td>
 						</tr>
 						<tr>
-							<td colspan="2"><textarea type="text" class="form-control"
-									placeholder="글 내용" name="boardContent" maxlength="2048"
-									style="height: 350px;"><%=boardVO.getBoardContent()%></textarea></td>
+							<td colspan="2"><textarea type="text" class="form-control" name="boardContent" id="boardContent"
+									placeholder="글 내용" maxlength="2048"
+									style="height: 350px;"><%=boardVO.getBoardContent().replaceAll("\n", "<br>").replaceAll(" ", "&nbsp;")%></textarea></td>
 						</tr>
 						<jsp:include page="_fileUpload.jsp" flush="false"/>
 					</tbody>
@@ -74,3 +77,32 @@
 
 		</div>
 	</div>
+
+
+<script type="text/javascript">
+    var oEditors = [];
+
+    nhn.husky.EZCreator.createInIFrame({
+        oAppRef: oEditors,
+        elPlaceHolder: "boardContent",
+        sSkinURI: "smartEditor\\SmartEditor2Skin.html",
+        fCreator: "createSEditor2"
+    });
+
+    // ‘저장’ 버튼을 누르는 등 저장을 위한 액션을 했을 때 submitContents가 호출된다고 가정한다.
+    function contentSubmit() {
+        // 에디터의 내용이 textarea에 적용된다.
+        oEditors.getById["boardContent"].exec("UPDATE_CONTENTS_FIELD", []);
+
+        // 에디터의 내용에 대한 값 검증은 이곳에서
+        // document.getElementById("ir1").value를 이용해서 처리한다.
+
+        try {
+            document.boardForm.action="boardUpdateAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>";
+            document.boardForm.enctype="multipart/form-data";
+            document.boardForm.method="post";
+            document.boardForm.submit();
+        } catch (e) {
+        }
+    }
+</script>
