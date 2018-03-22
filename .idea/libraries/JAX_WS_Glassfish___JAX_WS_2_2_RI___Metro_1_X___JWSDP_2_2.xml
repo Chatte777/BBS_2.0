@@ -26,6 +26,7 @@
       <root url="jar://C:/WebApp/apache-tomcat-8.5.27/lib/servlet-api.jar!/" />
       <root url="jar://C:/WebApp/apache-tomcat-8.5.27/lib/jsp-api.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/cos.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/json-simple-1.1.1.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

@@ -39,7 +39,7 @@ public class ThreadFileDAO {
 			if(rs.next()){
 				return rs.getInt(1)+1;
 			}
-			return 1; //첫 게시물인 경우
+			return 1; 
 		}catch(Exception e){
 			e.printStackTrace();
 		}
