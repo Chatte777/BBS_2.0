@@ -9,6 +9,7 @@
 <%
     String boardName = request.getParameter("boardName");
 %>
+
 <div class="container">
     <div class="row">
         <form method="post" name="boardForm">
@@ -38,61 +39,4 @@
     </div>
 </div>
 
-<script type="text/javascript">
-    function contentSubmit() {
-        try {
-            document.boardForm.action="boardWriteAction.jsp?boardName=<%=boardName%>";
-            document.boardForm.enctype="multipart/form-data";
-            document.boardForm.method="post";
-            document.boardForm.submit();
-        } catch (e) {
-        }
-    }
-
-    $(document).ready(function() {
-        $('#summernote').summernote(
-            {
-                height: 300,                 // set editor height
-                minHeight: null,             // set minimum height of editor
-                maxHeight: null,             // set maximum height of editor
-                focus: true,             // set focus to editable area after initializing summernote
-
-                callbacks: { // 콜백을 사용
-                    // 이미지를 업로드할 경우 이벤트를 발생
-                    onImageUpload: function (files, editor, welEditable) {
-                        sendFile(files[0], this);
-                    }
-                },
-                lang : 'ko-KR',
-                placeholder: '게시판 본문',
-                codemirror: { // codemirror options
-                theme: 'monokai'
-                }
-            });
-    });
-
-    /* summernote에서 이미지 업로드시 실행할 함수 */
-    function sendFile(file, editor) {
-        // 파일 전송을 위한 폼생성
-        data = new FormData();
-        data.append("uploadFile", file);
-        $.ajax({ // ajax를 통해 파일 업로드 처리
-            data : data,
-            type : "POST",
-            url : "./summernote_imageUpload.jsp",
-            cache : false,
-            contentType : false,
-            processData : false,
-            success : function(data) { // 처리가 성공할 경우
-                // 에디터에 이미지
-
-                $(editor).summernote('editor.insertImage', data.url);
-            }
-            ,error:function(request,status,error){
-                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);}
-        });
-    }
-
-
-</script>
-
+<script src="js/_boardFileUpload.js" boardName="<%=boardName%>"></script>

@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="BBS:war exploded">
-    <output-path>$PROJECT_DIR$/out/artifacts/BBS_war_exploded</output-path>
+    <output-path>C:/WebApp/apache-tomcat-8.5.27/webapps</output-path>
     <root id="root">
       <element id="javaee-facet-resources" facet="BBS/web/Web" />
       <element id="directory" name="WEB-INF">

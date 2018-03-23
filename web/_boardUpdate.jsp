@@ -72,7 +72,6 @@
 							<td colspan="2"><textarea <textarea name="boardContent" id="summernote"
 																placeholder="글 내용"  maxlength="2048"><%=boardVO.getBoardContent()%></textarea></td>
 						</tr>
-						<jsp:include page="_fileUpload.jsp" flush="false"/>
 					</tbody>
 				</table>
 				<input type="button" onclick="contentSubmit()" class="btn btn-primary pull-right" value="글수정">
@@ -81,26 +80,4 @@
 		</div>
 	</div>
 
-
-<script type="text/javascript">
-    function contentSubmit() {
-        try {
-            document.boardForm.action="boardUpdateAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>";
-            document.boardForm.enctype="multipart/form-data";
-            document.boardForm.method="post";
-            document.boardForm.submit();
-        } catch (e) {
-        }
-    }
-
-    $(document).ready(function() {
-        $('#summernote').summernote(
-            {
-                height: 300,                 // set editor height
-                minHeight: null,             // set minimum height of editor
-                maxHeight: null,             // set maximum height of editor
-                focus: true                  // set focus to editable area after initializing summernote
-            }
-        );
-    });
-</script>
+<script src="js/_boardFileUpload.js" boardName="<%=boardName%>"></script>

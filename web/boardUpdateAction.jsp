@@ -1,29 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-
 <%@ page import="java.io.PrintWriter"%>
-<%@ page import="file.FileDAO"%>
-<%@ page import="java.io.File"%>
-<%@ page import="com.oreilly.servlet.multipart.DefaultFileRenamePolicy"%>
-<%@ page import="com.oreilly.servlet.MultipartRequest"%>
-<%@ page import="java.util.Enumeration"%>
 <%@ page import="board.BoardDAO" %>
 <%@ page import="board.BoardVO" %>
-
 
 <%
 	request.setCharacterEncoding("UTF-8");
 
 		String userID = null;
-
-		String tmpDirDesktop = "E:/Dropbox/Workspace/Eclipse/BBS/WebContent/images/uploadFile/mountainFile/";
-		String tmpDirLaptop = "C:/Workspace/Eclipse/BBS/WebContent/images/uploadFile/mountainFile/";
-		String directory = tmpDirDesktop;
-		int maxSize = 1024 * 1024 * 100;
-		String encoding = "UTF-8";
-
-		MultipartRequest multipartRequest = new MultipartRequest(request, directory, maxSize, encoding,
-				new DefaultFileRenamePolicy());
 
 		if (session.getAttribute("userID") != null) {
 			userID = (String) session.getAttribute("userID");
@@ -61,18 +45,18 @@
 			script.println("location.href = 'login.jsp'");
 			script.println("</script>");
 		} else {
-			if (multipartRequest.getParameterValues("boardTitle")[0] == null
-					|| multipartRequest.getParameterValues("boardContent")[0] == null) {
+			if (request.getParameter("boardTitle") == null
+					|| request.getParameter("boardContent") == null) {
 				PrintWriter script = response.getWriter();
 				script.println("<script>");
 				script.println("alert('입력이 안된 사항이 있습니다.')");
 				script.println("history.back()");
 				script.println("</script>");
 			} else {
-				int result = boardDAO.update(Integer.parseInt(multipartRequest.getParameterValues("boardNo")[0]),
-						multipartRequest.getParameterValues("boardTitle")[0],
-						multipartRequest.getParameterValues("boardContent")[0],
-						Integer.parseInt(multipartRequest.getParameterValues("boardAuthorize")[0]));
+				int result = boardDAO.update(Integer.parseInt(request.getParameter("boardNo")),
+						request.getParameter("boardTitle"),
+						request.getParameter("boardContent"),
+						Integer.parseInt(request.getParameter("boardAuthorize")));
 
 				if (result == -1) {
 					PrintWriter script = response.getWriter();
@@ -81,42 +65,6 @@
 					script.println("history.back()");
 					script.println("</script>");
 				} else {
-					int successsFlag = 1;
-					Enumeration fileNames = multipartRequest.getFileNames();
-
-					while (fileNames.hasMoreElements()) {
-						String parameter = (String) fileNames.nextElement();
-
-						String fileClientName = multipartRequest.getOriginalFileName(parameter);
-						String fileServerName = multipartRequest.getFilesystemName(parameter);
-						if (fileClientName == null)
-							continue;
-
-						String fileNameLowerCase = fileClientName.toLowerCase();
-						if (!fileNameLowerCase.endsWith(".doc") && !fileNameLowerCase.endsWith(".hwp")
-								&& !fileNameLowerCase.endsWith(".jpg") && !fileNameLowerCase.endsWith(".gif")
-								&& !fileNameLowerCase.endsWith(".png") && !fileNameLowerCase.endsWith(".pdf")
-								&& !fileNameLowerCase.endsWith(".xls") && !fileNameLowerCase.endsWith(".jpeg")) {
-							File file = new File(directory + fileServerName);
-							System.gc();
-							file.delete();
-
-							//out.write("업로드할 수 없는 확장자입니다.");
-							PrintWriter script = response.getWriter();
-							successsFlag = 2;
-							script.println("<script>");
-							script.println("alert('업로드할 수 없는 확장자입니다.')");
-							script.println("history.back()");
-							script.println("</script>");
-							break;
-						} else {
-							new FileDAO(boardName).upload(fileClientName, fileServerName, result);
-							//out.write("파일명: " + fileName + "<br>");
-							//out.write("실제파일명: " + fileRealName + "<br>");
-
-						}
-					}
-					if (successsFlag == 1) {
 						PrintWriter script = response.getWriter();
 						script.println("<script>");
 						script.println("alert('수정 되었습니다..')");
@@ -124,6 +72,5 @@
 						script.println("</script>");
 					}
 				}
-			}
 		}
 	%>
