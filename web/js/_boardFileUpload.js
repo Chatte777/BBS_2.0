@@ -1,9 +1,11 @@
 var boardName = document.currentScript.getAttribute('boardName');
+var boardNo = document.currentScript.getAttribute('boardNo');
 var boardType = document.currentScript.getAttribute('boardType'); //1:write 2:update
 
     function contentSubmit() {
         try {
-            document.boardForm.action="boardWriteAction.jsp?boardName="+boardName;
+            if(boardType==1)document.boardForm.action="boardWriteAction.jsp?boardName="+boardName;
+            else if(boardType==2)document.boardForm.action="boardUpdateAction.jsp?boardName="+boardName+"&boardNo="+boardNo;
             document.boardForm.method="post";
             document.boardForm.submit();
         } catch (e) {

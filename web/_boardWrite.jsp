@@ -39,4 +39,4 @@
     </div>
 </div>
 
-<script src="js/_boardFileUpload.js" boardName="<%=boardName%>" boardType="1"></script>
+<script src="js/_boardFileUpload.js" boardName="<%=boardName%>" boardNo="0" boardType="1"></script>
