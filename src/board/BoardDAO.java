@@ -231,7 +231,7 @@ public class BoardDAO {
 
             if (rs.next()){
                 BoardVO boardVO = new BoardVO();
-                int readCount = rs.getInt(12);
+                int readCount = rs.getInt(13);
 
                 boardVO.setTableName(rs.getString(1));
                 boardVO.setBoardNo(rs.getInt(2));
