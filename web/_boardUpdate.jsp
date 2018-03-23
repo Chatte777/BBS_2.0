@@ -80,4 +80,4 @@
 		</div>
 	</div>
 
-<script src="js/_boardFileUpload.js" boardName="<%=boardName%>"></script>
+<script src="js/_boardFileUpload.js" boardName="<%=boardName%>" boardType="2"></script>

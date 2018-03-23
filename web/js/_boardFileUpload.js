@@ -1,4 +1,5 @@
 var boardName = document.currentScript.getAttribute('boardName');
+var boardType = document.currentScript.getAttribute('boardType'); //1:write 2:update
 
     function contentSubmit() {
         try {
