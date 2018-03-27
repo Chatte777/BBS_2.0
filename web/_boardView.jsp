@@ -4,8 +4,6 @@
 <%@ page import="board.BoardDAO" %>
 <%@ page import="board.BoardVO" %>
 <%@ page import="java.util.ArrayList"%>
-<%@ page import="file.FileVO"%>
-<%@ page import="file.FileDAO"%>
 <%@ page import="reply.ReplyVO"%>
 <%@ page import="reply.ReplyDAO"%>
 <%@ page import="reReply.ReReplyDAO" %>
@@ -70,25 +68,7 @@
             <tr>
                 <td>내용</td>
                 <td colspan="3" style="min-height: 200px; text-align: left;">
-                    <%
-                        FileDAO fileDAO = new FileDAO(boardName);
-                        ArrayList<FileVO> fileList = fileDAO.getList(boardVO.getBoardNo());
-
-                        for (FileVO file : fileList) {
-                    %>
-                    <div style="width: 100%; text-algin: center;">
-                        <%
-                            out.write("<img src=\"images/uploadFile/"+boardName+"File/"
-                                    + java.net.URLEncoder.encode(file.getFileServerName(), "UTF-8")
-                                    + "\" style=\"width:100%; max-width:760px; vertical-align:middle\">" + "</a><br><br>");
-                        %>
-
-                    </div> <%
-                    }
-                %>
-
-                    <p>
-                        <%=boardVO.getBoardContent()%></p>
+                    <p><%=boardVO.getBoardContent()%></p>
                 </td>
             </tr>
             </tbody>
@@ -167,7 +147,14 @@
     </form>
 
     <div class="row" align="right">
-            <a href="board.jsp?boardName=<%=boardName%>" class="btn btn-primary">목록</a>
+        <a href="board.jsp?boardName=<%=boardName%>" class="btn btn-primary">목록</a>
+        <%
+            if(boardVO.getIsRebaord()==1){
+        %>
+        <a href="boardWrite.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>" class="btn btn-primary">답글쓰기</a>
+        <%
+            }
+        %>
     <%
         if (userId != null && userId.equals(boardVO.getBoardMakeUser())) {
     %>
@@ -181,7 +168,7 @@
         <%
         }
         %>
-        <a href="boardWrite.jsp?boardName=<%=boardName%>" class="btn btn-primary pull-right">글쓰기</a>
+        <a href="boardWrite.jsp?boardName=<%=boardName%>" class="btn btn-primary">글쓰기</a>
     </div>
 </div>
 

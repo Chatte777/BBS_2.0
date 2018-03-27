@@ -16,12 +16,10 @@ public class MountainReReplyDAO {
 		try {
 			String ipStr;
 			InetAddress ip = InetAddress.getLocalHost();
-			if (ip.toString().equals("KoreaUniv-PC/192.168.219.90"))
-				ipStr = "localhost";
-			else
-				ipStr = "122.42.239.89";
+			if(ip.toString().equals("KoreaUniv-PC/192.168.219.90")) ipStr="localhost:3306";
+			else ipStr = "localhost:63306";
 
-			String dbURL = "jdbc:mysql://" + ipStr + ":3306/BBS";
+			String dbURL = "jdbc:mysql://" +ipStr+ "/BBS";
 			String dbID = "root";
 			String dbPassword = "root";
 			Class.forName("com.mysql.jdbc.Driver");
@@ -56,7 +54,7 @@ public class MountainReReplyDAO {
 			if (rs.next()) {
 				return rs.getInt(1) + 1;
 			}
-			return 1; // Ã¹ °Ô½Ã¹°ÀÏ °æ¿ì.
+			return 1; // Ã¹ ï¿½Ô½Ã¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½.
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

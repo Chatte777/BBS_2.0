@@ -8,11 +8,6 @@
 	request.setCharacterEncoding("UTF-8");
 %>
 
-<jsp:useBean id="boardVO" class="board.BoardVO" scope="page" />
-<jsp:setProperty name="boardVO" property="boardTitle" />
-<jsp:setProperty name="boardVO" property="boardContent" />
-
-
 	<%
 		String userId = null;
 
@@ -37,7 +32,7 @@
 				String boardName = request.getParameter("boardName");
 				BoardDAO boardDAO = new BoardDAO(boardName);
 				int result = boardDAO.write(request.getParameter("boardTitle"), userId,
-						request.getParameter("boardContent"), Integer.parseInt(request.getParameter("boardAuthorize")));
+						request.getParameter("boardContent"), Integer.parseInt(request.getParameter("boardAuthorize")), Integer.parseInt(request.getParameter("boardNo")));
 
 				if (result == -1) {
 					PrintWriter script = response.getWriter();

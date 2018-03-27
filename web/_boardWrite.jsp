@@ -8,6 +8,8 @@
 
 <%
     String boardName = request.getParameter("boardName");
+    int boardNo = 0;
+    if(request.getParameter("boardNo")!=null) boardNo=Integer.parseInt(request.getParameter("boardNo"));
 %>
 
 <div class="container">
@@ -39,4 +41,4 @@
     </div>
 </div>
 
-<script src="js/_boardFileUpload.js" boardName="<%=boardName%>" boardNo="0" boardType="1"></script>
+<script src="js/_boardFileUpload.js" boardName="<%=boardName%>" boardNo="<%=boardNo%>" boardType="1"></script>

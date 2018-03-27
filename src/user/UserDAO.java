@@ -16,10 +16,10 @@ public class UserDAO {
 		try {
 			String ipStr;
 			InetAddress ip = InetAddress.getLocalHost();
-			if(ip.toString().equals("KoreaUniv-PC/192.168.219.90")) ipStr="localhost";
-			else ipStr = "122.42.239.89";
-			
-			String dbURL = "jdbc:mysql://" +ipStr+ ":3306/BBS";
+			if(ip.toString().equals("KoreaUniv-PC/192.168.219.90")) ipStr="localhost:3306";
+			else ipStr = "localhost:63306";
+
+			String dbURL = "jdbc:mysql://" +ipStr+ "/BBS";
 			String dbID = "root";
 			String dbPassword = "root";
 			Class.forName("com.mysql.jdbc.Driver");
@@ -41,7 +41,7 @@ public class UserDAO {
 					return 1; // Login successs
 				}
 				else
-					return 0; // Password ºÒÀÏÄ¡
+					return 0; // Password ï¿½ï¿½ï¿½ï¿½Ä¡
 			}
 			return -1; // no ID
 		}catch(Exception e){

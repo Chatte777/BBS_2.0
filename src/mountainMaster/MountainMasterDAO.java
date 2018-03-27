@@ -21,10 +21,10 @@ public class MountainMasterDAO {
 		try {
 			String ipStr;
 			InetAddress ip = InetAddress.getLocalHost();
-			if(ip.toString().equals("KoreaUniv-PC/192.168.219.90")) ipStr="localhost";
-			else ipStr = "122.42.239.89";
-			
-			String dbURL = "jdbc:mysql://" +ipStr+ ":3306/BBS";
+			if(ip.toString().equals("KoreaUniv-PC/192.168.219.90")) ipStr="localhost:3306";
+			else ipStr = "localhost:63306";
+
+			String dbURL = "jdbc:mysql://" +ipStr+ "/BBS";
 			String dbID = "root";
 			String dbPassword = "root";
 			Class.forName("com.mysql.jdbc.Driver");
@@ -58,7 +58,7 @@ public class MountainMasterDAO {
 			if (rs.next()) {
 				return rs.getInt(1) + 1;
 			}
-			return 1; // Ã¹ °Ô½Ã¹°ÀÏ °æ¿ì.
+			return 1; // Ã¹ ï¿½Ô½Ã¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½.
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -247,14 +247,14 @@ public class MountainMasterDAO {
 
 				if (hourGap < 1) {
 					if (minuteGap < 1) {
-						if (secondGap <= 30) gapFlag = 1; // 30ÃÊ-º¸¶ó»ö
+						if (secondGap <= 30) gapFlag = 1; // 30ï¿½ï¿½-ï¿½ï¿½ï¿½ï¿½ï¿½
 						else gapFlag = 2;
-					} else if (minuteGap <= 3)  gapFlag = 2; // 3ºÐ-»¡°£»ö
-					  else if (minuteGap <= 10) gapFlag = 3; // 10ºÐ-ÁÖÈ²»ö
-					  else if (minuteGap <= 30) gapFlag = 4; // 30ºÐ-ÃÊ·Ï»ö
+					} else if (minuteGap <= 3)  gapFlag = 2; // 3ï¿½ï¿½-ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+					  else if (minuteGap <= 10) gapFlag = 3; // 10ï¿½ï¿½-ï¿½ï¿½È²ï¿½ï¿½
+					  else if (minuteGap <= 30) gapFlag = 4; // 30ï¿½ï¿½-ï¿½Ê·Ï»ï¿½
 					  else gapFlag = 5;
-				} else if (hourGap <= 2) gapFlag = 5; // 2½Ã°£-ÆÄ¶õ»ö
-				  else gapFlag = 6; // °ËÁ¤»ö
+				} else if (hourGap <= 2) gapFlag = 5; // 2ï¿½Ã°ï¿½-ï¿½Ä¶ï¿½ï¿½ï¿½
+				  else gapFlag = 6; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 				return gapFlag;
 			}

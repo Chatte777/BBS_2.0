@@ -14,6 +14,9 @@ public class BoardVO {
     private int boardDeleteYn;
     private int boardAuthorize;
     private int boardReadCount;
+    private int isRebaord;
+    private int hasReboard;
+    private int orgBoardNo;
 
     public String getTableName() {
         return tableName;
@@ -91,8 +94,30 @@ public class BoardVO {
     public int getBoardReadCount() {
         return boardReadCount;
     }
-
     public void setBoardReadCount(int boardReadCount) {
         this.boardReadCount = boardReadCount;
+    }
+    public int getIsRebaord() {
+        return isRebaord;
+    }
+
+    public void setIsRebaord(int isRebaord) {
+        this.isRebaord = isRebaord;
+    }
+
+    public int getHasReboard() {
+        return hasReboard;
+    }
+
+    public void setHasReboard(int hasReboard) {
+        this.hasReboard = hasReboard;
+    }
+
+    public int getOrgBoardNo() {
+        return orgBoardNo;
+    }
+
+    public void setOrgBoardNo(int orgBoardNo) {
+        this.orgBoardNo = orgBoardNo;
     }
 }
