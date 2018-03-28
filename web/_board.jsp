@@ -100,31 +100,31 @@
                     for (int j = 0; j < listReboard.size(); j++) {
 
                         if ("myBoard".equals(boardName)) {
-                            replyCnt = reboardDAO.getMyReplyCnt(list.get(j).getTableName(), list.get(j).getBoardNo());
-                            replyColorFlag = reboardDAO.getMyReplyColor(list.get(j).getTableName(), list.get(j).getBoardNo());
+                            replyCnt = reboardDAO.getMyReplyCnt(listReboard.get(j).getTableName(), listReboard.get(j).getBoardNo());
+                            replyColorFlag = reboardDAO.getMyReplyColor(listReboard.get(j).getTableName(), listReboard.get(j).getBoardNo());
                         } else {
-                            replyCnt = reboardDAO.getReplyCnt(list.get(j).getBoardNo());
-                            replyColorFlag = reboardDAO.getReplyColor(list.get(j).getBoardNo());
+                            replyCnt = reboardDAO.getReplyCnt(listReboard.get(j).getBoardNo());
+                            replyColorFlag = reboardDAO.getReplyColor(listReboard.get(j).getBoardNo());
                         }
-                        boardColorFlag = reboardDAO.getBoardColor(list.get(j).getBoardNo());
+                        boardColorFlag = reboardDAO.getBoardColor(listReboard.get(j).getBoardNo());
             %>
             <tr style="height: 1px; font-size: 0.875em; background-color: #FEFEF2; margin: 1em;">
                 <td align="center"><span class="glyphicon glyphicon-menu-right" style="color: #bbbbbb;">&nbsp;</span></td>
-                <td align="left" ><a href="boardView.jsp?boardName=<%=list.get(j).getTableName()%>&boardNo=<%= list.get(j).getBoardNo() %>">조회수&nbsp;<%= list.get(j).getBoardReadCount() %></a>
+                <td align="left" ><a href="boardView.jsp?boardName=<%=listReboard.get(j).getTableName()%>&boardNo=<%= listReboard.get(j).getBoardNo() %>">조회수&nbsp;<%= listReboard.get(j).getBoardReadCount() %></a>
                 </td>
                 <td align="left">
                     <%
-                        if (list.get(j).getBoardAuthorize() == 2) {
+                        if (listReboard.get(j).getBoardAuthorize() == 2) {
                     %><span class="glyphicon glyphicon-lock" style="color: #bbbbbb;">&nbsp;</span><%
                     }
                 %>
-                    <a href="boardView.jsp?boardName=<%=list.get(j).getTableName()%>&boardNo=<%= list.get(j).getBoardNo() %>"
+                    <a href="boardView.jsp?boardName=<%=listReboard.get(j).getTableName()%>&boardNo=<%= listReboard.get(j).getBoardNo() %>"
                             <%
                                 if (boardColorFlag == 1) {%>
                        style="color: #DE2A45;"<%} else if (boardColorFlag == 2) {%>
                        style="color:#10BF00;"<%} else if (boardColorFlag == 3) {%>
                        style="color:#2865BF;"<%} else if (boardColorFlag == 4) {%> style="color:black;"<%}%>>
-                        <%= list.get(j).getBoardTitle() %>
+                        <%= listReboard.get(j).getBoardTitle() %>
                     </a>
                 </td>
                 <td
@@ -139,9 +139,9 @@
                     }
                 %>>
                     <%if (replyCnt != 0) {%><%=replyCnt%><%}%></td>
-                <td><%= list.get(j).getBoardMakeUser() %>
+                <td><%= listReboard.get(j).getBoardMakeUser() %>
                 </td>
-                <td><%= list.get(j).getBoardMakeDt().substring(5, 7) + "/" + list.get(j).getBoardMakeDt().substring(8, 13) + ":" + list.get(j).getBoardMakeDt().substring(14, 16) %>
+                <td><%= listReboard.get(j).getBoardMakeDt().substring(5, 7) + "/" + listReboard.get(j).getBoardMakeDt().substring(8, 13) + ":" + listReboard.get(j).getBoardMakeDt().substring(14, 16) %>
                 </td>
             </tr>
 
