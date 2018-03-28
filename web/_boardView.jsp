@@ -36,7 +36,7 @@
 
 <div class="container">
     <div class="row">
-        <table class="table table-striped" style="text-align: center; border: 1px solid #dddddd; word-break: break-all;">
+        <table class="table table-striped" style="text-align: center; border: 1px solid #dddddd; word-break: break-all; margin-bottom: 5px;">
             <thead>
             <tr>
                 <th colspan="4" style="background-color: #eeeeee; text-align: center;">게시판 글</th>
@@ -73,6 +73,21 @@
             </tr>
             </tbody>
         </table>
+        <div style="margin-bottom: 10px;" align="right">
+            <%
+                if (userId != null && userId.equals(boardVO.getBoardMakeUser())) {
+            %>
+            <a href="boardUpdate.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>" class="btn btn-primary">수정</a>
+            <a onclick="return confirm('정말로 삭제하시겠습니까?')" href="boardDeleteAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>" class="btn btn-primary">삭제</a>&nbsp;
+            <%
+            } else {
+            %>
+            <a href="#" class="btn btn-primary" style="background:gray;">수정</a>
+            <a href="#" class="btn btn-primary" style="background:gray;">삭제</a>&nbsp;
+            <%
+                }
+            %>
+        </div>
 
         <table class="table table-striped">
             <tbody>
@@ -153,21 +168,11 @@
         %>
         <a href="boardWrite.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>" class="btn btn-primary">답글쓰기</a>
         <%
-            }
+            } else {
         %>
-    <%
-        if (userId != null && userId.equals(boardVO.getBoardMakeUser())) {
-    %>
-            <a href="boardUpdate.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>" class="btn btn-primary">수정</a>
-            <a onclick="return confirm('정말로 삭제하시겠습니까?')" href="boardDeleteAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>" class="btn btn-primary">삭제</a>&nbsp;
-    <%
-        } else {
-    %>
-        <a href="#" class="btn btn-primary" style="background:gray;">수정</a>
-        <a href="#" class="btn btn-primary" style="background:gray;">삭제</a>&nbsp;
-        <%
-        }
-        %>
+        <a href="#" class="btn btn-primary" style="background:gray;">답글쓰기</a>
+        <%}%>
+
         <a href="boardWrite.jsp?boardName=<%=boardName%>" class="btn btn-primary">글쓰기</a>
     </div>
 </div>
