@@ -1,17 +1,18 @@
 package board;
 
-import java.net.InetAddress;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import dbConn.*;
+import alarmMaster.*;
 
 public class BoardDAO {
 
     private Connection conn;
+    private DbConn dbConn=new DbConn();
     private ResultSet rs;
     
     private String boardName;
@@ -42,20 +43,7 @@ public class BoardDAO {
         this.colReadCount = boardName+"_read_count";
         this.replyTableName = boardName+"_reply";
 
-        try {
-            String ipStr;
-            InetAddress ip = InetAddress.getLocalHost();
-            if(ip.toString().equals("KoreaUniv-PC/192.168.219.90")) ipStr="localhost:3306";
-            else ipStr = "localhost:63306";
-
-            String dbURL = "jdbc:mysql://" +ipStr+ "/BBS";
-            String dbID = "root";
-            String dbPassword = "root";
-            Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection(dbURL, dbID, dbPassword);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+        conn=dbConn.getDbConnection();
     }
 
     public String getDate(){
@@ -114,8 +102,12 @@ public class BoardDAO {
             if(boardNo==0)pstmt.setInt(16,0);  //orgBoardNo
             else pstmt.setInt(16, boardNo);
 
-            hasReboardUpdate(boardNo);
+            if(boardNo!=0) {
+                AlarmMasterDAO alarmMasterDAO = new AlarmMasterDAO();
+                alarmMasterDAO.writeReboardAlarm(this.boardName, boardMakeUser, boardNo, tmpNextNo);
 
+                hasReboardUpdate(boardNo);
+            }
             pstmt.executeUpdate();
 
             return tmpNextNo;

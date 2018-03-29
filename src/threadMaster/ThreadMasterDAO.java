@@ -8,27 +8,16 @@ import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import dbConn.*;
 
 public class ThreadMasterDAO {
 
 	private Connection conn;
+	private DbConn dbConn = new DbConn();
 	private ResultSet rs;
 	
 	public ThreadMasterDAO() {
-		try {
-			String ipStr;
-			InetAddress ip = InetAddress.getLocalHost();
-			if(ip.toString().equals("KoreaUniv-PC/192.168.219.90")) ipStr="localhost:3306";
-			else ipStr = "localhost:63306";
-
-			String dbURL = "jdbc:mysql://" +ipStr+ "/BBS";
-			String dbID = "root";
-			String dbPassword = "root";
-			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection(dbURL, dbID, dbPassword);
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		conn = dbConn.getDbConnection();
 	}
 	
 	public String getDate(){

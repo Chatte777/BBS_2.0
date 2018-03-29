@@ -1,32 +1,19 @@
 package bbs;
 
 import java.sql.Connection;		
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.net.InetAddress;
+import dbConn.*;
 
 public class BbsDAO {
 
 	private Connection conn;
+	private DbConn dbConn=new DbConn();
 	private ResultSet rs;
 	
 	public BbsDAO() {
-		try {
-			String ipStr;
-			InetAddress ip = InetAddress.getLocalHost();
-			if(ip.toString().equals("KoreaUniv-PC/192.168.219.90")) ipStr="localhost:3306";
-			else ipStr = "localhost:63306";
-
-			String dbURL = "jdbc:mysql://" +ipStr+ "/BBS";
-			String dbID = "root";
-			String dbPassword = "root";
-			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection(dbURL, dbID, dbPassword);
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		conn=dbConn.getDbConnection();
 	}
 	
 	public String getDate(){

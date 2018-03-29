@@ -6,27 +6,16 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import dbConn.*;
 
 public class MountainReplyDAO {
 
 	private Connection conn;
+	private DbConn dbConn = new DbConn();
 	private ResultSet rs;
 	
 	public MountainReplyDAO() {
-		try {
-			String ipStr;
-			InetAddress ip = InetAddress.getLocalHost();
-			if(ip.toString().equals("KoreaUniv-PC/192.168.219.90")) ipStr="localhost:3306";
-			else ipStr = "localhost:63306";
-
-			String dbURL = "jdbc:mysql://" +ipStr+ "/BBS";
-			String dbID = "root";
-			String dbPassword = "root";
-			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection(dbURL, dbID, dbPassword);
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		conn = dbConn.getDbConnection();
 	}
 	
 	public String getDate(){
