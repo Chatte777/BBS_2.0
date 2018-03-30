@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class AlarmMasterDAO {
-    private int boardCountPerPage=15;
+    private int boardCountPerPage = 15;
 
     private Connection conn;
     private DbConn dbConn = new DbConn();
@@ -110,7 +110,7 @@ public class AlarmMasterDAO {
 
         String SQL = "SELECT * FROM alarm_master" +
                 " WHERE alarm_delete_yn = 1 " +
-                " AND alarm_read_yn=1 " +
+                " AND alarm_delete_yn=1 " +
                 " AND alarm_target_user = ? " +
                 " ORDER BY alarm_no DESC LIMIT ?,?";
 
@@ -148,15 +148,15 @@ public class AlarmMasterDAO {
         return list; //Database error
     }
 
-    public BoardVO getOrgBoard(String boardName, int boardNo){
-        String TableName = boardName+"_master";
-        String colBoardNo = boardName+"_no";
-        String title=null;
+    public BoardVO getOrgBoard(String boardName, int boardNo) {
+        String TableName = boardName + "_master";
+        String colBoardNo = boardName + "_no";
+        String title = null;
 
         BoardVO boardVO = new BoardVO();
 
         String SQL = "SELECT * FROM " + TableName +
-                " WHERE "+ colBoardNo +" = ? ";
+                " WHERE " + colBoardNo + " = ? ";
 
         try {
             PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -178,5 +178,71 @@ public class AlarmMasterDAO {
             e.printStackTrace();
         }
         return boardVO;
+    }
+
+    public AlarmMaster getAlarmMaster(int alarmNo, String alarmTargetUser) {
+        AlarmMaster alarmMaster = new AlarmMaster();
+        String SQL = "SELECT * FROM alarm_master WHERE alarm_no = ? AND alarm_target_user = ?";
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setInt(1, alarmNo);
+            pstmt.setString(2, alarmTargetUser);
+
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                alarmMaster.setAlarmNo(rs.getInt(1));
+                alarmMaster.setAlarmTargetUser(rs.getString(2));
+                alarmMaster.setAlarmType(rs.getInt(3));
+                alarmMaster.setAlarmOrgboardName(rs.getString(4));
+                alarmMaster.setAlarmOrgBoardNo(rs.getInt(5));
+                alarmMaster.setAlarmOrgReplyNo(rs.getInt(6));
+                alarmMaster.setAlarmNewboardName(rs.getString(7));
+                alarmMaster.setAlarmNewBoardNo(rs.getInt(8));
+                alarmMaster.setAlarmNewReplyNo(rs.getInt(9));
+                alarmMaster.setAlarmNewReReplyNo(rs.getInt(10));
+                alarmMaster.setAlarmContent(rs.getString(11));
+                alarmMaster.setAlarmReadYn(rs.getInt(12));
+                alarmMaster.setAlarmDeleteYn(rs.getInt(13));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return alarmMaster;
+    }
+
+    public int updateAlarmReadYn(int alarmNo, String alarmTargetUser) {
+        String SQL = "UPDATE alarm_master SET alarm_read_yn = 2 WHERE alarm_no = ? AND alarm_target_user = ?";
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setInt(1, alarmNo);
+            pstmt.setString(2, alarmTargetUser);
+
+            pstmt.executeUpdate();
+
+            return 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public int updateAlarmDeleteYn(int alarmNo, String alarmTargetUser) {
+        String SQL = "UPDATE alarm_master SET alarm_delete_yn = 2 WHERE alarm_no = ? AND alarm_target_user = ?";
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setInt(1, alarmNo);
+            pstmt.setString(2, alarmTargetUser);
+
+            pstmt.executeUpdate();
+
+            return 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 }

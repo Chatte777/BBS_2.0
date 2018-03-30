@@ -58,9 +58,9 @@
 
                 for (int i = 0; i < list.size(); i++) {
                     boardName = list.get(i).getAlarmOrgboardName();
-                    if("notify".equals(boardName)) boardName="공지 및 건의";
-                    else if("mountain".equals(boardName)) boardName = "산악일기";
-                    else if("thread".equals(boardName)) boardName = "대화의 숲";
+                    if ("notify".equals(boardName)) boardName = "공지 및 건의";
+                    else if ("mountain".equals(boardName)) boardName = "산악일기";
+                    else if ("thread".equals(boardName)) boardName = "대화의 숲";
             %>
             <tr>
                 <td align="left">
@@ -68,8 +68,24 @@
                         "<%=boardName%>" 게시판에 작성한 【<%= list.get(i).getAlarmContent() %>】 글에 답글이 달렸습니다.
                     </a>
                 </td>
-                <td></td>
-                <td></td>
+                <td>
+                    <%
+                        if (list.get(i).getAlarmReadYn() == 1) {
+                    %>
+                    <a href="alarmReadAction.jsp?alarmNo=<%=list.get(i).getAlarmNo()%>&alarmTargetUser=<%=list.get(i).getAlarmTargetUser()%>"
+                       class="btn" style="background-color: lightblue;">읽음</a>
+                    <%
+                    } else {
+                    %>
+                    <a href="#" class="btn" style="background-color: gray;">읽음</a>
+                    <%
+                        }
+                    %>
+                </td>
+                <td>
+                    <a href="alarmDeleteAction.jsp?alarmNo=<%=list.get(i).getAlarmNo()%>&alarmTargetUser=<%=list.get(i).getAlarmTargetUser()%>"
+                       class="btn" style="background-color: lightpink;">삭제</a>
+                </td>
             </tr>
             <%
                 }
