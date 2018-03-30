@@ -64,7 +64,7 @@
             %>
             <tr>
                 <td align="left">
-                    <a href="boardView.jsp?boardName=<%=list.get(i).getAlarmOrgboardName()%>&boardNo=<%=list.get(i).getAlarmOrgBoardNo()%>">
+                    <a href="boardView.jsp?boardName=<%=list.get(i).getAlarmOrgboardName()%>&boardNo=<%=list.get(i).getAlarmNewBoardNo()%>">
                         "<%=boardName%>" 게시판에 작성한 【<%= list.get(i).getAlarmContent() %>】 글에 답글이 달렸습니다.
                     </a>
                 </td>
