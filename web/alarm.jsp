@@ -64,8 +64,12 @@
             %>
             <tr>
                 <td align="left">
-                    <a href="boardView.jsp?boardName=<%=list.get(i).getAlarmOrgboardName()%>&boardNo=<%=list.get(i).getAlarmNewBoardNo()%>">
-                        "<%=boardName%>" 게시판에 작성한 【<%= list.get(i).getAlarmContent() %>】 글에 답글이 달렸습니다.
+                    <a href="boardView.jsp?boardName=<%=list.get(i).getAlarmOrgboardName()%>&boardNo=<%=list.get(i).getAlarmOrgBoardNo()%>">
+                        <span style="color:purple;">
+                        <%if (list.get(i).getAlarmType() == 1) {%> "<%=boardName%>" 게시판에 작성한 【<%= list.get(i).getAlarmOrgContent() %>】 글에 답글이 달렸습니다. <%} else if (list.get(i).getAlarmType() == 2) {%> "<%=boardName%>" 게시판에 작성한 【<%= list.get(i).getAlarmOrgContent() %>】 글에 댓글이 달렸습니다. <%}%>
+                            </span>
+                        <br>
+                        <span style="font-size: 0.9em; color: blue;">&nbsp;☞&nbsp;"<%=list.get(i).getAlarmNewContent()%>..."</span>
                     </a>
                 </td>
                 <td>
@@ -73,7 +77,7 @@
                         if (list.get(i).getAlarmReadYn() == 1) {
                     %>
                     <a href="alarmReadAction.jsp?alarmNo=<%=list.get(i).getAlarmNo()%>&alarmTargetUser=<%=list.get(i).getAlarmTargetUser()%>"
-                       class="btn" style="background-color: lightblue;">읽음</a>
+                       class="btn" style="background-color: lightblue;">읽음처리</a>
                     <%
                     } else {
                     %>

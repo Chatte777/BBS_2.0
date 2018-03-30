@@ -103,8 +103,11 @@ public class BoardDAO {
             else pstmt.setInt(16, boardNo);
 
             if(boardNo!=0) {
+                boardContent = boardContent.replaceAll("<br>", "&nbsp;").replaceAll("<p>", "&nbsp;").replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+                if(boardContent.length()>70) boardContent=boardContent.substring(0,70);
+
                 AlarmMasterDAO alarmMasterDAO = new AlarmMasterDAO();
-                alarmMasterDAO.writeReboardAlarm(this.boardName, boardNo, tmpNextNo);
+                alarmMasterDAO.writeReboardAlarm(this.boardName, boardNo, tmpNextNo, boardContent);
 
                 hasReboardUpdate(boardNo);
             }

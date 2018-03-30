@@ -35,8 +35,8 @@ public class AlarmMasterDAO {
         return -1; // Database error
     }
 
-    public int writeReboardAlarm(String alarmOrgBoardName, int alarmOrgBoardNo, int alarmNewBoardNo) {
-        String SQL = "INSERT INTO alarm_master (alarm_no, alarm_target_user, alarm_type, alarm_org_board_name, alarm_org_board_no, alarm_new_board_name, alarm_new_board_no, alarm_content)" +
+    public int writeReboardAlarm(String alarmOrgBoardName, int alarmOrgBoardNo, int alarmNewBoardNo, String alarmNewContent) {
+        String SQL = "INSERT INTO alarm_master (alarm_no, alarm_target_user, alarm_type, alarm_org_board_name, alarm_org_board_no, alarm_org_content, alarm_new_board_no, alarm_new_content)" +
                 " VALUES(?,?,?,?,?,?,?,?)";
         int tmpNextNo = getNext();
 
@@ -44,14 +44,42 @@ public class AlarmMasterDAO {
             BoardVO boardVO = getOrgBoard(alarmOrgBoardName, alarmOrgBoardNo);
 
             PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setInt(1, getNext());
-            pstmt.setString(2, boardVO.getBoardMakeUser());
-            pstmt.setInt(3, 1);
-            pstmt.setString(4, alarmOrgBoardName);
-            pstmt.setInt(5, alarmOrgBoardNo);
-            pstmt.setString(6, alarmOrgBoardName);
-            pstmt.setInt(7, alarmNewBoardNo);
-            pstmt.setString(8, boardVO.getBoardTitle());
+            pstmt.setInt(1, getNext()); //alarm_no
+            pstmt.setString(2, boardVO.getBoardMakeUser()); //alarm_taraget_user
+            pstmt.setInt(3, 1);  //alarm_type
+            pstmt.setString(4, alarmOrgBoardName); //alarm_org_board_name
+            pstmt.setInt(5, alarmOrgBoardNo);  //alarm_org_board_no
+            pstmt.setString(6, boardVO.getBoardTitle());  //alarm_content
+            pstmt.setInt(7, alarmNewBoardNo);  //alarm_new_board_no
+            pstmt.setString(8, alarmNewContent);  //alarm_new_content
+
+
+            pstmt.executeUpdate();
+
+            return tmpNextNo;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1; // Database error
+    }
+
+    public int writeReplyAlarm(String alarmOrgBoardName, int alarmOrgBoardNo, int alarmNewReplydNo, String alarmNewContent) {
+        String SQL = "INSERT INTO alarm_master (alarm_no, alarm_target_user, alarm_type, alarm_org_board_name, alarm_org_board_no, alarm_org_content, alarm_new_reply_no, alarm_new_content)" +
+                " VALUES(?,?,?,?,?,?,?,?)";
+        int tmpNextNo = getNext();
+
+        try {
+            BoardVO boardVO = getOrgBoard(alarmOrgBoardName, alarmOrgBoardNo);
+
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setInt(1, getNext()); //alarm_no
+            pstmt.setString(2, boardVO.getBoardMakeUser()); //alarm_taraget_user
+            pstmt.setInt(3, 2);  //alarm_type
+            pstmt.setString(4, alarmOrgBoardName); //alarm_org_board_name
+            pstmt.setInt(5, alarmOrgBoardNo);  //alarm_org_board_no
+            pstmt.setString(6, boardVO.getBoardTitle());  //alarm_org_content
+            pstmt.setInt(7, alarmNewReplydNo);  //alarm_new_board_no
+            pstmt.setString(8, alarmNewContent);
 
             pstmt.executeUpdate();
 
@@ -132,13 +160,14 @@ public class AlarmMasterDAO {
                 alarmMaster.setAlarmOrgboardName(rs.getString(4));
                 alarmMaster.setAlarmOrgBoardNo(rs.getInt(5));
                 alarmMaster.setAlarmOrgReplyNo(rs.getInt(6));
-                alarmMaster.setAlarmNewboardName(rs.getString(7));
-                alarmMaster.setAlarmNewBoardNo(rs.getInt(8));
-                alarmMaster.setAlarmNewReplyNo(rs.getInt(9));
-                alarmMaster.setAlarmNewReReplyNo(rs.getInt(10));
-                alarmMaster.setAlarmContent(rs.getString(11));
-                alarmMaster.setAlarmReadYn(rs.getInt(12));
-                alarmMaster.setAlarmDeleteYn(rs.getInt(13));
+                alarmMaster.setAlarmOrgContent(rs.getString(7));
+                alarmMaster.setAlarmNewboardName(rs.getString(8));
+                alarmMaster.setAlarmNewBoardNo(rs.getInt(9));
+                alarmMaster.setAlarmNewReplyNo(rs.getInt(10));
+                alarmMaster.setAlarmNewReReplyNo(rs.getInt(11));
+                alarmMaster.setAlarmNewContent(rs.getString(12));
+                alarmMaster.setAlarmReadYn(rs.getInt(13));
+                alarmMaster.setAlarmDeleteYn(rs.getInt(14));
 
                 list.add(alarmMaster);
             }
@@ -149,13 +178,13 @@ public class AlarmMasterDAO {
     }
 
     public BoardVO getOrgBoard(String boardName, int boardNo) {
-        String TableName = boardName + "_master";
         String colBoardNo = boardName + "_no";
         String title = null;
+        String content = null;
 
         BoardVO boardVO = new BoardVO();
 
-        String SQL = "SELECT * FROM " + TableName +
+        String SQL = "SELECT * FROM " + boardName + "_master" +
                 " WHERE " + colBoardNo + " = ? ";
 
         try {
@@ -168,8 +197,14 @@ public class AlarmMasterDAO {
                 //title을 받아온다.
                 title = rs.getString(3);
                 title = title.replaceAll("<br>", "&nbsp;").replaceAll("<p>", "&nbsp;").replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
-                //title = title.substring(0, 70);
+                if(title.length()>70) title = title.substring(0, 70);
                 boardVO.setBoardTitle(title);
+
+                //content를 받아온다.
+                content = rs.getString(5);
+                content = content.replaceAll("<br>", "&nbsp;").replaceAll("<p>", "&nbsp;").replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+                if(content.length()>70) content = content.substring(0, 70);
+                boardVO.setBoardContent(content);
 
                 //makeUser를 받아온다.
                 boardVO.setBoardMakeUser(rs.getString(6));
@@ -198,13 +233,14 @@ public class AlarmMasterDAO {
                 alarmMaster.setAlarmOrgboardName(rs.getString(4));
                 alarmMaster.setAlarmOrgBoardNo(rs.getInt(5));
                 alarmMaster.setAlarmOrgReplyNo(rs.getInt(6));
-                alarmMaster.setAlarmNewboardName(rs.getString(7));
-                alarmMaster.setAlarmNewBoardNo(rs.getInt(8));
-                alarmMaster.setAlarmNewReplyNo(rs.getInt(9));
-                alarmMaster.setAlarmNewReReplyNo(rs.getInt(10));
-                alarmMaster.setAlarmContent(rs.getString(11));
-                alarmMaster.setAlarmReadYn(rs.getInt(12));
-                alarmMaster.setAlarmDeleteYn(rs.getInt(13));
+                alarmMaster.setAlarmOrgContent(rs.getString(7));
+                alarmMaster.setAlarmNewboardName(rs.getString(8));
+                alarmMaster.setAlarmNewBoardNo(rs.getInt(9));
+                alarmMaster.setAlarmNewReplyNo(rs.getInt(10));
+                alarmMaster.setAlarmNewReReplyNo(rs.getInt(11));
+                alarmMaster.setAlarmNewContent(rs.getString(12));
+                alarmMaster.setAlarmReadYn(rs.getInt(13));
+                alarmMaster.setAlarmDeleteYn(rs.getInt(14));
             }
         } catch (Exception e) {
             e.printStackTrace();

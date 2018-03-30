@@ -7,13 +7,14 @@ public class AlarmMaster {
     private String alarmOrgboardName;
     private int alarmOrgBoardNo;
     private int alarmOrgReplyNo;
+    private String alarmOrgContent;
     private String alarmNewboardName;
     private int alarmNewBoardNo;
     private int alarmNewReplyNo;
     private int alarmNewReReplyNo;
-    private String alarmContent;
     private int alarmReadYn;
     private int alarmDeleteYn;
+    private String alarmNewContent;
 
     public int getAlarmNo() {
         return alarmNo;
@@ -28,7 +29,7 @@ public class AlarmMaster {
     }
 
     public void setAlarmTargetUser(String alarmTargetUser) {
-        this.alarmTargetUser= alarmTargetUser;
+        this.alarmTargetUser = alarmTargetUser;
     }
 
     public int getAlarmType() {
@@ -63,6 +64,14 @@ public class AlarmMaster {
         this.alarmOrgReplyNo = alarmOrgReplyNo;
     }
 
+    public String getAlarmOrgContent() {
+        return alarmOrgContent;
+    }
+
+    public void setAlarmOrgContent(String alarmOrgContent) {
+        this.alarmOrgContent = alarmOrgContent;
+    }
+
     public String getAlarmNewboardName() {
         return alarmNewboardName;
     }
@@ -95,14 +104,6 @@ public class AlarmMaster {
         this.alarmNewReReplyNo = alarmNewReReplyNo;
     }
 
-    public String getAlarmContent() {
-        return alarmContent;
-    }
-
-    public void setAlarmContent(String alarmContent) {
-        this.alarmContent = alarmContent;
-    }
-
     public int getAlarmReadYn() {
         return alarmReadYn;
     }
@@ -117,5 +118,13 @@ public class AlarmMaster {
 
     public void setAlarmDeleteYn(int alarmDeleteYn) {
         this.alarmDeleteYn = alarmDeleteYn;
+    }
+
+    public String getAlarmNewContent() {
+        return alarmNewContent;
+    }
+
+    public void setAlarmNewContent(String alarmNewContent) {
+        this.alarmNewContent = alarmNewContent;
     }
 }
