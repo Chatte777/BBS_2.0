@@ -96,7 +96,7 @@ public class BoardDAO {
             pstmt.setInt(11, 1);  //boardDeleteYn
             pstmt.setInt(12, boardAuthorize);  //boardAuthorize
             pstmt.setInt(13, 0);  //boardReadCount
-            if(boardNo==0)pstmt.setInt(14,1);  //isReboard
+            if(boardNo==0)pstmt.setInt(14,1);  //boardNo가 0이면 원본글임. isReboard
             else pstmt.setInt(14, 2);
             pstmt.setInt(15, 1);  //hasReboard
             if(boardNo==0)pstmt.setInt(16,0);  //orgBoardNo
@@ -104,7 +104,7 @@ public class BoardDAO {
 
             if(boardNo!=0) {
                 AlarmMasterDAO alarmMasterDAO = new AlarmMasterDAO();
-                alarmMasterDAO.writeReboardAlarm(this.boardName, boardMakeUser, boardNo, tmpNextNo);
+                alarmMasterDAO.writeReboardAlarm(this.boardName, boardNo, tmpNextNo);
 
                 hasReboardUpdate(boardNo);
             }

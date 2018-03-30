@@ -35,23 +35,23 @@ public class AlarmMasterDAO {
         return -1; // Database error
     }
 
-    public int writeReboardAlarm(String boardName, String userId, int orgBoardNo, int newBoardNo) {
+    public int writeReboardAlarm(String alarmOrgBoardName, int alarmOrgBoardNo, int alarmNewBoardNo) {
         String SQL = "INSERT INTO alarm_master (alarm_no, alarm_target_user, alarm_type, alarm_org_board_name, alarm_org_board_no, alarm_new_board_name, alarm_new_board_no, alarm_content)" +
                 " VALUES(?,?,?,?,?,?,?,?)";
         int tmpNextNo = getNext();
 
         try {
-            String title = getOrgBoardTitle(boardName, orgBoardNo);
+            BoardVO boardVO = getOrgBoard(alarmOrgBoardName, alarmOrgBoardNo);
 
             PreparedStatement pstmt = conn.prepareStatement(SQL);
             pstmt.setInt(1, getNext());
-            pstmt.setString(2, userId);
+            pstmt.setString(2, boardVO.getBoardMakeUser());
             pstmt.setInt(3, 1);
-            pstmt.setString(4, boardName);
-            pstmt.setInt(5, orgBoardNo);
-            pstmt.setString(6, boardName);
-            pstmt.setInt(7, newBoardNo);
-            pstmt.setString(8, title);
+            pstmt.setString(4, alarmOrgBoardName);
+            pstmt.setInt(5, alarmOrgBoardNo);
+            pstmt.setString(6, alarmOrgBoardName);
+            pstmt.setInt(7, alarmNewBoardNo);
+            pstmt.setString(8, boardVO.getBoardTitle());
 
             pstmt.executeUpdate();
 
@@ -148,13 +148,14 @@ public class AlarmMasterDAO {
         return list; //Database error
     }
 
-    public String getOrgBoardTitle(String boardName, int boardNo){
+    public BoardVO getOrgBoard(String boardName, int boardNo){
         String TableName = boardName+"_master";
         String colBoardNo = boardName+"_no";
-        String colBoardTitle= boardName+"_title";
         String title=null;
 
-        String SQL = "SELECT "+ colBoardTitle +" FROM " + TableName +
+        BoardVO boardVO = new BoardVO();
+
+        String SQL = "SELECT * FROM " + TableName +
                 " WHERE "+ colBoardNo +" = ? ";
 
         try {
@@ -164,13 +165,18 @@ public class AlarmMasterDAO {
             rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                title =  rs.getString(1);
+                //title을 받아온다.
+                title = rs.getString(3);
                 title = title.replaceAll("<br>", "&nbsp;").replaceAll("<p>", "&nbsp;").replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
-                title = title.substring(0, 70);
+                //title = title.substring(0, 70);
+                boardVO.setBoardTitle(title);
+
+                //makeUser를 받아온다.
+                boardVO.setBoardMakeUser(rs.getString(6));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return title;
+        return boardVO;
     }
 }
