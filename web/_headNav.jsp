@@ -1,3 +1,4 @@
+<%@ page import="alarmMaster.AlarmMasterDAO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 
@@ -6,6 +7,9 @@
     if (session.getAttribute("userID") != null) {
         userID = (String) session.getAttribute("userID");
     }
+
+    AlarmMasterDAO alarmMasterDAO = new AlarmMasterDAO();
+    int alarmCount = alarmMasterDAO.getAlarmCount(userID);
 %>
 
 
@@ -36,9 +40,12 @@
             <li><a href="main.jsp">메인</a></li>
             <li><a href="board.jsp?boardName=notify">공지 및 건의</a></li>
             <li><a href="board.jsp?boardName=mountain">산악일기</a></li>
-            <li><a href="test.jsp">서기원</a></li>
+            <li><a href="board.jsp?boardName=military">국방부학습지</a></li>
             <%if (userID != null) {%> <li><a href="board.jsp?boardName=myBoard">내가쓴글</a></li> <%}%>
-            <%if (userID != null) {%> <li><a href="alarm.jsp">알람</a></li> <%}%>
+            <%if (userID != null) {%> <li><a href="alarm.jsp">알람
+            <%
+                if(alarmCount!=0) {%><span style="color: red;"><%=alarmCount%><%};%>
+            </a></li> <%}%>
             <%
                 if (userID != null && (userID.equals("slop1434") || userID.equals("chatte777") || userID.equals("test"))) {
             %>

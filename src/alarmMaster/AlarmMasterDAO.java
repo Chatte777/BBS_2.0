@@ -91,8 +91,8 @@ public class AlarmMasterDAO {
     }
 
     public int getTotalBoardIndex(String makeUser) {
-        String SQL = "SELECT COUNT(1) FROM alarm_masetr" +
-                " WH`te_yn = 1 " +
+        String SQL = "SELECT COUNT(1) FROM alarm_master" +
+                " WHERE alarm_delete_yn = 1 " +
                 " AND alarm_read_yn=1 " +
                 " AND alarm_target_user = ? " +
                 " ORDER BY alarm_no";
@@ -276,6 +276,30 @@ public class AlarmMasterDAO {
             pstmt.executeUpdate();
 
             return 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public int getAlarmCount(String alarmTargetUser) {
+        String SQL = "SELECT COUNT(1) FROM alarm_master" +
+                " WHERE alarm_delete_yn = 1 " +
+                " AND alarm_read_yn=1 " +
+                " AND alarm_target_user = ? ";
+
+        try {
+            int alarmCount=0;
+
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setString(1, alarmTargetUser);
+
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                alarmCount = rs.getInt(1);
+            }
+            return alarmCount;
         } catch (Exception e) {
             e.printStackTrace();
         }
