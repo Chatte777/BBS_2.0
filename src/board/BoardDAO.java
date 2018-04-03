@@ -27,6 +27,7 @@ public class BoardDAO {
     private String colReadCount;
 
     private String replyTableName;
+    private String reReplyTableName;
 
     private int boardCountPerPage=15;
 
@@ -42,6 +43,7 @@ public class BoardDAO {
         this.colAuthorize = boardName+"_authorize";
         this.colReadCount = boardName+"_read_count";
         this.replyTableName = boardName+"_reply";
+        this.reReplyTableName = boardName+"_re_reply";
 
         conn=dbConn.getDbConnection();
     }
@@ -299,6 +301,27 @@ public class BoardDAO {
 
     public int getReplyCnt(int boardNo) {
         String SQL = "SELECT COUNT(1) from "+ this.replyTableName +" WHERE "+ this.colBoardNo +" =? and reply_delete_yn=1";
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setInt(1, boardNo);
+
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                int allReplyCnt = rs.getInt(1);
+                allReplyCnt = allReplyCnt + getReReplyCnt(boardNo);
+
+                return allReplyCnt;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public int getReReplyCnt(int boardNo) {
+        String SQL = "SELECT COUNT(1) from "+ this.reReplyTableName +" WHERE "+ this.colBoardNo +" =? and re_reply_delete_yn=1";
 
         try {
             PreparedStatement pstmt = conn.prepareStatement(SQL);
