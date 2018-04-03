@@ -42,7 +42,7 @@
             <li><a href="board.jsp?boardName=mountain">산악일기</a></li>
             <li><a href="board.jsp?boardName=military">국방부학습지</a></li>
             <%if (userID != null) {%> <li><a href="board.jsp?boardName=myBoard">내가쓴글</a></li> <%}%>
-            <%if (userID != null) {%> <li><a href="alarm.jsp">알람
+            <%if (userID != null) {%> <li><a href="alarm.jsp">알림
             <%
                 if(alarmCount!=0) {%><span style="color: red;"><%=alarmCount%><%};%>
             </a></li> <%}%>
