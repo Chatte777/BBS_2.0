@@ -90,19 +90,17 @@ public class AlarmMasterDAO {
         return -1; // Database error
     }
 
-    public int getTotalBoardIndex(String makeUser) {
+    public int getTotalAlarmIndex(String alarmTargetUser) {
         String SQL = "SELECT COUNT(1) FROM alarm_master" +
                 " WHERE alarm_delete_yn = 1 " +
-                " AND alarm_read_yn=1 " +
-                " AND alarm_target_user = ? " +
-                " ORDER BY alarm_no";
+                " AND alarm_target_user = ? ";
 
         try {
             //조건에 맞는 전체 게시글 갯수
             int totalBoardCount = 1;
 
             PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setString(1, makeUser);
+            pstmt.setString(1, alarmTargetUser);
 
             rs = pstmt.executeQuery();
 
@@ -116,8 +114,8 @@ public class AlarmMasterDAO {
         return -1;
     }
 
-    public boolean isNextPage(int pageNumber, String makeUser) {
-        int totalBoardIndex = getTotalBoardIndex(makeUser);
+    public boolean isNextPage(int pageNumber, String alarmTargetUser) {
+        int totalBoardIndex = getTotalAlarmIndex(alarmTargetUser);
 
         //전체 페이지 갯수(전체 게시글 수가 페이지당 게시글 수로 나누어떨어지지 않으면 나눈 몫에다가 +1
         int totalPageNo;
