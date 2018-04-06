@@ -59,6 +59,8 @@ public class BoardDAO {
                 return rs.getString(1);
             }
         } catch(Exception e){
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("", "", "", "", "boardDAO.getDate", e.getMessage().toString(), "");
             e.printStackTrace();
         }
         return ""; //Database error
@@ -75,6 +77,8 @@ public class BoardDAO {
             }
             return 1; // 첫 게시물일 경우.
         } catch(Exception e){
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("", "", "", "", "boardDAO.getNext", e.getMessage().toString(), "");
             e.printStackTrace();
         }
         return -1; //Database error
@@ -119,7 +123,7 @@ public class BoardDAO {
             return tmpNextNo;
         } catch(Exception e){
             ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
-            errorMasterDAO.write("boardTitle:"+boardTitle, "boardAuthorize:"+boardAuthorize, "boardNo:"+boardNo, "boardContent:"+boardContent, "", e.getMessage().toString(), boardMakeUser);
+            errorMasterDAO.write("boardTitle:"+boardTitle, "boardAuthorize:"+boardAuthorize, "boardNo:"+boardNo, "boardContent:"+boardContent, "boardDAO.write", e.getMessage().toString(), boardMakeUser);
             e.printStackTrace();
         }
         return -1; //Database error
@@ -145,6 +149,8 @@ public class BoardDAO {
             }
             return totalBoardCount;
         } catch(Exception e){
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("makeUser:"+makeUser, "", "", "", "boardDAO.getTotalBoardIndex", e.getMessage().toString(), "");
             e.printStackTrace();
         }
         return -1;
@@ -203,6 +209,8 @@ public class BoardDAO {
                 list.add(boardVO);
             }
         } catch(Exception e){
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("makeUser:"+makeUser, "pageNumber:"+pageNumber, "", "", "boardDAO.getList", e.getMessage().toString(), "");
             e.printStackTrace();
         }
         return list; //Database error
@@ -266,6 +274,8 @@ public class BoardDAO {
                 return boardVO;
             }
         } catch(Exception e){
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("boardNo:"+boardNo, "", "", "", "boardDAO.getBoardNo", e.getMessage().toString(), "");
             e.printStackTrace();
         }
         return null;
@@ -284,6 +294,8 @@ public class BoardDAO {
             return boardNo;
 
         } catch(Exception e){
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("boardNo:"+boardNo, "boardTitle"+boardTitle, "boardAuthorize:"+boardAuthorize, "boardContent:"+boardContent, "boardDAO.getBoardNo", e.getMessage().toString(), "boardDAO.update");
             e.printStackTrace();
         }
         return -1; //Database error
@@ -297,6 +309,8 @@ public class BoardDAO {
 
             return pstmt.executeUpdate();
         } catch(Exception e){
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("boardNo:"+boardNo, "", "", "", "boardDAO.delete", e.getMessage().toString(), "");
             e.printStackTrace();
         }
         return -1; //Database error
@@ -318,6 +332,8 @@ public class BoardDAO {
                 return allReplyCnt;
             }
         } catch (Exception e) {
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("boardNo:"+boardNo, "", "", "", "boardDAO.getReplyCnt", e.getMessage().toString(), "");
             e.printStackTrace();
         }
         return -1;
@@ -338,6 +354,8 @@ public class BoardDAO {
                 return replyCnt;
             }
         } catch (Exception e) {
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("boardNo:"+boardNo, "", "", "", "boardDAO.getReReplyCnt", e.getMessage().toString(), "");
             e.printStackTrace();
         }
         return -1;
@@ -358,6 +376,8 @@ public class BoardDAO {
                 return replyCnt;
             }
         } catch (Exception e) {
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("boardNo:"+boardNo, "tableName:"+tableName, "", "", "boardDAO.getBoardNo", e.getMessage().toString(), "");
             e.printStackTrace();
         }
         return -1;
@@ -403,6 +423,8 @@ public class BoardDAO {
                 return gapFlag;
             }
         } catch (Exception e) {
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("boardNo:"+boardNo, "", "", "", "boardDAO.getReplyColor", e.getMessage().toString(), "");
             e.printStackTrace();
         }
         return -1;
@@ -448,6 +470,8 @@ public class BoardDAO {
                 return gapFlag;
             }
         } catch (Exception e) {
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("boardNo:"+boardNo, "tableName"+tableName, "", "", "boardDAO.getMyReplyColor", e.getMessage().toString(), "");
             e.printStackTrace();
         }
         return -1;
@@ -485,6 +509,8 @@ public class BoardDAO {
                 return gapFlag;
             }
         } catch (Exception e) {
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("boardNo:"+boardNo, "", "", "", "boardDAO.getBoardColor", e.getMessage().toString(), "");
             e.printStackTrace();
         }
         return -1;
@@ -541,6 +567,8 @@ public class BoardDAO {
                 list.add(boardVO);
             }
         } catch(Exception e){
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("pageNumber:"+pageNumber, "makeUser:"+makeUser, "", "", "boardDAO.getMyList", e.getMessage().toString(), "");
             e.printStackTrace();
         }
         return list; //Database error
@@ -556,6 +584,8 @@ public class BoardDAO {
 
             pstmt.executeUpdate();
         } catch(Exception e){
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("boardNo:"+boardNo, "", "", "", "boardDAO.hasReboardUpdate", e.getMessage().toString(), "");
             e.printStackTrace();
         }
     }
@@ -598,6 +628,8 @@ public class BoardDAO {
                 list.add(boardVO);
             }
         } catch(Exception e){
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("boardNo:"+boardNo, "makeUser:"+makeUser, "", "", "boardDAO.getReboardList", e.getMessage().toString(), "");
             e.printStackTrace();
         }
         return list; //Database error
