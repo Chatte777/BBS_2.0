@@ -1,3 +1,4 @@
+<%@ page import="java.net.URLDecoder" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <link href="css/bootstrap.css" rel="stylesheet">
@@ -11,7 +12,24 @@
 <%
     String boardName = request.getParameter("boardName");
     int boardNo = 0;
+
     if(request.getParameter("boardNo")!=null) boardNo=Integer.parseInt(request.getParameter("boardNo"));
+    Cookie[] cookies = request.getCookies();
+    String boardTitle=null;
+    String boardContent=null;
+    String boardAuthorize=null;
+    String reloadFlag=null;
+
+    for(int i=0; i<cookies.length; i++){
+        if("reloadFlag".equals(cookies[i].getName())) reloadFlag=cookies[i].getValue();
+    }
+
+    if("1".equals(reloadFlag))
+    for(int i=0; i<cookies.length; i++){
+        if("boardTitle".equals(cookies[i].getName())) boardTitle=URLDecoder.decode(cookies[i].getValue(),"utf-8");
+        if("boardContent".equals(cookies[i].getName())) boardContent= URLDecoder.decode(cookies[i].getValue(),"utf-8");
+        if("boardAuthorize".equals(cookies[i].getName())) boardAuthorize=cookies[i].getValue();
+    }
 %>
 
 <div class="container">
@@ -29,12 +47,24 @@
                 <tr>
                 <tr>
                     <td><input type="text" class="form-control"
-                               placeholder="글 제목" name="boardTitle" maxlength="50"></td>
-                    <td><select class="form-control" name="boardAuthorize"><option value="1" selected>전체공개</option><option value="2">나만보기</option></select></td>
+                               placeholder="글 제목" name="boardTitle" maxlength="50" <%if(boardTitle!=null){%>value="<%=boardTitle%>"<%}%>></td>
+                    <td><select class="form-control" name="boardAuthorize">
+                        <%
+                            if(boardAuthorize=="2"){
+                        %>
+                        <option value="1">전체공개</option><option value="2" selected>나만보기</option></select>
+                        <%
+                            } else {
+                        %>
+                        <option value="1" selected>전체공개</option><option value="2">나만보기</option></select>
+                        <%
+                            }
+                        %>
+                    </td>
                 </tr>
                 <tr>
                     <td colspan="2"><textarea name="boardContent" id="summernote"
-                                    maxlength="2048"></textarea></td>
+                                    maxlength="2048"><%if(boardContent!=null){%><%=boardContent%><%}%></textarea></td>
                 </tr>
                 </tbody>
             </table>

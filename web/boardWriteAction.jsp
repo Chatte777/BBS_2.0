@@ -2,6 +2,7 @@
 
 <%@ page import="java.io.PrintWriter"%>
 <%@ page import="board.BoardDAO" %>
+<%@ page import="java.net.URLEncoder" %>
 
 
 <%
@@ -35,10 +36,25 @@
 						request.getParameter("boardContent"), Integer.parseInt(request.getParameter("boardAuthorize")), Integer.parseInt(request.getParameter("boardNo")));
 
 				if (result == -1) {
+					Cookie reloadFlag = new Cookie("reloadFlag", "1");
+					reloadFlag.setMaxAge(5);
+					Cookie boardTitle = new Cookie("boardTitle", URLEncoder.encode(request.getParameter("boardTitle"),"utf-8"));
+					boardTitle.setMaxAge(5);
+                    Cookie boardContent = new Cookie("boardContent", URLEncoder.encode(request.getParameter("boardContent"),"utf-8"));
+					boardContent.setMaxAge(5);
+					Cookie boardAuthorize = new Cookie("boardAuthorize", request.getParameter("boardAuthorize"));
+					boardAuthorize.setMaxAge(5);
+
+					response.addCookie(reloadFlag);
+					response.addCookie(boardTitle);
+					response.addCookie(boardContent);
+					response.addCookie(boardAuthorize);
+
 					PrintWriter script = response.getWriter();
+
 					script.println("<script>");
 					script.println("alert('글쓰기에 실패했습니다.')");
-					script.println("history.back()");
+					script.println("location.href='boardWrite.jsp?boardName="+boardName+"'");
 					script.println("</script>");
 				} else {
 						PrintWriter script = response.getWriter();

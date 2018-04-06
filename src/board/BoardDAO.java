@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import dbConn.*;
 import alarmMaster.*;
+import errorMaster.*;
 
 public class BoardDAO {
 
@@ -117,6 +118,8 @@ public class BoardDAO {
 
             return tmpNextNo;
         } catch(Exception e){
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("boardTitle:"+boardTitle, "boardAuthorize:"+boardAuthorize, "boardNo:"+boardNo, "boardContent:"+boardContent, "", e.getMessage().toString(), boardMakeUser);
             e.printStackTrace();
         }
         return -1; //Database error
