@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import dbConn.*;
+import errorMaster.ErrorMasterDAO;
 
 public class UserDAO {
 
@@ -18,11 +19,11 @@ public class UserDAO {
 		conn = dbConn.getDbConnection();
 	}
 	
-	public int login(String userID, String userPassword){
+	public int login(String userId, String userPassword){
 		String SQL = "SELECT userPassword FROM USER WHERE userID= ?";
 		try{
 			pstmt = conn.prepareStatement(SQL);
-			pstmt.setString(1, userID);
+			pstmt.setString(1, userId);
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()){
@@ -30,10 +31,12 @@ public class UserDAO {
 					return 1; // Login successs
 				}
 				else
-					return 0; // Password ����ġ
+					return 0;
 			}
 			return -1; // no ID
 		}catch(Exception e){
+			ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+			errorMasterDAO.write("userId"+userId, "userPassWord"+userPassword, "", "", "userDAO.login", e.getMessage().toString(), "");
 			e.printStackTrace();
 		}
 		return -2; //Database error
@@ -51,6 +54,8 @@ public class UserDAO {
 			pstmt.setString(5, user.getUserEmail());
 			return pstmt.executeUpdate();
 		}catch(Exception e){
+			ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+			errorMasterDAO.write("userId"+user.getUserID(), "userPassWord"+user.getUserPassword(), "userName"+user.getUserName(), "userEmail"+user.getUserEmail(), "userDAO.join", e.getMessage().toString(), "");
 			e.printStackTrace();
 		}
 		return -1; //Database error

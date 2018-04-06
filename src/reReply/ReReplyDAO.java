@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import dbConn.*;
+import errorMaster.ErrorMasterDAO;
 
 public class ReReplyDAO {
 
@@ -35,6 +36,8 @@ public class ReReplyDAO {
                 return rs.getString(1);
             }
         } catch (Exception e) {
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("", "", "", "", "reReplyDAO.getDate", e.getMessage().toString(), "");
             e.printStackTrace();
         }
         return ""; // Database error
@@ -53,6 +56,8 @@ public class ReReplyDAO {
             }
             return 1; // Database오류
         } catch (Exception e) {
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("boardNo:"+boardNo, "replyNo"+replyNo, "", "", "reReplyDAO.getNext", e.getMessage().toString(), "");
             e.printStackTrace();
         }
         return -1; // Database error
@@ -75,6 +80,8 @@ public class ReReplyDAO {
             return pstmt.executeUpdate();
 
         } catch (Exception e) {
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("boardNo"+boardNo, "replyNo"+replyNo, "reReplyMakeUser"+replyMakeUser, "reReplyContent"+replyContent, "reReplyDAO.getDate", e.getMessage().toString(), "");
             e.printStackTrace();
         }
         return -1; // Database error
@@ -106,41 +113,12 @@ public class ReReplyDAO {
             }
 
         } catch (Exception e) {
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("boardNo"+boardNo, "replyNo"+replyNo, "", "", "reReplyDAO.getList", e.getMessage().toString(), "");
             e.printStackTrace();
         }
         return innerList; // Database error
     }
-
-    /*
-     * public MountainReply getReply(int mountainNo, int replyNo){ String SQL =
-     * "SELECT * from mountain_reply WHERE mountain_no = ? and reply_no = ?";
-     *
-     * try{ PreparedStatement pstmt = conn.prepareStatement(SQL);
-     * pstmt.setInt(1, mountainNo); pstmt.setInt(2, replyNo);
-     *
-     * rs = pstmt.executeQuery();
-     *
-     * if (rs.next()){ MountainReply mountainReply = new MountainReply();
-     * mountainReply.setMountainNo(rs.getInt(1));
-     * mountainReply.setReplyNo(rs.getInt(2));
-     * mountainReply.setReplyContent(rs.getString(3));
-     * mountainReply.setReplyMakeUser(rs.getString(4));
-     * mountainReply.setReplyMakeDt(rs.getString(5));
-     * mountainReply.setReplyLikeCnt(rs.getInt(6));
-     * mountainReply.setReplyDislikeCnt(rs.getInt(7));
-     * mountainReply.setReplyDeleteYn(rs.getInt(8));
-     *
-     * return mountainReply; } } catch(Exception e){ e.printStackTrace(); }
-     * return null; }
-     *
-     * public int delete(int mountainNo, int replyNo){ String SQL =
-     * "UPDATE mountain_reply SET reply_delete_yn=2 WHERE mountain_no = ? and reply_no = ?"
-     * ; try{ PreparedStatement pstmt = conn.prepareStatement(SQL);
-     * pstmt.setInt(1, mountainNo); pstmt.setInt(2, replyNo);
-     *
-     * return pstmt.executeUpdate(); } catch(Exception e){ e.printStackTrace();
-     * } return -1; //Database error }
-     */
 
     public int update(int boardNo, int replyNo, int reReplyNo, String replyContent) {
         String SQL = "UPDATE "+ this.tableName +" SET re_reply_content=? WHERE "+ this.colBoardNo +" =? and reply_no=? and re_reply_no = ?";
@@ -155,6 +133,8 @@ public class ReReplyDAO {
 
         } catch (Exception e) {
             e.printStackTrace();
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("boardNo:"+boardNo, "", "", "", "reReplyDAO.getDate", e.getMessage().toString(), "");
         }
         return -1; // Database error
     }
