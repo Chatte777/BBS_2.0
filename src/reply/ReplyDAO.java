@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import alarmMaster.AlarmMaster;
 import alarmMaster.AlarmMasterDAO;
 import dbConn.*;
+import errorMaster.ErrorMasterDAO;
 
 public class ReplyDAO {
 
@@ -36,6 +37,9 @@ public class ReplyDAO {
 				return rs.getString(1);
 			}
 		} catch(Exception e){
+			ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+			errorMasterDAO.write("", "", "", "", "replyDAO.getDate", e.getMessage().toString(), "");
+
 			e.printStackTrace();
 		}
 		return ""; //Database error
@@ -53,6 +57,8 @@ public class ReplyDAO {
 			}
 			return 1; // Database오류
 		} catch(Exception e){
+			ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+			errorMasterDAO.write("boardNo:"+boardNo, "", "", "", "replyDAO.getNext", e.getMessage().toString(), "");
 			e.printStackTrace();
 		}
 		return -1; //Database error
@@ -80,6 +86,9 @@ public class ReplyDAO {
 
 			return pstmt.executeUpdate();
 		} catch(Exception e){
+
+			ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+			errorMasterDAO.write("boardNo:"+boardNo, "replyMakeUser:"+replyMakeUser, "", "replyContent:"+replyContent, "replyDAO.write", e.getMessage().toString(), "");
 			e.printStackTrace();
 		}
 		return -1; //Database error
@@ -109,6 +118,8 @@ public class ReplyDAO {
 				list.add(reply);
 			}
 		} catch(Exception e){
+			ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+			errorMasterDAO.write("boardNo:"+boardNo, "", "", "", "replyDAO.getList", e.getMessage().toString(), "");
 			e.printStackTrace();
 		}
 		return list; //Database error
@@ -139,6 +150,8 @@ public class ReplyDAO {
 				return reply;
 			}
 		} catch(Exception e){
+			ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+			errorMasterDAO.write("boardNo:"+boardNo, "replyNo:"+replyNo, "", "", "replyDAO.getReply", e.getMessage().toString(), "");
 			e.printStackTrace();
 		}
 		return null; 
@@ -153,6 +166,8 @@ public class ReplyDAO {
 			
 			return pstmt.executeUpdate();
 		} catch(Exception e){
+			ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+			errorMasterDAO.write("boardNo:"+boardNo, "replyNo:"+replyNo, "", "", "replyDAO.delete", e.getMessage().toString(), "");
 			e.printStackTrace();
 		}
 		return -1; //Database error
@@ -169,6 +184,8 @@ public class ReplyDAO {
 			return pstmt.executeUpdate();
 			
 		} catch(Exception e){
+			ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+			errorMasterDAO.write("boardNo:"+boardNo, "replyNo"+replyNo, "", "replyContent:"+replyContent, "replyDAO.update", e.getMessage().toString(), "");
 			e.printStackTrace();
 		}
 		return -1; //Database error

@@ -1,5 +1,7 @@
 package dbConn;
 
+import errorMaster.ErrorMasterDAO;
+
 import java.net.InetAddress;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,6 +22,8 @@ public class DbConn {
             Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection(dbURL, dbID, dbPassword);
         } catch (Exception e) {
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("", "", "", "", "DbConn.getDbConnection", e.getMessage().toString(), "");
             e.printStackTrace();
         }
         return conn;
