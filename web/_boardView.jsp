@@ -122,11 +122,19 @@
                 for (int j = 0; j < listReReply.size(); j++) {
             %>
             <tr style="height: 1px; font-size: 0.875em; background-color: #FEFEF2; margin: 1em;">
-                <td align="center"><span class="glyphicon glyphicon-menu-right" style="color: #bbbbbb;">&nbsp;</span></td>
-
-                <td align="left" style="word-break: break-all;"><%=listReReply.get(j).getReReplyContent().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;")
+                <td align="center" style="border: none;"><span class="glyphicon glyphicon-menu-right" style="color: #bbbbbb;">&nbsp;</span></td>
+                <td style="border: none;"><%=listReReply.get(j).getReReplyMakeUser()%> &nbsp; <%=listReReply.get(j).getReReplyMakeDt().substring(0, 11)
+                        + listReReply.get(j).getReReplyMakeDt().substring(11, 13) + "시"
+                        + listReReply.get(j).getReReplyMakeDt().substring(14, 16) + "분"%></td>
+                <td style="border: none;"></td>
+                <td style="border: none;"></td>
+                <td style="border: none;"></td>
+            </tr>
+            <tr style="height: 1px; font-size: 0.875em; background-color: #FEFEF2; margin: 1em;">
+                <td style=" border-top-style: none; border-bottom-style: dashed; border-right-style: none; border-left-style: none; border-bottom-color: lightskyblue; border-width: 0.1em;"></td>
+                <td align="left" style="word-break: break-all; border-top-style: none; border-bottom-style: dashed; border-right-style: none; border-left-style: none; border-bottom-color: lightskyblue; border-width: 0.1em;"><%=listReReply.get(j).getReReplyContent().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;")
                         .replaceAll(">", "&gt;").replaceAll("\n", "<br>")%></td>
-                <td align="center" style="width: 5%;">
+                <td align="center" style="width: 5%; border-top-style: none; border-bottom-style: dashed; border-right-style: none; border-left-style: none; border-bottom-color: lightskyblue; border-width: 0.1em;">
                     <%
                         if (userId != null && userId.equals(listReReply.get(j).getReReplyMakeUser())) {
                     %>
@@ -135,10 +143,8 @@
                     }
                 %>
                 </td>
-                <td><%=listReReply.get(j).getReReplyMakeUser()%></td>
-                <td><%=listReReply.get(j).getReReplyMakeDt().substring(0, 11)
-                        + listReReply.get(j).getReReplyMakeDt().substring(11, 13) + "시"
-                        + listReReply.get(j).getReReplyMakeDt().substring(14, 16) + "분"%></td>
+                <td style="border-top-style: none; border-bottom-style: dashed; border-right-style: none; border-left-style: none; border-bottom-color: lightskyblue; border-width: 0.1em;;"></td>
+                <td style="border-top-style: none; border-bottom-style: dashed; border-right-style: none; border-left-style: none; border-bottom-color: lightskyblue; border-width: 0.1em;"></td>
             </tr>
             <%
                     }
