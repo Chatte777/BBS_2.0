@@ -2,6 +2,8 @@ package errorMaster;
 
 import dbConn.DbConn;
 
+import java.io.FileWriter;
+import java.net.InetAddress;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,6 +28,19 @@ public class ErrorMasterDAO {
             }
             return 1;
         } catch (Exception e) {
+            try {
+                String location;
+                InetAddress ip = InetAddress.getLocalHost();
+                if (ip.toString().equals("KoreaUniv-PC/192.168.219.90"))
+                    location = "C:\\Users\\IMTSOFT\\Documents\\log.txt";
+                else location = "C:\\Users\\IMTSOFT\\Documents\\log.txt";
+
+                FileWriter writer = new FileWriter(location, true);
+                writer.write("ErrorWrite Error \t ErrorMasterDAO.getNext() \t " + e.getMessage().toString() + "\r\n");
+                writer.close();
+            } catch (Exception innerE) {
+                innerE.printStackTrace();
+            }
             e.printStackTrace();
         }
         return -1; // Database error
@@ -41,6 +56,19 @@ public class ErrorMasterDAO {
                 return rs.getString(1);
             }
         } catch (Exception e) {
+            try {
+                String location;
+                InetAddress ip = InetAddress.getLocalHost();
+                if (ip.toString().equals("KoreaUniv-PC/192.168.219.90"))
+                    location = "C:\\Users\\IMTSOFT\\Documents\\log.txt";
+                else location = "C:\\Users\\IMTSOFT\\Documents\\log.txt";
+
+                FileWriter writer = new FileWriter(location, true);
+                writer.write("ErrorWrite Error \t ErrorMasterDAO.getDate() \t " + e.getMessage().toString() + "\r\n");
+                writer.close();
+            } catch (Exception innerE) {
+                innerE.printStackTrace();
+            }
             e.printStackTrace();
         }
         return ""; // Database error
@@ -66,6 +94,19 @@ public class ErrorMasterDAO {
 
             return tmpNextNo;
         } catch (Exception e) {
+            try {
+                String location;
+                InetAddress ip = InetAddress.getLocalHost();
+                if (ip.toString().equals("KoreaUniv-PC/192.168.219.90"))
+                    location = "C:\\Users\\IMTSOFT\\Documents\\log.txt";
+                else location = "C:\\Users\\IMTSOFT\\Documents\\log.txt";
+
+                FileWriter writer = new FileWriter(location, true);
+                writer.write("ErrorWrite Error \t ErrorMasterDAO.write() \t " + e.getMessage().toString() + "\r\n");
+                writer.close();
+            } catch (Exception innerE) {
+                innerE.printStackTrace();
+            }
             e.printStackTrace();
         }
         return -1; // Database error
