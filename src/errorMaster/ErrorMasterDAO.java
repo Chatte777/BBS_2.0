@@ -5,8 +5,10 @@ import dbConn.DbConn;
 import java.io.FileWriter;
 import java.net.InetAddress;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 
 public class ErrorMasterDAO {
     private Connection conn;
@@ -35,8 +37,12 @@ public class ErrorMasterDAO {
                     location = "C:\\Users\\IMTSOFT\\Documents\\log.txt";
                 else location = "C:\\Users\\IMTSOFT\\Documents\\log.txt";
 
+                long curTimeLong = System.currentTimeMillis();
+                SimpleDateFormat dayTime = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+                String curTimeStr = dayTime.format(new Date(curTimeLong));
+
                 FileWriter writer = new FileWriter(location, true);
-                writer.write("ErrorWrite Error \t ErrorMasterDAO.getNext() \t " + e.getMessage().toString() + "\r\n");
+                writer.write(curTimeStr + "\t ErrorWrite Error \t ErrorMasterDAO.getNext() \t " + e.getMessage().toString() + "\r\n");
                 writer.close();
             } catch (Exception innerE) {
                 innerE.printStackTrace();
@@ -63,8 +69,12 @@ public class ErrorMasterDAO {
                     location = "C:\\Users\\IMTSOFT\\Documents\\log.txt";
                 else location = "C:\\Users\\IMTSOFT\\Documents\\log.txt";
 
+                long curTimeLong = System.currentTimeMillis();
+                SimpleDateFormat dayTime = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+                String curTimeStr = dayTime.format(new Date(curTimeLong));
+
                 FileWriter writer = new FileWriter(location, true);
-                writer.write("ErrorWrite Error \t ErrorMasterDAO.getDate() \t " + e.getMessage().toString() + "\r\n");
+                writer.write(curTimeStr + "\t ErrorWrite Error \t ErrorMasterDAO.getDate() \t " + e.getMessage().toString() + "\r\n");
                 writer.close();
             } catch (Exception innerE) {
                 innerE.printStackTrace();
@@ -101,8 +111,12 @@ public class ErrorMasterDAO {
                     location = "C:\\Users\\IMTSOFT\\Documents\\log.txt";
                 else location = "C:\\Users\\IMTSOFT\\Documents\\log.txt";
 
+                long curTimeLong = System.currentTimeMillis();
+                SimpleDateFormat dayTime = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+                String curTimeStr = dayTime.format(new Date(curTimeLong));
+
                 FileWriter writer = new FileWriter(location, true);
-                writer.write("ErrorWrite Error \t ErrorMasterDAO.write() \t " + e.getMessage().toString() + "\r\n");
+                writer.write(curTimeStr + "\t ErrorWrite Error \t ErrorMasterDAO.write() \t " + e.getMessage().toString() + "\r\n");
                 writer.close();
             } catch (Exception innerE) {
                 innerE.printStackTrace();
