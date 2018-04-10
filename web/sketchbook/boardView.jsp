@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
 <%@ page import="java.io.PrintWriter"%>
 <%@ page import="board.BoardDAO" %>
 <%@ page import="board.BoardVO" %>
@@ -9,7 +8,16 @@
 <%@ page import="reReply.ReReplyDAO" %>
 <%@ page import="reReply.ReReplyVO" %>
 
-
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width" , initial-scale="1">
+<link rel="stylesheet" href="../css/bootstrap.css">
+<title>DREAMY CAT</title>
+</head>
+<body>
+<jsp:include page="../_headNav.jsp" flush="false" />
 <%
     String userId = null;
     String boardName = request.getParameter("boardName");
@@ -27,7 +35,7 @@
         PrintWriter script = response.getWriter();
         script.println("<script>");
         script.println("alert('유효하지 않은 글입니다.')");
-        script.println("location.href = '"+boardName+".jsp'");
+        script.println("location.href = './board.jsp?boardName=sketchbook'");
         script.println("</script>");
     }
     BoardVO boardVO = new BoardDAO(boardName).getBoardVO(boardNo);
@@ -53,7 +61,7 @@
                     }
                 %>
                     <%=boardVO.getBoardTitle().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;")
-                        .replaceAll(">", "&gt;").replaceAll("\n", "<br>")%></td>
+                            .replaceAll(">", "&gt;").replaceAll("\n", "<br>")%></td>
             </tr>
             <tr>
                 <td>작성자</td>
@@ -77,8 +85,8 @@
             <%
                 if (userId != null && userId.equals(boardVO.getBoardMakeUser())) {
             %>
-            <a href="boardUpdate.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>" class="btn btn-primary">수정</a>
-            <a onclick="return confirm('정말로 삭제하시겠습니까?')" href="boardDeleteAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>" class="btn btn-primary">삭제</a>&nbsp;
+            <a href="./boardUpdate.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>" class="btn btn-primary">수정</a>
+            <a onclick="return confirm('정말로 삭제하시겠습니까?')" href="./boardDeleteAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>" class="btn btn-primary">삭제</a>&nbsp;
             <%
             } else {
             %>
@@ -107,7 +115,7 @@
                         if (userId != null && userId.equals(list.get(i).getReplyMakeUser())) {
                     %>
                     <a onclick="modifyClick('<%=list.get(i).getReplyContent()%>', '<%=replyNo%>')" type="button" class="glyphicon glyphicon-pencil" style="color: #cccccc"/>
-                    <a onclick="return confirm('정말로 삭제하시겠습니까?')" a href="replyDeleteAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>&replyNo=<%=replyNo%>" type="button" class="close" aria-label="close"/> <span aria-hidden="true">&times;</span> <%
+                    <a onclick="return confirm('정말로 삭제하시겠습니까?')" a href="./replyDeleteAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>&replyNo=<%=replyNo%>" type="button" class="close" aria-label="close"/> <span aria-hidden="true">&times;</span> <%
                     }
                 %>
                 </td>
@@ -139,7 +147,7 @@
                         if (userId != null && userId.equals(listReReply.get(j).getReReplyMakeUser())) {
                     %>
                     <a onclick="modifyClick('<%=listReReply.get(j).getReReplyContent()%>', '<%=listReReply.get(j).getReReplyNo()%>')" type="button" class="glyphicon glyphicon-pencil" style="color: #cccccc" />
-                    <a onclick="return confirm('정말로 삭제하시겠습니까?')" a href="reReplyDeleteAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>&replyNo=<%=replyNo%>&reReplyNo=<%=listReReply.get(j).getReReplyNo()%>" type="button" class="close" aria-label="close" /> <span aria-hidden="true">&times</span> <%
+                    <a onclick="return confirm('정말로 삭제하시겠습니까?')" a href="./reReplyDeleteAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>&replyNo=<%=replyNo%>&reReplyNo=<%=listReReply.get(j).getReReplyNo()%>" type="button" class="close" aria-label="close" /> <span aria-hidden="true">&times</span> <%
                     }
                 %>
                 </td>
@@ -168,18 +176,18 @@
     </form>
 
     <div class="row" align="right">
-        <a href="board.jsp?boardName=<%=boardName%>" class="btn btn-primary">목록</a>
+        <a href="./board.jsp?boardName=<%=boardName%>" class="btn btn-primary">목록</a>
         <%
             if(boardVO.getIsRebaord()==1){
         %>
-        <a href="boardWrite.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>" class="btn btn-primary">답글쓰기</a>
+        <a href="./boardWrite.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>" class="btn btn-primary">답글쓰기</a>
         <%
-            } else {
+        } else {
         %>
         <a href="#" class="btn btn-primary" style="background:gray;">답글쓰기</a>
         <%}%>
 
-        <a href="boardWrite.jsp?boardName=<%=boardName%>" class="btn btn-primary">글쓰기</a>
+        <a href="./boardWrite.jsp?boardName=<%=boardName%>" class="btn btn-primary">글쓰기</a>
     </div>
 </div>
 
@@ -218,3 +226,5 @@
         }
     }
 </script>
+</body>
+</html>

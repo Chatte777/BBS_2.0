@@ -1,17 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-<%@ page import = "reply.ReplyVO" %>
-<%@ page import = "reply.ReplyDAO" %>
+<%@ page import = "board.BoardVO" %>
+<%@ page import = "board.BoardDAO"%>
 <%@ page import = "java.io.PrintWriter" %>
-
 <% request.setCharacterEncoding("UTF-8"); %>
+
+
 
 	<%
 		String userId = null;
-		String boardName = request.getParameter("boardName");
-		int boardNo = Integer.parseInt(request.getParameter("boardNo"));
-
 		if(session.getAttribute("userID") != null){
 			userId = (String) session.getAttribute("userID");
 		}
@@ -23,12 +21,12 @@
 				script.println("</script>");
 			}
 		
-			int replyNo = 0;
-			if(request.getParameter("replyNo") != null){
-				replyNo = Integer.parseInt(request.getParameter("replyNo"));
+			int boardNo = 0;
+			if(request.getParameter("boardNo") != null){
+				boardNo = Integer.parseInt(request.getParameter("boardNo"));
 			}
 		
-			if(replyNo == 0){
+			if(boardNo == 0){
 				PrintWriter script = response.getWriter();
 				script.println("<script>");
 				script.println("alert('유효하지 않은 글입니다.')");
@@ -36,23 +34,23 @@
 				script.println("</script>"); 
 			}
 
-		ReplyVO replyVO = new ReplyVO();
-		ReplyDAO replyDAO = new ReplyDAO(boardName);
-		replyVO = replyDAO.getReply(boardNo, replyNo);
+			String boardName = request.getParameter("boardName");
+			BoardDAO boardDAO = new BoardDAO(boardName);
+			BoardVO boardVO = boardDAO.getBoardVO(boardNo);
 
-		if(!userId.equals(replyVO.getReplyMakeUser())){
+			if(!userId.equals(boardVO.getBoardMakeUser())){
 				PrintWriter script = response.getWriter();
 				script.println("<script>");
 				script.println("alert('권한이 없습니다.')");
 				script.println("location.href = 'login.jsp'");
 				script.println("</script>"); 
 			} else {
-				int result = replyDAO.delete(replyVO.getBoardNo(), replyNo);
+					int result = boardDAO.delete(boardNo);
 					
 					if(result == -1){
 						PrintWriter script = response.getWriter();
 						script.println("<script>");
-						script.println("alert('댓글 삭제에 실패했습니다.')");
+						script.println("alert('글 삭제에 실패했습니다.')");
 						script.println("history.back()");
 						script.println("</script>");
 					}
@@ -60,7 +58,7 @@
 					{
 						PrintWriter script = response.getWriter();
 						script.println("<script>");
-						script.println("location.href='boardView.jsp?boardName="+boardName+"&boardNo="+replyVO.getBoardNo()+"'");
+						script.println("location.href='board.jsp?boardName="+boardName+"'");
 						script.println("</script>");
 					}
 		}

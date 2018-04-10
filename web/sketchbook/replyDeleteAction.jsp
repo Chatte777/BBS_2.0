@@ -32,7 +32,7 @@
 				PrintWriter script = response.getWriter();
 				script.println("<script>");
 				script.println("alert('유효하지 않은 글입니다.')");
-				script.println("location.href = 'board.jsp'");
+				script.println("location.href = './board.jsp'");
 				script.println("</script>"); 
 			}
 
@@ -52,7 +52,7 @@
 					if(result == -1){
 						PrintWriter script = response.getWriter();
 						script.println("<script>");
-						script.println("alert('댓글 삭제에 실패했습니다.')");
+						script.println("alert('글 삭제에 실패했습니다.')");
 						script.println("history.back()");
 						script.println("</script>");
 					}
@@ -60,7 +60,7 @@
 					{
 						PrintWriter script = response.getWriter();
 						script.println("<script>");
-						script.println("location.href='boardView.jsp?boardName="+boardName+"&boardNo="+replyVO.getBoardNo()+"'");
+						script.println("location.href='./boardView.jsp?boardName="+boardName+"&boardNo="+replyVO.getBoardNo()+"'");
 						script.println("</script>");
 					}
 		}

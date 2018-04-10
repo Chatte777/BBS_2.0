@@ -136,4 +136,21 @@ public class ReReplyDAO {
         }
         return -1; // Database error
     }
+
+    public int delete(int boardNo, int replyNo, int reReplyNo){
+        String SQL = "UPDATE "+ this.tableName +" SET re_reply_delete_yn=0 WHERE "+ this.colBoardNo +" = ? and reply_no = ? and re_reply_no=?";
+        try{
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setInt(1, boardNo);
+            pstmt.setInt(2, replyNo);
+            pstmt.setInt(3, reReplyNo);
+
+            return pstmt.executeUpdate();
+        } catch(Exception e){
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("boardNo:"+boardNo, "replyNo:"+replyNo, "", "", "replyDAO.delete", e.getMessage().toString(), "");
+            e.printStackTrace();
+        }
+        return -1; //Database error
+    }
 }

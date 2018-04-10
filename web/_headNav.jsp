@@ -24,11 +24,11 @@
         <%
             if (userID != null && (userID.equals("slop1434") || userID.equals("chatte777"))) {
         %>
-        <a class="navbar-brand" href="main.jsp">DREAMY KAT</a>
+        <a class="navbar-brand" href="/main.jsp">DREAMY KAT</a>
         <%
         } else {
         %>
-        <a class="navbar-brand" href="main.jsp">MyLogs</a>
+        <a class="navbar-brand" href="/main.jsp">MyLogs</a>
         <%
             }
         %>
@@ -37,19 +37,19 @@
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-            <li><a href="main.jsp">메인</a></li>
-            <li><a href="board.jsp?boardName=notify">공지 및 건의</a></li>
-            <li><a href="board.jsp?boardName=mountain">산악일기</a></li>
-            <li><a href="board.jsp?boardName=military">국방부학습지</a></li>
-            <%if (userID != null) {%> <li><a href="board.jsp?boardName=myBoard">내가쓴글</a></li> <%}%>
-            <%if (userID != null) {%> <li><a href="alarm.jsp">알림
+            <li><a href="/board.jsp?boardName=notify">공지 및 건의</a></li>
+            <li><a href="/board.jsp?boardName=mountain">산악일기</a></li>
+            <li><a href="/board.jsp?boardName=military">국방부학습지</a></li>
+            <li><a href="/sketchbook/board.jsp?boardName=sketchbook">스케치북</a></li>
+            <%if (userID != null) {%> <li><a href="/board.jsp?boardName=myBoard">내가쓴글</a></li> <%}%>
+            <%if (userID != null) {%> <li><a href="/alarm.jsp">알림
             <%
                 if(alarmCount!=0) {%><span style="color: red;"><%=alarmCount%><%};%>
             </a></li> <%}%>
             <%
                 if (userID != null && (userID.equals("slop1434") || userID.equals("chatte777") || userID.equals("test"))) {
             %>
-            <li><a href="board.jsp?boardName=thread">대화의 숲</a></li>
+            <li><a href="/board.jsp?boardName=thread">대화의 숲</a></li>
             <%
                 }
             %>
@@ -63,8 +63,8 @@
                                     data-toggle="dropdown" role="button" aria-haspopup="true"
                                     aria-expanded="false">접속하기<span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="login.jsp">로그인</a></li>
-                    <li><a href="join.jsp">회원가입</a></li>
+                    <li><a href="/login.jsp">로그인</a></li>
+                    <li><a href="/join.jsp">회원가입</a></li>
                 </ul></li>
         </ul>
         <%
@@ -75,7 +75,7 @@
                                     data-toggle="dropdown" role="button" aria-haspopup="true"
                                     aria-expanded="false">회원관리<span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="logoutAction.jsp">로그아웃</a></li>
+                    <li><a href="/logoutAction.jsp">로그아웃</a></li>
                 </ul></li>
         </ul>
         <%

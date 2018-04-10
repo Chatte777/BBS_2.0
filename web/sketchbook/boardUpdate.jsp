@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="java.io.PrintWriter"%>
 
 <link href="css/bootstrap.css" rel="stylesheet">
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
@@ -11,6 +12,16 @@
 <%@ page import="board.BoardVO"%>
 <%@ page import="board.BoardDAO"%>
 
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width" , initial-scale="1">
+<link rel="stylesheet" href="css/bootstrap.css">
+<title>DREAMY CAT</title>
+</head>
+<body>
+	<jsp:include page="../_headNav.jsp" flush="false" />
 	<%
 		String userId = null;
 		if (session.getAttribute("userID") != null) {
@@ -51,27 +62,27 @@
 		<div class="row">
 			<form method="post" name="boardForm">
 				<table class="table table-striped"
-					style="border: 1px solid #dddddd">
+					   style="border: 1px solid #dddddd">
 					<thead>
-						<tr>
-							<th colspan="2"
-								style="background-color: #eeeeee; text-align: center;">게시판
-								글 수정 양식</th>
-						</tr>
+					<tr>
+						<th colspan="2"
+							style="background-color: #eeeeee; text-align: center;">게시판
+							글 수정 양식</th>
+					</tr>
 					</thead>
 
 					<tbody>
-						<tr>
-						<tr>
-							<td><input type="text" class="form-control"
-								placeholder="글 제목" name="boardTitle" maxlength="50"
-								value="<%=boardVO.getBoardTitle()%>"></td>
-							<td><select class="form-control" name="boardAuthorize"><option value="1" <%if (boardVO.getBoardAuthorize()==1){ %>selected <%}%>>전체공개</option><option value="2"  <%if (boardVO.getBoardAuthorize()==2){ %>selected <%}%>>나만보기</option></select></td>
-						</tr>
-						<tr>
-							<td colspan="2"><textarea <textarea name="boardContent" id="summernote"
-																placeholder="글 내용"  maxlength="2048"><%=boardVO.getBoardContent()%></textarea></td>
-						</tr>
+					<tr>
+					<tr>
+						<td><input type="text" class="form-control"
+								   placeholder="글 제목" name="boardTitle" maxlength="50"
+								   value="<%=boardVO.getBoardTitle()%>"></td>
+						<td><select class="form-control" name="boardAuthorize"><option value="1" <%if (boardVO.getBoardAuthorize()==1){ %>selected <%}%>>전체공개</option><option value="2"  <%if (boardVO.getBoardAuthorize()==2){ %>selected <%}%>>나만보기</option></select></td>
+					</tr>
+					<tr>
+						<td colspan="2"><textarea <textarea name="boardContent" id="summernote"
+															placeholder="글 내용"  maxlength="2048"><%=boardVO.getBoardContent()%></textarea></td>
+					</tr>
 					</tbody>
 				</table>
 				<input type="button" onclick="contentSubmit()" class="btn btn-primary pull-right" value="글수정">
@@ -80,4 +91,6 @@
 		</div>
 	</div>
 
-<script src="js/_boardFileUpload.js" boardName="<%=boardName%>" boardNo="<%=boardNo%>" boardType="2"></script>
+	<script src="js/_boardFileUpload.js" boardName="<%=boardName%>" boardNo="<%=boardNo%>" boardType="2"></script>
+</body>
+</html>
