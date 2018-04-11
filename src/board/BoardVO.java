@@ -17,6 +17,8 @@ public class BoardVO {
     private int isRebaord;
     private int hasReboard;
     private int orgBoardNo;
+    private String boardPassword;
+    private int boardPriority;
 
     public String getTableName() {
         return tableName;
@@ -119,5 +121,21 @@ public class BoardVO {
 
     public void setOrgBoardNo(int orgBoardNo) {
         this.orgBoardNo = orgBoardNo;
+    }
+
+    public String getBoardPassword() {
+        return boardPassword;
+    }
+
+    public void setBoardPassword(String boardPassword) {
+        this.boardPassword = boardPassword;
+    }
+
+    public int getBoardPriority() {
+        return boardPriority;
+    }
+
+    public void setBoardPriority(int boardPriority) {
+        this.boardPriority = boardPriority;
     }
 }

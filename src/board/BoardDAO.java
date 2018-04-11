@@ -84,8 +84,37 @@ public class BoardDAO {
         return -1; //Database error
     }
 
+    public BoardVO setBoardVO(BoardVO boardVO, ResultSet rs){
+        try {
+            boardVO.setTableName(rs.getString(1));
+            boardVO.setBoardNo(rs.getInt(2));
+            boardVO.setBoardTitle(rs.getString(3));
+            boardVO.setBoardTm(rs.getInt(4));
+            boardVO.setBoardContent(rs.getString(5));
+            boardVO.setBoardMakeUser(rs.getString(6));
+            boardVO.setBoardMakeDt(rs.getString(7));
+            boardVO.setBoardReplyCnt(rs.getInt(8));
+            boardVO.setBoardLikeCnt(rs.getInt(9));
+            boardVO.setBoardDislikeCnt(rs.getInt(10));
+            boardVO.setBoardDeleteYn(rs.getInt(11));
+            boardVO.setBoardAuthorize(rs.getInt(12));
+            boardVO.setBoardReadCount(rs.getInt(13));
+            boardVO.setIsRebaord(rs.getInt(14));
+            boardVO.setHasReboard(rs.getInt(15));
+            boardVO.setOrgBoardNo(rs.getInt(16));
+            boardVO.setBoardPassword(rs.getString(17));
+            boardVO.setBoardPriority(rs.getInt(18));
+        }catch (Exception e){
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("boardVO:"+boardVO, "rs:"+rs, "", "", "boardDAO.setBoardVO", e.getMessage().toString(), "");
+            e.printStackTrace();
+        }
+        return boardVO;
+    }
+
+
     public int write(String boardTitle, String boardMakeUser, String boardContent, int boardAuthorize, int boardNo){
-        String SQL = "INSERT INTO "+ this.tableName +" VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String SQL = "INSERT INTO "+ this.tableName +" VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         int tmpNextNo = getNext();
 
         if("".equals(boardTitle)) boardTitle = "<span style=\"color:lightgray;\">제목을 작성하지 않은 글입니다._"+boardContent.replaceAll("<br>", "&nbsp;").replaceAll("<p>", "&nbsp;").replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "").substring(0,20)+"</span>";
@@ -110,6 +139,8 @@ public class BoardDAO {
             pstmt.setInt(15, 1);  //hasReboard
             if(boardNo==0)pstmt.setInt(16,0);  //orgBoardNo
             else pstmt.setInt(16, boardNo);
+            pstmt.setString(17, "");
+            pstmt.setInt(18, 0);
 
             if(boardNo!=0) {
                 boardContent = boardContent.replaceAll("<br>", "&nbsp;").replaceAll("<p>", "&nbsp;").replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
@@ -191,22 +222,7 @@ public class BoardDAO {
 
             while (rs.next()){
                 BoardVO boardVO = new BoardVO();
-                boardVO.setTableName(rs.getString(1));
-                boardVO.setBoardNo(rs.getInt(2));
-                boardVO.setBoardTitle(rs.getString(3));
-                boardVO.setBoardTm(rs.getInt(4));
-                boardVO.setBoardContent(rs.getString(5));
-                boardVO.setBoardMakeUser(rs.getString(6));
-                boardVO.setBoardMakeDt(rs.getString(7));
-                boardVO.setBoardReplyCnt(rs.getInt(8));
-                boardVO.setBoardLikeCnt(rs.getInt(9));
-                boardVO.setBoardDislikeCnt(rs.getInt(10));
-                boardVO.setBoardDeleteYn(rs.getInt(11));
-                boardVO.setBoardAuthorize(rs.getInt(12));
-                boardVO.setBoardReadCount(rs.getInt(13));
-                boardVO.setIsRebaord(rs.getInt(14));
-                boardVO.setHasReboard(rs.getInt(15));
-                boardVO.setOrgBoardNo(rs.getInt(16));
+                setBoardVO(boardVO, rs);
 
                 list.add(boardVO);
             }
@@ -244,23 +260,8 @@ public class BoardDAO {
             if (rs.next()){
                 BoardVO boardVO = new BoardVO();
                 int readCount = rs.getInt(13);
+                setBoardVO(boardVO, rs);
 
-                boardVO.setTableName(rs.getString(1));
-                boardVO.setBoardNo(rs.getInt(2));
-                boardVO.setBoardTitle(rs.getString(3));
-                boardVO.setBoardTm(rs.getInt(4));
-                boardVO.setBoardContent(rs.getString(5));
-                boardVO.setBoardMakeUser(rs.getString(6));
-                boardVO.setBoardMakeDt(rs.getString(7));
-                boardVO.setBoardReplyCnt(rs.getInt(8));
-                boardVO.setBoardLikeCnt(rs.getInt(9));
-                boardVO.setBoardDislikeCnt(rs.getInt(10));
-                boardVO.setBoardDeleteYn(rs.getInt(11));
-                boardVO.setBoardAuthorize(rs.getInt(12));
-                boardVO.setBoardReadCount(rs.getInt(13));
-                boardVO.setIsRebaord(rs.getInt(14));
-                boardVO.setHasReboard(rs.getInt(15));
-                boardVO.setOrgBoardNo(rs.getInt(16));
                 boardVO.setBoardReadCount(readCount);
                 readCount++;
 
@@ -549,22 +550,7 @@ public class BoardDAO {
 
             while (rs.next()){
                 BoardVO boardVO = new BoardVO();
-                boardVO.setTableName(rs.getString(1));
-                boardVO.setBoardNo(rs.getInt(2));
-                boardVO.setBoardTitle(rs.getString(3));
-                boardVO.setBoardTm(rs.getInt(4));
-                boardVO.setBoardContent(rs.getString(5));
-                boardVO.setBoardMakeUser(rs.getString(6));
-                boardVO.setBoardMakeDt(rs.getString(7));
-                boardVO.setBoardReplyCnt(rs.getInt(8));
-                boardVO.setBoardLikeCnt(rs.getInt(9));
-                boardVO.setBoardDislikeCnt(rs.getInt(10));
-                boardVO.setBoardDeleteYn(rs.getInt(11));
-                boardVO.setBoardAuthorize(rs.getInt(12));
-                boardVO.setBoardReadCount(rs.getInt(13));
-                boardVO.setIsRebaord(rs.getInt(14));
-                boardVO.setHasReboard(rs.getInt(15));
-                boardVO.setOrgBoardNo(rs.getInt(16));
+                setBoardVO(boardVO, rs);
 
                 list.add(boardVO);
             }
@@ -610,22 +596,7 @@ public class BoardDAO {
 
             while (rs.next()){
                 BoardVO boardVO = new BoardVO();
-                boardVO.setTableName(rs.getString(1));
-                boardVO.setBoardNo(rs.getInt(2));
-                boardVO.setBoardTitle(rs.getString(3));
-                boardVO.setBoardTm(rs.getInt(4));
-                boardVO.setBoardContent(rs.getString(5));
-                boardVO.setBoardMakeUser(rs.getString(6));
-                boardVO.setBoardMakeDt(rs.getString(7));
-                boardVO.setBoardReplyCnt(rs.getInt(8));
-                boardVO.setBoardLikeCnt(rs.getInt(9));
-                boardVO.setBoardDislikeCnt(rs.getInt(10));
-                boardVO.setBoardDeleteYn(rs.getInt(11));
-                boardVO.setBoardAuthorize(rs.getInt(12));
-                boardVO.setBoardReadCount(rs.getInt(13));
-                boardVO.setIsRebaord(rs.getInt(14));
-                boardVO.setHasReboard(rs.getInt(15));
-                boardVO.setOrgBoardNo(rs.getInt(16));
+                setBoardVO(boardVO, rs);
 
                 list.add(boardVO);
             }
