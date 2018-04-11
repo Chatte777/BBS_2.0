@@ -118,12 +118,12 @@
                         if (userId != null && userId.equals(list.get(i).getReplyMakeUser())) {
                     %>
                     <a onclick="reReplyClick('<%=replyNo%>', '<%=replyContent%>')"
-                       type="button" class="glyphicon glyphicon-share-alt" style="color: #cccccc; padding:0px 5px 0px 0px;"/>
+                       type="button" class="glyphicon glyphicon-share-alt" style="color: seagreen; padding:0px 5px 0px 0px;"/>
                     <a onclick="modifyClick('<%=list.get(i).getReplyContent()%>', '<%=replyNo%>')" type="button"
-                       class="glyphicon glyphicon-pencil" style="color: #cccccc; padding:0px;"/>
-                    <a onclick="return confirm('정말로 삭제하시겠습니까?')" a
+                       class="glyphicon glyphicon-pencil" style="color: limegreen; padding:5px;"/>
+                    <a onclick="return confirm('정말 삭제하시겠습니까?')" a
                        href="replyDeleteAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>&replyNo=<%=replyNo%>"
-                       type="button" class="glyphicon glyphicon-remove" style="color: #cccccc; padding:0px;"/>  <%
+                       type="button" class="glyphicon glyphicon-remove" style="color: #a9a9a9; padding:5px;"/>  <%
                     }
                 %>
                 </td>

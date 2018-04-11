@@ -10,7 +10,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width", initial-scale="1">
     <link rel="stylesheet" href="../css/bootstrap.css">
-    <title>DREAMY CAT</title>
+    <title>DREAMY KAT</title>
     <style type="text/css">
         a, a:hover {
             color: #000000;
@@ -192,7 +192,7 @@
         <% }
             if(!("myBoard".equals(boardName))){
         %>
-        <a href="./boardWrite.jsp?boardName=<%=boardName%>" class="btn btn-primary pull-right">글쓰기</a>
+        <a href="./boardWrite.jsp?boardName=<%=boardName%>" class="btn btn-primary pull-right" style="background-color: royalblue;">글쓰기</a>
         <%
             }
         %>
