@@ -173,17 +173,17 @@
             <nav aria-label="...">
                 <ul class="pagination">
                     <li class="page-item">
-                        <a class="page-link" href="board.jsp?boardName=<%=boardName%>&pageNumber=1">First</a>
+                        <a class="page-link" href="board.jsp?boardName=<%=boardName%>&pageNumber=1">처음</a>
                     </li>
                     <%if (pageNumber != 1) { %>
                     <li class="page-item">
-                        <a class="page-link" href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=pageNumber-1%>">Previous</a>
+                        <a class="page-link" href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=pageNumber-1%>">이전</a>
                     </li>
                     <%
                     } else {
                     %>
                     <li class="page-item disabled">
-                        <span class="page-link">Previous</span>
+                        <span class="page-link">이전</span>
                     </li>
                     <% }
                         if (pageNumber > 3) { %>
@@ -252,18 +252,18 @@
                     %>
                     <li class="page-item">
                         <a class="page-link"
-                           href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=pageNumber+1%>">Next</a>
+                           href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=pageNumber+1%>">다음</a>
                     </li>
                     <%
                     } else {
                     %>
                     <li class="page-item disabled">
-                        <span class="page-link">Next</span>
+                        <span class="page-link">다음</span>
                     </li>
                     <%}%>
                     <li class="page-item">
                         <a class="page-link"
-                           href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=boardDAO.getTotalPageNo(userId)%>">Last</a>
+                           href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=boardDAO.getTotalPageNo(userId)%>">마지막</a>
                     </li>
                 </ul>
             </nav>
