@@ -234,13 +234,23 @@ public class BoardDAO {
         return list; //Database error
     }
 
-    public boolean isNextPage(int pageNumber, String makeUser){
+    public int getTotalPageNo(String makeUser){
         int totalBoardIndex=getTotalBoardIndex(makeUser);
 
         //전체 페이지 갯수(전체 게시글 수가 페이지당 게시글 수로 나누어떨어지지 않으면 나눈 몫에다가 +1
         int totalPageNo;
         if((totalBoardIndex%boardCountPerPage)==0) {totalPageNo = totalBoardIndex/boardCountPerPage;}
         else {totalPageNo = (totalBoardIndex/boardCountPerPage)+1;}
+
+        return totalPageNo;
+    }
+    public boolean isNextPage(int pageNumber, String makeUser){
+        //int totalBoardIndex=getTotalBoardIndex(makeUser);
+
+        //전체 페이지 갯수(전체 게시글 수가 페이지당 게시글 수로 나누어떨어지지 않으면 나눈 몫에다가 +1
+        int totalPageNo=getTotalPageNo(makeUser);
+        //if((totalBoardIndex%boardCountPerPage)==0) {totalPageNo = totalBoardIndex/boardCountPerPage;}
+        //else {totalPageNo = (totalBoardIndex/boardCountPerPage)+1;}
 
         //변수로 받은 pageNumber가 totalPageNumber보다 작으면 다음 페이지가 있다.(true)
         //같아질 때 부터(같거나 크면) 다음 페이지가 없다.(false)

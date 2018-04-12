@@ -154,26 +154,93 @@
             </tbody>
         </table>
 
-        <%
-            if (pageNumber != 1) {
-        %>
-        <a href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=pageNumber-1%>"
-           class="btn btn-successs btn-arrow-left" style="background-color: pink">이전</a>
-        <%
-        } else { %>
-        <a href="#" class="btn btn-primary btn-arrow-left" style="background: grey;">이전</a>
-        <%
-            }
+        <div class="text-center">
+        <nav aria-label="...">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="board.jsp?boardName=<%=boardName%>&pageNumber=1">First</a>
+                </li>
+                <%if(pageNumber != 1){ %>
+                <li class="page-item">
+                    <a class="page-link" href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=pageNumber-1%>">Previous</a>
+                </li>
+                <%
+                } else {
+                %>
+                <li class="page-item disabled">
+                    <span class="page-link">Previous</span>
+                </li>
+                <% }
+                    if(pageNumber > 3){ %>
+                <li class="page-item">
+                    <a class="page-link" href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=pageNumber-3%>"><span class="glyphicon glyphicon-option-horizontal"></span></a>
+                </li>
+                <%
+                } else {
+                %>
+                <li class="page-item disabled">
+                    <span class="page-link"><span class="glyphicon glyphicon-option-horizontal"></span></span>
+                </li>
+                <% }
+                if(pageNumber>2){
+                %>
+                <li class="page-item"><a class="page-link" href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=pageNumber-2%>"><%=pageNumber-2%></a></li>
+                <%
+                    }
+                    if(pageNumber>1){
+                %>
+                <li class="page-item"><a class="page-link" href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=pageNumber-1%>"><%=pageNumber-1%></a></li>
+                <%
+                    }
+                %>
+                <li class="page-item active">
+      <span class="page-link">
+        <%=pageNumber%>
+        <span class="sr-only">(current)</span>
+      </span>
+                </li>
+                <%
+                    if (boardDAO.isNextPage(pageNumber, userId)) {
+                %>
+                <li class="page-item"><a class="page-link" href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=pageNumber+1%>"><%=pageNumber+1%></a></li>
+                <%
+                    }
+                    if (boardDAO.isNextPage(pageNumber+1, userId)) {
+                %>
+                <li class="page-item"><a class="page-link" href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=pageNumber+2%>"><%=pageNumber+2%></a></li>
+                <%
+                    }
+                    if(boardDAO.isNextPage(pageNumber+2, userId)){ %>
+                <li class="page-item">
+                    <a class="page-link" href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=pageNumber+3%>"><span class="glyphicon glyphicon-option-horizontal"></span></a>
+                </li>
+                <%
+                } else {
+                %>
+                <li class="page-item disabled">
+                    <span class="page-link"><span class="glyphicon glyphicon-option-horizontal"></span></span>
+                </li>
+                <% }
+                    if (boardDAO.isNextPage(pageNumber, userId)) {
+                %>
+                <li class="page-item">
+                    <a class="page-link" href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=pageNumber+1%>">Next</a>
+                </li>
+                <%
+                    } else {
+                %>
+                <li class="page-item disabled">
+                    <span class="page-link">Next</span>
+                </li>
+                <%}%>
+                <li class="page-item">
+                    <a class="page-link" href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=boardDAO.getTotalPageNo(userId)%>">Last</a>
+                </li>
+            </ul>
+        </nav>
+        </div>
 
-            if (boardDAO.isNextPage(pageNumber, userId)) {
-        %>
-        <a href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=pageNumber+1%>"
-           class="btn btn-successs btn-arrow-right" style="background-color: hotpink">다음</a>
         <%
-        } else {
-        %>
-        <a href="#" class="btn btn-primary btn-arrow-right" style="background: gray;">다음</a>
-        <% }
             if(!("myBoard".equals(boardName))){
         %>
         <a href="boardWrite.jsp?boardName=<%=boardName%>" class="btn btn-primary pull-right">글쓰기</a>
