@@ -113,7 +113,7 @@ public class BoardDAO {
     }
 
 
-    public int write(String boardTitle, String boardMakeUser, String boardContent, int boardAuthorize, int boardNo){
+    public int write(String boardTitle, String boardMakeUser, String boardContent, int boardAuthorize, int boardNo, String boardPassword){
         String SQL = "INSERT INTO "+ this.tableName +" VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         int tmpNextNo = getNext();
 
@@ -139,7 +139,7 @@ public class BoardDAO {
             pstmt.setInt(15, 1);  //hasReboard
             if(boardNo==0)pstmt.setInt(16,0);  //orgBoardNo
             else pstmt.setInt(16, boardNo);
-            pstmt.setString(17, "");
+            pstmt.setString(17, boardPassword);
             pstmt.setInt(18, 0);
 
             if(boardNo!=0) {

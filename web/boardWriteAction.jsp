@@ -32,23 +32,34 @@
 			} else {
 				String boardName = request.getParameter("boardName");
 				BoardDAO boardDAO = new BoardDAO(boardName);
-				int result = boardDAO.write(request.getParameter("boardTitle"), userId,
-						request.getParameter("boardContent"), Integer.parseInt(request.getParameter("boardAuthorize")), Integer.parseInt(request.getParameter("boardNo")));
+				int boardAuthorize = Integer.parseInt(request.getParameter("boardAuthorize"));
+				String boardPassword = null;
+
+				if(boardAuthorize==2){
+					if(request.getParameter("boardPassword")!=null) {
+					    if(request.getParameter("boardPassword").equals("")) boardPassword="0000";
+					    else boardPassword = request.getParameter("boardPassword");
+					}
+					else boardPassword = "0000";
+				}
+
+				int result = boardDAO.write(request.getParameter("boardTitle"), userId, request.getParameter("boardContent"),
+						boardAuthorize, Integer.parseInt(request.getParameter("boardNo")), boardPassword);
 
 				if (result == -1) {
 					Cookie reloadFlag = new Cookie("reloadFlag", "1");
 					reloadFlag.setMaxAge(5);
-					Cookie boardTitle = new Cookie("boardTitle", URLEncoder.encode(request.getParameter("boardTitle"),"utf-8"));
-					boardTitle.setMaxAge(5);
-                    Cookie boardContent = new Cookie("boardContent", URLEncoder.encode(request.getParameter("boardContent"),"utf-8"));
-					boardContent.setMaxAge(5);
-					Cookie boardAuthorize = new Cookie("boardAuthorize", request.getParameter("boardAuthorize"));
-					boardAuthorize.setMaxAge(5);
+					Cookie cookieBoardTitle = new Cookie("boardTitle", URLEncoder.encode(request.getParameter("boardTitle"),"utf-8"));
+					cookieBoardTitle.setMaxAge(5);
+                    Cookie cookieBoardContent = new Cookie("boardContent", URLEncoder.encode(request.getParameter("boardContent"),"utf-8"));
+					cookieBoardContent.setMaxAge(5);
+					Cookie cookieBoardAuthorize = new Cookie("boardAuthorize", request.getParameter("boardAuthorize"));
+					cookieBoardAuthorize.setMaxAge(5);
 
 					response.addCookie(reloadFlag);
-					response.addCookie(boardTitle);
-					response.addCookie(boardContent);
-					response.addCookie(boardAuthorize);
+					response.addCookie(cookieBoardTitle);
+					response.addCookie(cookieBoardContent);
+					response.addCookie(cookieBoardAuthorize);
 
 					PrintWriter script = response.getWriter();
 

@@ -1,4 +1,5 @@
 <%@ page import="java.net.URLDecoder" %>
+<%@ page import="java.io.PrintWriter" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <link href="css/bootstrap.css" rel="stylesheet">
@@ -10,6 +11,19 @@
 <script src="summernote-0.8.9-dist/dist/summernote.js"></script>
 
 <%
+    String userId=null;
+
+    if (session.getAttribute("userID") != null) {
+        userId = (String) session.getAttribute("userID");
+    }
+    if (userId == null) {
+        PrintWriter script = response.getWriter();
+        script.println("<script>");
+        script.println("alert('로그인을 하세요.')");
+        script.println("location.href = '/login.jsp'");
+        script.println("</script>");
+    }
+
     String boardName = request.getParameter("boardName");
     int boardNo = 0;
 
@@ -38,7 +52,7 @@
             <table class="table table-striped" style="border: 1px solid #dddddd">
                 <thead>
                 <tr>
-                    <th colspan="2"
+                    <th colspan="3"
                         style="background-color: #eeeeee; text-align: center;">게시판 글쓰기 양식</th>
                 </tr>
                 </thead>
@@ -46,9 +60,9 @@
                 <tbody>
                 <tr>
                 <tr>
-                    <td><input type="text" class="form-control"
+                    <td width="80%"><input type="text" class="form-control"
                                placeholder="글 제목" name="boardTitle" maxlength="50" <%if(boardTitle!=null){%>value="<%=boardTitle%>"<%}%>></td>
-                    <td><select class="form-control" name="boardAuthorize">
+                    <td width="10%"><select class="form-control" name="boardAuthorize" id="boardAuthorize">
                         <%
                             if(boardAuthorize=="2"){
                         %>
@@ -61,9 +75,13 @@
                             }
                         %>
                     </td>
+                    <td width="10%">
+                        <input type="text" class="form-control" disabled style="text-align: center;" onkeydown="onlyNumber(this)"
+                               placeholder="글 비밀번호" name="boardPassword" id="boardPassword" maxlength="4" <%if(boardTitle!=null){%>value="<%=boardTitle%>"<%}%>></td>
+                    </td>
                 </tr>
                 <tr>
-                    <td colspan="2"><textarea name="boardContent" id="summernote"
+                    <td colspan="3"><textarea name="boardContent" id="summernote"
                                     maxlength="2048"><%if(boardContent!=null){%><%=boardContent%><%}%></textarea></td>
                 </tr>
                 </tbody>
