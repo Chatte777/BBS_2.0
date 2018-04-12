@@ -14,7 +14,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width" , initial-scale="1">
 <link rel="stylesheet" href="../css/bootstrap.css">
-<title>DREAMY CAT</title>
+<title>DREAMY KAT</title>
 </head>
 <body>
 <jsp:include page="../_headNav.jsp" flush="false" />
@@ -86,7 +86,7 @@
                 if (userId != null && userId.equals(boardVO.getBoardMakeUser())) {
             %>
             <a href="./boardUpdate.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>" class="btn btn-primary">수정</a>
-            <a onclick="return confirm('정말로 삭제하시겠습니까?')" href="./boardDeleteAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>" class="btn btn-primary">삭제</a>&nbsp;
+            <a onclick="return confirm('정말 삭제하시겠습니까?')" href="./boardDeleteAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>" class="btn btn-primary">삭제</a>&nbsp;
             <%
             } else {
             %>
@@ -110,12 +110,12 @@
                 <td align="center"><a onclick="reReplyClick('<%=replyNo%>')" style="text-decoration: none; color: #000000;"><%=replyNo%></a></td>
                 <td align="left" style="word-break: break-all;"><%=list.get(i).getReplyContent().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;")
                         .replaceAll(">", "&gt;").replaceAll("\n", "<br>")%></td>
-                <td align="center" style="width: 5%;">
+                <td align="center" style="width: 10%;">
                     <%
                         if (userId != null && userId.equals(list.get(i).getReplyMakeUser())) {
                     %>
-                    <a onclick="modifyClick('<%=list.get(i).getReplyContent()%>', '<%=replyNo%>')" type="button" class="glyphicon glyphicon-pencil" style="color: #cccccc"/>
-                    <a onclick="return confirm('정말로 삭제하시겠습니까?')" a href="./replyDeleteAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>&replyNo=<%=replyNo%>" type="button" class="close" aria-label="close"/> <span aria-hidden="true">&times;</span> <%
+                    <a onclick="modifyClick('<%=list.get(i).getReplyContent()%>', '<%=replyNo%>')" type="button" class="glyphicon glyphicon-pencil" style="color: #cccccc; margin: 10px; "/>
+                    <a onclick="return confirm('정말 삭제하시겠습니까?')" a href="./replyDeleteAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>&replyNo=<%=replyNo%>" type="button" class="close" aria-label="close"/> <span aria-hidden="true">&times;</span> <%
                     }
                 %>
                 </td>
@@ -147,7 +147,7 @@
                         if (userId != null && userId.equals(listReReply.get(j).getReReplyMakeUser())) {
                     %>
                     <a onclick="modifyClick('<%=listReReply.get(j).getReReplyContent()%>', '<%=listReReply.get(j).getReReplyNo()%>')" type="button" class="glyphicon glyphicon-pencil" style="color: #cccccc" />
-                    <a onclick="return confirm('정말로 삭제하시겠습니까?')" a href="./reReplyDeleteAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>&replyNo=<%=replyNo%>&reReplyNo=<%=listReReply.get(j).getReReplyNo()%>" type="button" class="close" aria-label="close" /> <span aria-hidden="true">&times</span> <%
+                    <a onclick="return confirm('정말 삭제하시겠습니까?')" a href="./reReplyDeleteAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>&replyNo=<%=replyNo%>&reReplyNo=<%=listReReply.get(j).getReReplyNo()%>" type="button" class="close" aria-label="close" /> <span aria-hidden="true">&times</span> <%
                     }
                 %>
                 </td>
