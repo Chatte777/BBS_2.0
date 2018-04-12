@@ -59,7 +59,7 @@
                 <tr>
                 <tr>
                     <td width="80%"><input type="text" class="form-control"
-                               placeholder="글 제목" name="boardTitle" maxlength="50" <%if(boardTitle!=null){%>value="<%=boardTitle%>"<%}%>></td>
+                               placeholder="글 제목" name="boardTitle" maxlength="50"></td>
                     <td width="10%"><select class="form-control" name="boardAuthorize" id="boardAuthorize">
                         <%
                             if(boardAuthorize=="2"){
@@ -75,12 +75,12 @@
                     </td>
                     <td width="10%">
                         <input type="text" class="form-control" disabled style="text-align: center;" onkeydown="onlyNumber(this)"
-                               placeholder="글 비밀번호" name="boardPassword" id="boardPassword" maxlength="4" <%if(boardTitle!=null){%>value="<%=boardTitle%>"<%}%>></td>
+                               placeholder="글 비밀번호" name="boardPassword" id="boardPassword" maxlength="4"></td>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="3"><textarea name="boardContent" id="summernote"
-                                    maxlength="2048"><%if(boardContent!=null){%><%=boardContent%><%}%></textarea></td>
+                                    maxlength="2048"></textarea></td>
                 </tr>
                 </tbody>
             </table>
