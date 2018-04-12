@@ -5,8 +5,6 @@
 <link href="css/bootstrap.css" rel="stylesheet">
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
 <script src="js/bootstrap.js"></script>
-<!--<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
-<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script> -->
 <link href="summernote-0.8.9-dist/dist/summernote.css" rel="stylesheet">
 <script src="summernote-0.8.9-dist/dist/summernote.js"></script>
 
