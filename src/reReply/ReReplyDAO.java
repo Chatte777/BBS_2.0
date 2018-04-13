@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+
+import alarmMaster.AlarmMasterDAO;
 import dbConn.*;
 import errorMaster.ErrorMasterDAO;
 
@@ -12,12 +14,14 @@ public class ReReplyDAO {
     private Connection conn;
     private DbConn dbConn = new DbConn();
     private ResultSet rs;
+    private String boardName;
     private String tableName;
     private String colBoardNo;
     private String colReplyNo;
     private String colReReplyNo;
 
     public ReReplyDAO(String boardName) {
+        this.boardName = boardName;
         this.tableName = boardName+"_re_reply";
         this.colBoardNo = boardName+"_no";
 
@@ -62,12 +66,14 @@ public class ReReplyDAO {
     }
 
     public int write(int boardNo, int replyNo, String replyMakeUser, String replyContent) {
+        int tmpNextNo = getNext(boardNo, replyNo);
+
         String SQL = "INSERT INTO "+ this.tableName +" VALUES(?,?,?,?,?,?,?,?,?)";
         try {
             PreparedStatement pstmt = conn.prepareStatement(SQL);
             pstmt.setInt(1, boardNo);
             pstmt.setInt(2, replyNo);
-            pstmt.setInt(3, getNext(boardNo, replyNo));
+            pstmt.setInt(3, tmpNextNo);
             pstmt.setString(4, replyContent);
             pstmt.setString(5, replyMakeUser);
             pstmt.setString(6, getDate());
@@ -75,6 +81,13 @@ public class ReReplyDAO {
             pstmt.setInt(8, 1);
             pstmt.setInt(9, 1);
 
+            if(boardNo!=0) {
+                replyContent = replyContent.replaceAll("<br>", "&nbsp;").replaceAll("<p>", "&nbsp;").replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+                if(replyContent.length()>70) replyContent=replyContent.substring(0,70);
+
+                AlarmMasterDAO alarmMasterDAO = new AlarmMasterDAO();
+                alarmMasterDAO.writeReReplyAlarm(this.boardName, boardNo, replyNo, tmpNextNo, replyContent);
+            }
             return pstmt.executeUpdate();
 
         } catch (Exception e) {

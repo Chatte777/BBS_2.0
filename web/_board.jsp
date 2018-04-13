@@ -301,9 +301,11 @@
         else if(boardAuthorize==2) {
             var inputPassword = prompt("비밀번호를 입력하세요.(4자리 이하의 숫자)", "0000");
 
-            if(boardPassword == inputPassword) location.href = "boardView.jsp?boardName=" + boardName + "&boardNo=" + boardNo + "&boardPassword=" + inputPassword;
-            else {
-                alert("비밀번호 오류입니다.");
+            if(inputPassword!=null) {
+                if (boardPassword == inputPassword) location.href = "boardView.jsp?boardName=" + boardName + "&boardNo=" + boardNo + "&boardPassword=" + inputPassword;
+                else {
+                    alert("비밀번호 오류입니다.");
+                }
             }
         }
     }

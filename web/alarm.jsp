@@ -66,7 +66,7 @@
                     <a href="alarmReadAction.jsp?alarmNo=<%=list.get(i).getAlarmNo()%>&alarmTargetUser=<%=list.get(i).getAlarmTargetUser()%>&readType=1">
 
                         <span style="color:purple;">
-                        <%if (list.get(i).getAlarmType() == 1) {%> "<%=boardName%>" 게시판에 작성한 【<%= list.get(i).getAlarmOrgContent() %>】 글에 답글이 달렸습니다. <%} else if (list.get(i).getAlarmType() == 2) {%> "<%=boardName%>" 게시판에 작성한 【<%= list.get(i).getAlarmOrgContent() %>】 글에 댓글이 달렸습니다. <%}%>
+                        <%if (list.get(i).getAlarmType() == 1) {%> "<%=boardName%>" 게시판에 작성한 【<%= list.get(i).getAlarmOrgContent() %>】 글에 답글이 달렸습니다. <%} else if (list.get(i).getAlarmType() == 2) {%> "<%=boardName%>" 게시판에 작성한 【<%= list.get(i).getAlarmOrgContent() %>】 글에 댓글이 달렸습니다. <%} else if (list.get(i).getAlarmType() == 3) {%> "<%=boardName%>" 게시판에 작성한 【<%= list.get(i).getAlarmOrgContent() %>】 댓글에 대댓글이 달렸습니다. <%}%>
                             </span>
                         <br>
                         <span style="font-size: 0.9em; color: blue;">&nbsp;☞&nbsp;"<%=list.get(i).getAlarmNewContent()%>..."</span>

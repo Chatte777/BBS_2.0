@@ -2,6 +2,7 @@ package alarmMaster;
 
 import board.BoardVO;
 import dbConn.DbConn;
+import reply.ReplyVO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -80,6 +81,34 @@ public class AlarmMasterDAO {
             pstmt.setString(6, boardVO.getBoardTitle());  //alarm_org_content
             pstmt.setInt(7, alarmNewReplydNo);  //alarm_new_board_no
             pstmt.setString(8, alarmNewContent);
+
+            pstmt.executeUpdate();
+
+            return tmpNextNo;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1; // Database error
+    }
+
+    public int writeReReplyAlarm(String alarmOrgBoardName, int alarmOrgBoardNo, int alarmOrgReplyNo, int alarmNewReReplydNo, String alarmNewContent) {
+        String SQL = "INSERT INTO alarm_master (alarm_no, alarm_target_user, alarm_type, alarm_org_board_name, alarm_org_board_no, alarm_org_reply_no, alarm_org_content, alarm_new_reply_no, alarm_new_content)" +
+                " VALUES(?,?,?,?,?,?,?,?,?)";
+        int tmpNextNo = getNext();
+
+        try {
+            ReplyVO replyVO = getOrgReply(alarmOrgBoardName, alarmOrgBoardNo, alarmOrgReplyNo);
+
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setInt(1, getNext()); //alarm_no
+            pstmt.setString(2, replyVO.getReplyMakeUser()); //alarm_taraget_user
+            pstmt.setInt(3, 3);  //alarm_type
+            pstmt.setString(4, alarmOrgBoardName); //alarm_org_board_name
+            pstmt.setInt(5, alarmOrgBoardNo);  //alarm_org_board_no
+            pstmt.setInt(6, alarmOrgReplyNo); // alarm_org_replyNo
+            pstmt.setString(7, replyVO.getReplyContent());  //alarm_org_content
+            pstmt.setInt(8, alarmNewReReplydNo);  //alarm_new_board_no
+            pstmt.setString(9, alarmNewContent);
 
             pstmt.executeUpdate();
 
@@ -211,6 +240,39 @@ public class AlarmMasterDAO {
             e.printStackTrace();
         }
         return boardVO;
+    }
+
+    public ReplyVO getOrgReply(String boardName, int boardNo, int replyNo) {
+        String colBoardNo = boardName + "_no";
+        String content = null;
+
+        ReplyVO replyVO = new ReplyVO();
+
+        String SQL = "SELECT * FROM " + boardName + "_reply" +
+                " WHERE " + colBoardNo + " = ? " +
+                "AND reply_no = ?";
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setInt(1, boardNo);
+            pstmt.setInt(2, replyNo);
+
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                //content를 받아온다.
+                content = rs.getString(3);
+                content = content.replaceAll("<br>", "&nbsp;").replaceAll("<p>", "&nbsp;").replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+                if(content.length()>70) content = content.substring(0, 70);
+                replyVO.setReplyContent(content);
+
+                //makeUser를 받아온다.
+                replyVO.setReplyMakeUser(rs.getString(4));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return replyVO;
     }
 
     public AlarmMaster getAlarmMaster(int alarmNo, String alarmTargetUser) {
