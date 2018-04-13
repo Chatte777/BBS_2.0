@@ -160,9 +160,11 @@
         <div class="text-center">
             <nav aria-label="...">
                 <ul class="pagination">
+                    <!--1페이지로 이동-->
                     <li class="page-item">
                         <a class="page-link" href="board.jsp?boardName=<%=boardName%>&pageNumber=1">처음</a>
                     </li>
+                    <!--현재 1페이지이면 '이전'탭을 disable시키고 그게 아니라면 이전페이지로 이동-->
                     <%if (pageNumber != 1) { %>
                     <li class="page-item">
                         <a class="page-link" href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=pageNumber-1%>">이전</a>
@@ -173,6 +175,7 @@
                     <li class="page-item disabled">
                         <span class="page-link">이전</span>
                     </li>
+                    <!--현재 페이지가 3페이지 이상이면 '...'탭을 활성화 시키고, 클릭시 이전 페이지묶음 목록을 로드. 그게 아니라면 버튼 비활성화-->
                     <% }
                         if (pageNumber > 3) { %>
                     <li class="page-item">
@@ -186,12 +189,18 @@
                     <li class="page-item disabled">
                         <span class="page-link"><span class="glyphicon glyphicon-option-horizontal"></span></span>
                     </li>
+                    <!--현재 페이지가 2페이지 초과라면 -2페이지를 활성화시키고 -2페이지로 이동. 2페이지 이하라면 -2페이지를 비활성화.-->
                     <% }
                         if (pageNumber > 2) {
                     %>
                     <li class="page-item"><a class="page-link"
                                              href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=pageNumber-2%>"><%=pageNumber - 2%>
                     </a></li>
+                    <%
+                        } else {
+                        %>
+                    <li class="page-item disabled"><span class="page-link" style="color: darkgrey;">X</span></li>
+                    <!--현재 페이지가 1페이지 초과이면 -1페이지를 활성화시키고 -1페이지로 이동. 1페이지 이하면 -1페이지를 비활성화.-->
                     <%
                         }
                         if (pageNumber > 1) {
@@ -200,14 +209,20 @@
                                              href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=pageNumber-1%>"><%=pageNumber - 1%>
                     </a></li>
                     <%
+                        } else {
+                        %>
+                    <li class="page-item disabled"><span class="page-link" style="color: darkgray;">X</span></li>
+                    <%
                         }
                     %>
                     <li class="page-item active">
+                        <!-- 현재페이지는 항상 active, 활성화, 링크없음.-->
       <span class="page-link">
         <%=pageNumber%>
         <span class="sr-only">(current)</span>
       </span>
                     </li>
+                    <!-- 현재페이지의 다음페이지가 있으면 +1페이지 버튼을 활성화시키고 다음페이지로 이동. 다음페이지가 없으면 비활성화-->
                     <%
                         if (boardDAO.isNextPage(pageNumber, userId)) {
                     %>
@@ -215,12 +230,22 @@
                                              href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=pageNumber+1%>"><%=pageNumber + 1%>
                     </a></li>
                     <%
+                        } else{
+                            %>
+                    <li class="page-item disabled"><span class="page-link" style="color: darkgray;">X</span></li>
+                    <!-- 현재+1페이지의 다음페이지가 있으면 +2페이지 버튼을 활성화시키고 +2페이지로 이동, 현재+1페이지의 다음페이지가 없으면 +2페이지 버튼 비활성화-->
+                    <%
                         }
                         if (boardDAO.isNextPage(pageNumber + 1, userId)) {
                     %>
                     <li class="page-item"><a class="page-link"
                                              href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=pageNumber+2%>"><%=pageNumber + 2%>
                     </a></li>
+                    <%
+                        } else {
+                            %>
+                    <li class="page-item disabled"><span class="page-link" style="color: darkgray;">X</span></li>
+                    <!-- 현재+2페이지의 다음페이지가 있으면 '...'버튼을 활성화시키고 다음페이지묶음 목록을 로드. 현재+2페이지의 다음페이지가 없으면 버튼 비활성화-->
                     <%
                         }
                         if (boardDAO.isNextPage(pageNumber + 2, userId)) { %>
@@ -235,6 +260,7 @@
                     <li class="page-item disabled">
                         <span class="page-link"><span class="glyphicon glyphicon-option-horizontal"></span></span>
                     </li>
+                    <!-- 현재페이지의 다음페이지가 있으면 '다음'버튼을 활성화시키고 다음페이지로 이동. 다음페이지가 없으면 버튼 비활성화 -->
                     <% }
                         if (boardDAO.isNextPage(pageNumber, userId)) {
                     %>
@@ -249,6 +275,7 @@
                         <span class="page-link">다음</span>
                     </li>
                     <%}%>
+                    <!-- 마지막 페이지로 이동 -->
                     <li class="page-item">
                         <a class="page-link"
                            href="board.jsp?boardName=<%=boardName%>&pageNumber=<%=boardDAO.getTotalPageNo(userId)%>">마지막</a>
