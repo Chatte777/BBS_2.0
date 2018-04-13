@@ -63,17 +63,19 @@
                 <td align="left" colspan="2">
                     <%
                         if (list.get(i).getBoardAuthorize() == 2) {
-                    %><span class="glyphicon glyphicon-lock" style="color: #bbbbbb;">&nbsp;</span><%
+                    %><span class="glyphicon glyphicon-lock" style="color: #bbbbbb;">&nbsp;</span>
+                    <%
                     }
                 %>
-                    <a href="boardView.jsp?boardName=<%=list.get(i).getTableName()%>&boardNo=<%= list.get(i).getBoardNo() %>"
+                    <span onclick="onClickBoardTitle('<%=list.get(i).getTableName()%>', '<%=list.get(i).getBoardNo()%>', '<%=list.get(i).getBoardAuthorize()%>', '<%=list.get(i).getBoardPassword()%>')"
                             <%
                                 if (boardColorFlag == 1) {%>
                        style="color: #DE2A45;"<%} else if (boardColorFlag == 2) {%>
                        style="color:#10BF00;"<%} else if (boardColorFlag == 3) {%>
-                       style="color:#2865BF;"<%} else if (boardColorFlag == 4) {%> style="color:black;"<%}%>>
+                       style="color:#2865BF;"<%} else if (boardColorFlag == 4) {%>
+                        style="color:black;"<%}%>>
                         <%= list.get(i).getBoardTitle() %>
-                    </a>
+                    </span>
                 </td>
                 <td
                         <%
@@ -292,3 +294,17 @@
         </div>
     </div>
 </div>
+
+<script>
+    function onClickBoardTitle(boardName, boardNo, boardAuthorize, boardPassword) {
+        if(boardAuthorize == 1) location.href = "boardView.jsp?boardName="+boardName+"&boardNo="+boardNo;
+        else if(boardAuthorize==2) {
+            var inputPassword = prompt("비밀번호를 입력하세요.(4자리 이하의 숫자)", "0000");
+
+            if(boardPassword == inputPassword) location.href = "boardView.jsp?boardName=" + boardName + "&boardNo=" + boardNo + "&boardPassword=" + inputPassword;
+            else {
+                alert("비밀번호 오류입니다.");
+            }
+        }
+    }
+</script>
