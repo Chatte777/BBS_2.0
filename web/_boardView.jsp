@@ -121,8 +121,8 @@
                     %>
                     <a onclick="modifyClick('<%=list.get(i).getReplyContent()%>', '<%=replyNo%>')" type="button"
                        class="glyphicon glyphicon-pencil" style="color: limegreen; padding:5px;"/>
-                    <a onclick="return confirm('정말 삭제하시겠습니까?')" a
-                       href="replyDeleteAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>&replyNo=<%=replyNo%>"
+                    <a onclick="return confirm('정말 삭제하시겠습니까?')"
+                       a href="replyDeleteAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>&replyNo=<%=replyNo%>"
                        type="button" class="glyphicon glyphicon-remove" style="color: #a9a9a9; padding:5px;"/>  <%
                     }
                 %>

@@ -36,7 +36,7 @@
 				script.println("</script>"); 
 			}
 
-		ReplyVO replyVO = new ReplyVO();
+		ReplyVO replyVO = null;
 		ReplyDAO replyDAO = new ReplyDAO(boardName);
 		replyVO = replyDAO.getReply(boardNo, replyNo);
 
@@ -47,7 +47,9 @@
 				script.println("location.href = 'login.jsp'");
 				script.println("</script>"); 
 			} else {
-				int result = replyDAO.delete(replyVO.getBoardNo(), replyNo);
+			int result=0;
+				if(replyVO.getHasReReply()==1) result = replyDAO.delete(replyVO.getBoardNo(), replyNo);
+				else if(replyVO.getHasReReply()==2) result = replyDAO.deleteFail(replyVO.getBoardNo(), replyNo);
 					
 					if(result == -1){
 						PrintWriter script = response.getWriter();

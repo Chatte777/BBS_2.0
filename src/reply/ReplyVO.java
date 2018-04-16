@@ -9,6 +9,7 @@ public class ReplyVO {
 	private int replyLikeCnt;
 	private int replyDislikeCnt;
 	private int replyDeleteYn;
+	private int hasReReply;
 
     public int getBoardNo() {
         return boardNo;
@@ -72,5 +73,13 @@ public class ReplyVO {
 
     public void setReplyDeleteYn(int replyDeleteYn) {
         this.replyDeleteYn = replyDeleteYn;
+    }
+
+    public int getHasReReply() {
+        return hasReReply;
+    }
+
+    public void setHasReReply(int hasReReply) {
+        this.hasReReply = hasReReply;
     }
 }

@@ -18,11 +18,13 @@ public class ReReplyDAO {
     private String boardName;
     private String tableName;
     private String colBoardNo;
+    private String tableReplyName;
 
     public ReReplyDAO(String boardName) {
         this.boardName = boardName;
         this.tableName = boardName+"_re_reply";
         this.colBoardNo = boardName+"_no";
+        this.tableReplyName = boardName+"_reply";
 
         conn = dbConn.getDbConnection();
     }
@@ -68,6 +70,16 @@ public class ReReplyDAO {
         int tmpNextNo = getNext(boardNo, replyNo);
 
         String SQL = "INSERT INTO "+ this.tableName +" VALUES(?,?,?,?,?,?,?,?,?)";
+        String secondSQL = "UPDATE " + this.tableReplyName + " SET has_re_reply = 2 WHERE reply_no = " + replyNo;
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(secondSQL);
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("boardNo:"+boardNo, "replyNo:"+replyNo, "reReplyNo:"+tmpNextNo, "", "reReplyDAO.write()_updateHasReReply", e.getMessage().toString(), "");
+        }
+
         try {
             PreparedStatement pstmt = conn.prepareStatement(SQL);
             pstmt.setInt(1, boardNo);
@@ -93,7 +105,7 @@ public class ReReplyDAO {
             CommonDAO.writeContentLog("reReplyWrite", replyContent);
 
             ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
-            errorMasterDAO.write("boardNo"+boardNo, "replyNo"+replyNo, "reReplyMakeUser"+replyMakeUser, "reReplyContent"+replyContent, "reReplyDAO.getDate", e.getMessage().toString(), "");
+            errorMasterDAO.write("boardNo:"+boardNo, "replyNo:"+replyNo, "reReplyNo:"+tmpNextNo, "", "reReplyDAO.write()_updateHasReReply", e.getMessage().toString(), "");
             e.printStackTrace();
         }
         return -1; // Database error
@@ -148,7 +160,7 @@ public class ReReplyDAO {
 
             e.printStackTrace();
             ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
-            errorMasterDAO.write("boardNo:"+boardNo, "", "", "", "reReplyDAO.getDate", e.getMessage().toString(), "");
+            errorMasterDAO.write("boardNo:"+boardNo, "replyNo:"+replyNo, "reReplyNo:"+reReplyNo, "", "reReplyDAO.update", e.getMessage().toString(), "");
         }
         return -1; // Database error
     }
