@@ -33,7 +33,7 @@ public class DbConn {
                 else location = "C:\\Users\\IMTSOFT\\Documents\\log.txt";
 
                 long curTimeLong = System.currentTimeMillis();
-                SimpleDateFormat dayTime = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+                SimpleDateFormat dayTime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 String curTimeStr = dayTime.format(new Date(curTimeLong));
 
                 FileWriter writer = new FileWriter(location, true);
