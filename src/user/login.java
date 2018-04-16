@@ -19,14 +19,14 @@ public class login extends HttpServlet {
     }
 
     protected void requestPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        User userBean = new User();
-        userBean.setUserId(request.getParameter("userId"));
-        userBean.setUserPassword(request.getParameter("userPassword"));
-        userBean.setUserName(request.getParameter("userName"));
-        userBean.setUserGender(request.getParameter("userGender"));
-        userBean.setUserEmail(request.getParameter("userEmail"));
+        //User userBean = new User();
+        //userBean.setUserId(request.getParameter("userId"));
+        //userBean.setUserPassword(request.getParameter("userPassword"));
+        //userBean.setUserName(request.getParameter("userName"));
+        //userBean.setUserGender(request.getParameter("userGender"));
+        //userBean.setUserEmail(request.getParameter("userEmail"));
 
-        request.setAttribute("bean", userBean);
+        //request.setAttribute("bean", userBean);
 
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("loginAction.jsp");
         requestDispatcher.forward(request, response);

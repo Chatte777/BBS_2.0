@@ -13,16 +13,16 @@
 <title>DREAMY CAT</title>
 </head>
 <body>
-<%
-	Cookie[] cookies = request.getCookies();
-	String idRemember=null;
-	String pwRemember=null;
 
-	for(int i=0; i<cookies.length; i++){
-		if("idRemember".equals(cookies[i].getName())) idRemember=cookies[i].getValue();
-		if("pwRemember".equals(cookies[i].getName())) pwRemember=cookies[i].getValue();
-	}
-%>
+<c:forEach var="aCookie" items="<%=request.getCookies()%>">
+	<c:if test="${aCookie.name=='idRemember'}">
+		<c:set var="userId" value="${aCookie.value}"/>
+	</c:if>
+	<c:if test="${aCookie.name=='pwRemember'}">
+		<c:set var="userPassword" value="${aCookie.value}"/>
+	</c:if>
+</c:forEach>
+
 	<jsp:include page="_headNav.jsp" flush="false"/>
 	<div class="container">
 		<div class="col-lg-4"></div>
@@ -31,13 +31,16 @@
 				<form method="post" action="/login.do">
 					<h3 style="text-align: center;">로그인화면</h3>
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="아이디" name="userId" maxlength="20" <%if(idRemember!=null){%>value="<%=idRemember%>"<%}%>>
+
+						<input type="text" class="form-control" placeholder="아이디" name="userId" maxlength="20" value="${userId}">
 					</div>
 					<div class="form-group">
-						<input type="password" class="form-control" placeholder="비밀번호" name="userPassword" maxlength="20" <%if(pwRemember!=null){%>value="<%=pwRemember%>"<%}%>>
+						<input type="password" class="form-control" placeholder="비밀번호" name="userPassword" maxlength="20" value="${userPassword}">
 					</div>
 					<div class="form-check">
-						<input class="form-check-input" type="checkbox" value="1" name="accountRememberYn" id="accountRememberYn"<%if(pwRemember!=null){%>checked<%}%>>
+						<input class="form-check-input" type="checkbox" value="1" name="accountRememberYn" id="accountRememberYn"
+							   <c:if test="${userPassword!=null}">checked</c:if>
+							   >
 						<label class="form-check-label" for="accountRememberYn">
 							로그인정보를 저장하시겠습니까?
 						</label>

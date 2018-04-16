@@ -138,7 +138,7 @@ public class ReReplyDAO {
 
         } catch (Exception e) {
             ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
-            errorMasterDAO.write("boardNo"+boardNo, "replyNo"+replyNo, "", "", "reReplyDAO.getList", e.getMessage().toString(), "");
+            errorMasterDAO.write("boardNo"+boardNo, "replyNo"+replyNo, "", "", "reReplyDAO.GetBoardList", e.getMessage().toString(), "");
             e.printStackTrace();
         }
         return innerList; // Database error

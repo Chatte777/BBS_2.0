@@ -131,7 +131,7 @@ public class ReplyDAO {
 			}
 		} catch(Exception e){
 			ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
-			errorMasterDAO.write("boardNo:"+boardNo, "", "", "", "replyDAO.getList", e.getMessage().toString(), "");
+			errorMasterDAO.write("boardNo:"+boardNo, "", "", "", "replyDAO.GetBoardList", e.getMessage().toString(), "");
 			e.printStackTrace();
 		}
 		return list; //Database error

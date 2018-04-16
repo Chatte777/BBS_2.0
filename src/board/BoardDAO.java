@@ -235,7 +235,7 @@ public class BoardDAO {
             }
         } catch(Exception e){
             ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
-            errorMasterDAO.write("makeUser:"+makeUser, "pageNumber:"+pageNumber, "", "", "boardDAO.getList", e.getMessage().toString(), "");
+            errorMasterDAO.write("makeUser:"+makeUser, "pageNumber:"+pageNumber, "", "", "boardDAO.GetBoardList", e.getMessage().toString(), "");
             e.printStackTrace();
         }
         return list; //Database error
