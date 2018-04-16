@@ -27,6 +27,7 @@ public class BoardDAO {
     private String colDeleteYn;
     private String colAuthorize;
     private String colReadCount;
+    private String colBoardPassword;
 
     private String replyTableName;
     private String reReplyTableName;
@@ -46,6 +47,7 @@ public class BoardDAO {
         this.colReadCount = boardName+"_read_count";
         this.replyTableName = boardName+"_reply";
         this.reReplyTableName = boardName+"_re_reply";
+        this.colBoardPassword = boardName+"_password";
 
         conn=dbConn.getDbConnection();
     }
@@ -299,14 +301,16 @@ public class BoardDAO {
         return null;
     }
 
-    public int update(int boardNo, String boardTitle, String boardContent, int boardAuthorize){
-        String SQL = "UPDATE "+ this.tableName +" SET "+ this.colTitle +" =?, "+ this.colContent +" =?, "+ this.colAuthorize +" =? WHERE "+ this.colBoardNo +" =?";
+    public int update(int boardNo, String boardTitle, String boardContent, int boardAuthorize, String boardPassword){
+        String SQL = "UPDATE "+ this.tableName +" SET "+ this.colTitle +" =?, "+ this.colContent +" =?, "+ this.colAuthorize +" =?, "+ this.colBoardPassword + "= ? WHERE "+ this.colBoardNo +" =?";
         try{
             PreparedStatement pstmt = conn.prepareStatement(SQL);
             pstmt.setString(1, boardTitle);
             pstmt.setString(2, boardContent);
             pstmt.setInt(3, boardAuthorize);
-            pstmt.setInt(4, boardNo);
+            pstmt.setString(4, boardPassword);
+            pstmt.setInt(5, boardNo);
+
 
             pstmt.executeUpdate();
             return boardNo;

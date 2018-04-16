@@ -53,10 +53,21 @@
 				script.println("history.back()");
 				script.println("</script>");
 			} else {
+				int boardAuthorize = Integer.parseInt(request.getParameter("boardAuthorize"));
+			    String boardPassword=null;
+				if(boardAuthorize==2){
+					if(request.getParameter("boardPassword")!=null) {
+						if(request.getParameter("boardPassword").equals("")) boardPassword="0000";
+						else boardPassword = request.getParameter("boardPassword");
+					}
+					else boardPassword = "0000";
+				}
+
 				int result = boardDAO.update(Integer.parseInt(request.getParameter("boardNo")),
 						request.getParameter("boardTitle"),
 						request.getParameter("boardContent"),
-						Integer.parseInt(request.getParameter("boardAuthorize")));
+						Integer.parseInt(request.getParameter("boardAuthorize")),
+						boardPassword);
 
 				if (result == -1) {
 					PrintWriter script = response.getWriter();

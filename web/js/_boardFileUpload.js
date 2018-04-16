@@ -3,12 +3,14 @@ var boardNo = document.currentScript.getAttribute('boardNo');
 var boardType = document.currentScript.getAttribute('boardType'); //1:write 2:update
 
 $(document).ready(function () {
+    //게시글 권한설정이 바뀌면 게시글비밀번호 활성화,비활성화
     $("#boardAuthorize").change(function () {
         if ($("#boardAuthorize option:selected").val() == 1) $("#boardPassword").attr('disabled', true);
         else if ($("#boardAuthorize option:selected").val() == 2) $("#boardPassword").removeAttr('disabled');
     });
 });
 
+//게시글 비밀번호에 숫자만 입력할 수 있도록 정규식처리.
 function onlyNumber(obj) {
     $(obj).keyup(function () {
         $(this).val($(this).val().replace(/[^0-9]/g, ""));

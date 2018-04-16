@@ -54,7 +54,7 @@
 					style="border: 1px solid #dddddd">
 					<thead>
 						<tr>
-							<th colspan="2"
+							<th colspan="3"
 								style="background-color: #eeeeee; text-align: center;">게시판
 								글 수정 양식</th>
 						</tr>
@@ -66,10 +66,14 @@
 							<td><input type="text" class="form-control"
 								placeholder="글 제목" name="boardTitle" maxlength="50"
 								value="<%=boardVO.getBoardTitle()%>"></td>
-							<td><select class="form-control" name="boardAuthorize"><option value="1" <%if (boardVO.getBoardAuthorize()==1){ %>selected <%}%>>전체공개</option><option value="2"  <%if (boardVO.getBoardAuthorize()==2){ %>selected <%}%>>나만보기</option></select></td>
+							<td><select class="form-control" name="boardAuthorize" id="boardAuthorize"><option value="1" <%if (boardVO.getBoardAuthorize()==1){ %>selected <%}%>>전체공개</option><option value="2"  <%if (boardVO.getBoardAuthorize()==2){ %>selected <%}%>>나만보기</option></select></td>
+							<td width="10%">
+								<input type="text" class="form-control" disabled style="text-align: center;" onkeydown="onlyNumber(this)"
+									   placeholder="글 비밀번호" name="boardPassword" id="boardPassword" maxlength="4"></td>
+							</td>
 						</tr>
 						<tr>
-							<td colspan="2"><textarea <textarea name="boardContent" id="summernote"
+							<td colspan="3"><textarea <textarea name="boardContent" id="summernote"
 																placeholder="글 내용"  maxlength="2048"><%=boardVO.getBoardContent()%></textarea></td>
 						</tr>
 					</tbody>

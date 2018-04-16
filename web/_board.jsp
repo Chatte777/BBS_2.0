@@ -70,10 +70,10 @@
                     <span onclick="onClickBoardTitle('<%=list.get(i).getTableName()%>', '<%=list.get(i).getBoardNo()%>', '<%=list.get(i).getBoardAuthorize()%>', '<%=list.get(i).getBoardPassword()%>')"
                             <%
                                 if (boardColorFlag == 1) {%>
-                       style="color: #DE2A45;"<%} else if (boardColorFlag == 2) {%>
-                       style="color:#10BF00;"<%} else if (boardColorFlag == 3) {%>
-                       style="color:#2865BF;"<%} else if (boardColorFlag == 4) {%>
-                        style="color:black;"<%}%>>
+                       style="color: #DE2A45; cursor: pointer;"<%} else if (boardColorFlag == 2) {%>
+                       style="color:#10BF00; cursor: pointer;"<%} else if (boardColorFlag == 3) {%>
+                       style="color:#2865BF; cursor: pointer;"<%} else if (boardColorFlag == 4) {%>
+                        style="color:black; cursor: pointer;"<%}%>>
                         <%= list.get(i).getBoardTitle() %>
                     </span>
                 </td>

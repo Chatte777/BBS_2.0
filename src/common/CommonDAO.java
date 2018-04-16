@@ -15,7 +15,7 @@ public class CommonDAO {
         else location = "C:\\Users\\IMTSOFT\\Documents\\contentLog.txt";
 
         long curTimeLong = System.currentTimeMillis();
-        SimpleDateFormat dayTime = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        SimpleDateFormat dayTime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String curTimeStr = dayTime.format(new java.sql.Date(curTimeLong));
 
         FileWriter writer = new FileWriter(location, true);
