@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import alarmMaster.AlarmMasterDAO;
 import dbConn.*;
 import errorMaster.ErrorMasterDAO;
+import common.*;
 
 public class ReReplyDAO {
 
@@ -17,8 +18,6 @@ public class ReReplyDAO {
     private String boardName;
     private String tableName;
     private String colBoardNo;
-    private String colReplyNo;
-    private String colReReplyNo;
 
     public ReReplyDAO(String boardName) {
         this.boardName = boardName;
@@ -91,6 +90,8 @@ public class ReReplyDAO {
             return pstmt.executeUpdate();
 
         } catch (Exception e) {
+            CommonDAO.writeContentLog("reReplyWrite", replyContent);
+
             ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
             errorMasterDAO.write("boardNo"+boardNo, "replyNo"+replyNo, "reReplyMakeUser"+replyMakeUser, "reReplyContent"+replyContent, "reReplyDAO.getDate", e.getMessage().toString(), "");
             e.printStackTrace();
@@ -143,6 +144,8 @@ public class ReReplyDAO {
             return pstmt.executeUpdate();
 
         } catch (Exception e) {
+            CommonDAO.writeContentLog("reReplyUpdate", replyContent);
+
             e.printStackTrace();
             ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
             errorMasterDAO.write("boardNo:"+boardNo, "", "", "", "reReplyDAO.getDate", e.getMessage().toString(), "");

@@ -114,11 +114,11 @@
                         .replaceAll(">", "&gt;").replaceAll("\n", "<br>")%>
                 </td>
                 <td align="center" style="width: 10%;" onclick="event.cancelBubble = true;">
+                    <a onclick="reReplyClick('<%=replyNo%>', '<%=replyContent%>')"
+                       type="button" class="glyphicon glyphicon-share-alt" style="color: seagreen; padding:0px 5px 0px 0px;"/>
                     <%
                         if (userId != null && userId.equals(list.get(i).getReplyMakeUser())) {
                     %>
-                    <a onclick="reReplyClick('<%=replyNo%>', '<%=replyContent%>')"
-                       type="button" class="glyphicon glyphicon-share-alt" style="color: seagreen; padding:0px 5px 0px 0px;"/>
                     <a onclick="modifyClick('<%=list.get(i).getReplyContent()%>', '<%=replyNo%>')" type="button"
                        class="glyphicon glyphicon-pencil" style="color: limegreen; padding:5px;"/>
                     <a onclick="return confirm('정말 삭제하시겠습니까?')" a

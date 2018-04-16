@@ -9,6 +9,7 @@ import java.util.Date;
 import dbConn.*;
 import alarmMaster.*;
 import errorMaster.*;
+import common.*;
 
 public class BoardDAO {
 
@@ -114,6 +115,8 @@ public class BoardDAO {
 
 
     public int write(String boardTitle, String boardMakeUser, String boardContent, int boardAuthorize, int boardNo, String boardPassword){
+        CommonDAO.writeContentLog("boardWrite", boardContent);
+
         String SQL = "INSERT INTO "+ this.tableName +" VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         int tmpNextNo = getNext();
 
@@ -155,6 +158,8 @@ public class BoardDAO {
 
             return tmpNextNo;
         } catch(Exception e){
+            CommonDAO.writeContentLog("boardWrite", boardContent);
+
             ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
             errorMasterDAO.write("boardTitle:"+boardTitle, "boardAuthorize:"+boardAuthorize, "boardNo:"+boardNo, "boardContent:"+boardContent, "boardDAO.write", e.getMessage().toString(), boardMakeUser);
             e.printStackTrace();
@@ -307,6 +312,8 @@ public class BoardDAO {
             return boardNo;
 
         } catch(Exception e){
+            CommonDAO.writeContentLog("boardUpdate", boardContent);
+
             ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
             errorMasterDAO.write("boardNo:"+boardNo, "boardTitle"+boardTitle, "boardAuthorize:"+boardAuthorize, "boardContent:"+boardContent, "boardDAO.getBoardNo", e.getMessage().toString(), "boardDAO.update");
             e.printStackTrace();

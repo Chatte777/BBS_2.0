@@ -4,11 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-
-import alarmMaster.AlarmMaster;
 import alarmMaster.AlarmMasterDAO;
 import dbConn.*;
 import errorMaster.ErrorMasterDAO;
+import common.*;
 
 public class ReplyDAO {
 
@@ -84,6 +83,7 @@ public class ReplyDAO {
 
 			return pstmt.executeUpdate();
 		} catch(Exception e){
+			CommonDAO.writeContentLog("replyWrite", replyContent);
 
 			ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
 			errorMasterDAO.write("boardNo:"+boardNo, "replyMakeUser:"+replyMakeUser, "", "replyContent:"+replyContent, "replyDAO.write", e.getMessage().toString(), "");
@@ -182,6 +182,8 @@ public class ReplyDAO {
 			return pstmt.executeUpdate();
 			
 		} catch(Exception e){
+			CommonDAO.writeContentLog("replyWrite", replyContent);
+
 			ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
 			errorMasterDAO.write("boardNo:"+boardNo, "replyNo"+replyNo, "", "replyContent:"+replyContent, "replyDAO.update", e.getMessage().toString(), "");
 			e.printStackTrace();

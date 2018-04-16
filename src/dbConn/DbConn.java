@@ -29,7 +29,7 @@ public class DbConn {
                 String location;
                 InetAddress ip = InetAddress.getLocalHost();
                 if (ip.toString().equals("KoreaUniv-PC/192.168.219.90"))
-                    location = "C:\\Users\\IMTSOFT\\Documents\\log.txt";
+                    location = "E:\\Dropbox\\Workspace\\IntelliJ\\BBS\\BBS_2.0\\out\\log\\errorLog.txt";
                 else location = "C:\\Users\\IMTSOFT\\Documents\\log.txt";
 
                 long curTimeLong = System.currentTimeMillis();
