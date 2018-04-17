@@ -6,7 +6,7 @@
 <% request.setCharacterEncoding("UTF-8"); %>
 
 <jsp:useBean id="user" class="user.User" scope="page"/> 
-<jsp:setProperty name="user" property="userID"/>
+<jsp:setProperty name="user" property="userId"/>
 <jsp:setProperty name="user" property="userPassword"/>
 
 	<%
@@ -23,12 +23,12 @@
 		}
 		
 		UserDAO userDAO = new UserDAO();
-		int result = userDAO.login(user.getUserID(), user.getUserPassword());
+		int result = userDAO.login(user.getUserId(), user.getUserPassword());
 		
 		if(result == 1){
 		    if(request.getParameter("accountRememberYn") != null) {
 				if (Integer.parseInt(request.getParameter("accountRememberYn")) == 1) {
-					Cookie idRemember = new Cookie("idRemember", user.getUserID());
+					Cookie idRemember = new Cookie("idRemember", user.getUserId());
 					idRemember.setMaxAge(60 * 60 * 24 * 365);
 
 					Cookie pwRemember = new Cookie("pwRemember", user.getUserPassword());
@@ -39,7 +39,7 @@
 				}
 			}
 
-			session.setAttribute("userID", user.getUserID());
+			session.setAttribute("userID", user.getUserId());
 			session.setMaxInactiveInterval(60*60*24*7);
 
 			PrintWriter script = response.getWriter();
