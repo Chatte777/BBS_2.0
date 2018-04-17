@@ -1,5 +1,8 @@
 package board;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,6 +27,7 @@ public class GetBoardList extends HttpServlet {
         String boardName = request.getParameter("boardName");
         HttpSession session = request.getSession();
         ArrayList<BoardVO> returnList = new ArrayList<BoardVO>();
+        JSONArray jsonArray = new JSONArray();
         int replyCnt;
         int replyColorFlag;
         int boardColorFlag;
@@ -78,22 +82,16 @@ public class GetBoardList extends HttpServlet {
                         returnList.add(reboardList.get(j));
                     }
                 }
-                //댓글갯수, 댓글갯수색깔, 글제목색깔 JSON 만들기
-                StringBuffer JSONBuffer = new StringBuffer("");
-                String etcInformationJSON;
-                JSONBuffer.append("{\"result\":[");
 
-                for(int k=0; k<4; k++){
-                    JSONBuffer.append("[{\"value\": \"" + String.valueOf(replyCnt) + "\"}, ");
-                    JSONBuffer.append("[{\"value\": \"" + String.valueOf(replyColorFlag) + "\"}, ");
-                    JSONBuffer.append("[{\"value\": \"" + String.valueOf(boardColorFlag) + "\"}, ");
-                }
-                etcInformationJSON = JSONBuffer.toString();
-
-                request.setAttribute("etcInformationJSON", etcInformationJSON);
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("replyCnt", String.valueOf(replyCnt));
+                jsonObject.put("boardColorFlag", String.valueOf(boardColorFlag));
+                jsonObject.put("replyColorFlag", String.valueOf(replyColorFlag));
+                jsonArray.add(jsonObject);
             }
         }
 
+        request.setAttribute("etcInformationJson", jsonArray);
         request.setAttribute("boardList", returnList);
 
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("board.jsp");
