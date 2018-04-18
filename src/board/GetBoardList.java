@@ -23,6 +23,7 @@ public class GetBoardList extends HttpServlet {
     protected  void requestPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String boardName = request.getParameter("boardName");
         HttpSession session = request.getSession();
+        ArrayList<BoardVO> returnList = new ArrayList<BoardVO>();
         int replyCnt;
         int replyColorFlag;
         int boardColorFlag;
@@ -57,6 +58,8 @@ public class GetBoardList extends HttpServlet {
                 }
                 boardColorFlag = boardDAO.getBoardColor(boardList.get(i).getBoardNo());
 
+                returnList.add(boardList.get(i));
+
                 if (boardList.get(i).getHasReboard() == 2) {
                     BoardDAO reboardDAO = new BoardDAO(boardName);
                     ArrayList<BoardVO> reboardList = reboardDAO.getReboardList(userId, boardList.get(i).getBoardNo());
@@ -71,12 +74,27 @@ public class GetBoardList extends HttpServlet {
                             replyColorFlag = reboardDAO.getReplyColor(reboardList.get(j).getBoardNo());
                         }
                         boardColorFlag = reboardDAO.getBoardColor(reboardList.get(j).getBoardNo());
+
+                        returnList.add(reboardList.get(j));
                     }
-                    request.setAttribute("reboardList", reboardList);
                 }
-                request.setAttribute("boardList", boardList);
+                //댓글갯수, 댓글갯수색깔, 글제목색깔 JSON 만들기
+                StringBuffer JSONBuffer = new StringBuffer("");
+                String etcInformationJSON;
+                JSONBuffer.append("{\"result\":[");
+
+                for(int k=0; k<4; k++){
+                    JSONBuffer.append("[{\"value\": \"" + String.valueOf(replyCnt) + "\"}, ");
+                    JSONBuffer.append("[{\"value\": \"" + String.valueOf(replyColorFlag) + "\"}, ");
+                    JSONBuffer.append("[{\"value\": \"" + String.valueOf(boardColorFlag) + "\"}, ");
+                }
+                etcInformationJSON = JSONBuffer.toString();
+
+                request.setAttribute("etcInformationJSON", etcInformationJSON);
             }
         }
+
+        request.setAttribute("boardList", returnList);
 
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("board.jsp");
         requestDispatcher.forward(request, response);
