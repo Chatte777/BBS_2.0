@@ -24,27 +24,43 @@ public class GetBoardList extends HttpServlet {
     }
 
     protected  void requestPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //변수 선언 및 초기화
         String boardName = request.getParameter("boardName");
-        HttpSession session = request.getSession();
+        BoardDAO boardDAO = new BoardDAO(boardName);
         ArrayList<BoardVO> returnList = new ArrayList<BoardVO>();
-        JSONArray jsonArray = new JSONArray();
+        ArrayList<BoardVO> boardList;
+        JSONArray etcInformationJsonArr = new JSONArray();
+        JSONObject paginationJsonObj = new JSONObject();
+        HttpSession session = request.getSession();
         int replyCnt;
         int replyColorFlag;
         int boardColorFlag;
+        int isNextPage=0;
+        int isDoubleNextPage=0;
+        int isTripleNextPage=0;
+        int lastPage=1;
 
+        //세션에서 ID 받아오기
         String userId = null;
         if (session.getAttribute("userID") != null) {
             userId = (String) session.getAttribute("userID");
         }
 
+        //Pagination
         int pageNumber = 1;
         if (request.getParameter("pageNumber") != null) {
             pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
         }
+        lastPage = boardDAO.getTotalPageNo(userId);
+        if(boardDAO.isNextPage(pageNumber, userId)) isNextPage=1;
+        if(boardDAO.isNextPage(pageNumber+1, userId)) isDoubleNextPage=1;
+        if(boardDAO.isNextPage(pageNumber+2, userId)) isTripleNextPage=1;
+        paginationJsonObj.put("isNextPage", String.valueOf(isNextPage));
+        paginationJsonObj.put("isDoubleNextPage", String.valueOf(isDoubleNextPage));
+        paginationJsonObj.put("isTripleNextPage", String.valueOf(isTripleNextPage));
+        paginationJsonObj.put("lastPage", String.valueOf(lastPage));
 
-        BoardDAO boardDAO = new BoardDAO(boardName);
-        ArrayList<BoardVO> boardList;
-
+        //getBoardList
         if ("myBoard".equals(boardName)) {
             boardList = boardDAO.getMyList(pageNumber, userId);
         } else {
@@ -83,16 +99,17 @@ public class GetBoardList extends HttpServlet {
                     }
                 }
 
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("replyCnt", String.valueOf(replyCnt));
-                jsonObject.put("boardColorFlag", String.valueOf(boardColorFlag));
-                jsonObject.put("replyColorFlag", String.valueOf(replyColorFlag));
-                jsonArray.add(jsonObject);
+                JSONObject etcInformationJsonObj = new JSONObject();
+                etcInformationJsonObj.put("replyCnt", String.valueOf(replyCnt));
+                etcInformationJsonObj.put("boardColorFlag", String.valueOf(boardColorFlag));
+                etcInformationJsonObj.put("replyColorFlag", String.valueOf(replyColorFlag));
+                etcInformationJsonArr.add(etcInformationJsonObj);
             }
         }
 
-        request.setAttribute("etcInformationJson", jsonArray);
+        request.setAttribute("etcInformationJson", etcInformationJsonArr);
         request.setAttribute("boardList", returnList);
+        request.setAttribute("paginationJson", paginationJsonObj);
 
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("board.jsp");
         requestDispatcher.forward(request, response);

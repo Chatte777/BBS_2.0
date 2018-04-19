@@ -31,14 +31,16 @@
                 <c:set var="tmpDt" value="${fn:substring(boardVO.boardMakeDt, 5, 16)}"/>
                 <c:set var="tmpDt" value="${fn:replace(tmpDt, '-', '/')}"/>
 
-                <tr>
-                    <td>${boardVO.boardReadCount}</td>
-                    <td align="left" colspan="2">
-                        <c:if test="${boardVO.boardAuthorize==2}">
-                            <span class="glyphicon glyphicon-lock" style="color: #bbbbbb;">&nbsp;</span>
-                        </c:if>
-                        <span onclick="onClickBoardTitle('${boardVO.tableName}', '${boardVO.boardNo}', '${boardVO.boardAuthorize}', '${boardVO.boardPassword}')"
-                              style="cursor: pointer;">
+                <c:choose>
+                    <c:when test="${boardVO.isRebaord==1}">
+                        <tr>
+                            <td>${boardVO.boardReadCount}</td>
+                            <td align="left" colspan="2">
+                                <c:if test="${boardVO.boardAuthorize==2}">
+                                    <span class="glyphicon glyphicon-lock" style="color: #bbbbbb;">&nbsp;</span>
+                                </c:if>
+                                <span onclick="onClickBoardTitle('${boardVO.tableName}', '${boardVO.boardNo}', '${boardVO.boardAuthorize}', '${boardVO.boardPassword}')"
+                                      style="cursor: pointer;">
                             <c:choose>
                                 <c:when test="${etcInformationJson[i].boardColorFlag==1}">
                                     <span style="color: #DE2A45;">${boardVO.boardTitle}</span>
@@ -54,36 +56,94 @@
                                 </c:when>
                             </c:choose>
                         </span>
-                    </td>
-                    <td>
-                        <c:choose>
-                            <c:when test="${etcInformationJson[i].replyColorFlag==1}">
-                                <span style="color: #7A447A;">${etcInformationJson[i].replyCnt}</span>
-                            </c:when>
-                            <c:when test="${etcInformationJson[i].replyColorFlag==2}">
-                                <span style="color: #DE2A45;">${etcInformationJson[i].replyCnt}</span>
-                            </c:when>
-                            <c:when test="${etcInformationJson[i].replyColorFlag==3}">
-                                <span style="color: #F5762C;">${etcInformationJson[i].replyCnt}</span>
-                            </c:when>
-                            <c:when test="${etcInformationJson[i].replyColorFlag==4}">
-                                <span style="color: #10BF00;">${etcInformationJson[i].replyCnt}</span>
-                            </c:when>
-                            <c:when test="${etcInformationJson[i].replyColorFlag==5}">
-                                <span style="color: #2865BF;">${etcInformationJson[i].replyCnt}</span>
-                            </c:when>
-                            <c:when test="${etcInformationJson[i].replyColorFlag==6}">
-                                <span style="color: black;">${etcInformationJson[i].replyCnt}</span>
-                            </c:when>
-                        </c:choose>
-                    </td>
-                    <td>
-                            ${boardVO.boardMakeUser}
-                    </td>
-                    <td>
-                            ${tmpDt}
-                    </td>
-                </tr>
+                            </td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${etcInformationJson[i].replyColorFlag==1}">
+                                        <span style="color: #7A447A;">${etcInformationJson[i].replyCnt}</span>
+                                    </c:when>
+                                    <c:when test="${etcInformationJson[i].replyColorFlag==2}">
+                                        <span style="color: #DE2A45;">${etcInformationJson[i].replyCnt}</span>
+                                    </c:when>
+                                    <c:when test="${etcInformationJson[i].replyColorFlag==3}">
+                                        <span style="color: #F5762C;">${etcInformationJson[i].replyCnt}</span>
+                                    </c:when>
+                                    <c:when test="${etcInformationJson[i].replyColorFlag==4}">
+                                        <span style="color: #10BF00;">${etcInformationJson[i].replyCnt}</span>
+                                    </c:when>
+                                    <c:when test="${etcInformationJson[i].replyColorFlag==5}">
+                                        <span style="color: #2865BF;">${etcInformationJson[i].replyCnt}</span>
+                                    </c:when>
+                                    <c:when test="${etcInformationJson[i].replyColorFlag==6}">
+                                        <span style="color: black;">${etcInformationJson[i].replyCnt}</span>
+                                    </c:when>
+                                </c:choose>
+                            </td>
+                            <td>
+                                    ${boardVO.boardMakeUser}
+                            </td>
+                            <td>
+                                    ${tmpDt}
+                            </td>
+                        </tr>
+                    </c:when>
+                    <c:otherwise>
+                        <tr style="height: 1px; font-size: 0.875em; background-color: #FEFEF2; margin: 1em;">
+                            <td>${boardVO.boardReadCount}</td>
+                            <td align="left" colspan="2">
+                                <span class="glyphicon glyphicon-menu-right" style="color: #bbbbbb;">&nbsp;</span>
+                                <c:if test="${boardVO.boardAuthorize==2}">
+                                    <span class="glyphicon glyphicon-lock" style="color: #bbbbbb;">&nbsp;</span>
+                                </c:if>
+                                <span onclick="onClickBoardTitle('${boardVO.tableName}', '${boardVO.boardNo}', '${boardVO.boardAuthorize}', '${boardVO.boardPassword}')"
+                                      style="cursor: pointer;">
+                            <c:choose>
+                                <c:when test="${etcInformationJson[i].boardColorFlag==1}">
+                                    <span style="color: #DE2A45;">${boardVO.boardTitle}</span>
+                                </c:when>
+                                <c:when test="${etcInformationJson[i].boardColorFlag==2}">
+                                    <span style="color: #10BF00;">${boardVO.boardTitle}</span>
+                                </c:when>
+                                <c:when test="${etcInformationJson[i].boardColorFlag==3}">
+                                    <span style="color: #2865BF;">${boardVO.boardTitle}</span>
+                                </c:when>
+                                <c:when test="${etcInformationJson[i].boardColorFlag==4}">
+                                    <span style="color: black;">${boardVO.boardTitle}</span>
+                                </c:when>
+                            </c:choose>
+                        </span>
+                            </td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${etcInformationJson[i].replyColorFlag==1}">
+                                        <span style="color: #7A447A;">${etcInformationJson[i].replyCnt}</span>
+                                    </c:when>
+                                    <c:when test="${etcInformationJson[i].replyColorFlag==2}">
+                                        <span style="color: #DE2A45;">${etcInformationJson[i].replyCnt}</span>
+                                    </c:when>
+                                    <c:when test="${etcInformationJson[i].replyColorFlag==3}">
+                                        <span style="color: #F5762C;">${etcInformationJson[i].replyCnt}</span>
+                                    </c:when>
+                                    <c:when test="${etcInformationJson[i].replyColorFlag==4}">
+                                        <span style="color: #10BF00;">${etcInformationJson[i].replyCnt}</span>
+                                    </c:when>
+                                    <c:when test="${etcInformationJson[i].replyColorFlag==5}">
+                                        <span style="color: #2865BF;">${etcInformationJson[i].replyCnt}</span>
+                                    </c:when>
+                                    <c:when test="${etcInformationJson[i].replyColorFlag==6}">
+                                        <span style="color: black;">${etcInformationJson[i].replyCnt}</span>
+                                    </c:when>
+                                </c:choose>
+                            </td>
+                            <td>
+                                    ${boardVO.boardMakeUser}
+                            </td>
+                            <td>
+                                    ${tmpDt}
+                            </td>
+                        </tr>
+                    </c:otherwise>
+                </c:choose>
                 <c:set var="i" value="${i+1}"></c:set>
             </c:forEach>
             </tbody>
@@ -160,7 +220,62 @@
         <span class="sr-only">(current)</span>
       </span>
                     </li>
+                    <c:choose>
+                    <c:when test="${paginationJson.isNextPage==1}">
+                        <li class="page-item"><a class="page-link"
+                                             href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber+1}">${pageNumber+1}
+                        </a></li>
+                    </c:when>
+                    <c:otherwise>
+                    <li class="page-item disabled"><span class="page-link" style="color: darkgray;">X</span></li>
+                    </c:otherwise>
+                    </c:choose>
 
+                    <c:choose>
+                    <c:when test="${paginationJson.isDoubleNextPage==1}">
+                    <li class="page-item"><a class="page-link"
+                                             href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber+2}">${pageNumber+2}
+                    </a></li>
+                    </c:when>
+                    <c:otherwise>
+                    <li class="page-item disabled"><span class="page-link" style="color: darkgray;">X</span></li>
+                    </c:otherwise>
+                    </c:choose>
+
+                    <c:choose>
+                    <c:when test="${paginationJson.isTripleNextPage==1}">
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber+3}"><span
+                                class="glyphicon glyphicon-option-horizontal"></span></a>
+                    </li>
+                    </c:when>
+                    <c:otherwise>
+                    <li class="page-item disabled">
+                        <span class="page-link"><span class="glyphicon glyphicon-option-horizontal"></span></span>
+                    </li>
+                    </c:otherwise>
+                    </c:choose>
+
+                    <c:choose>
+                    <c:when test="${paginationJson.isNextPage==1}">
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber+1}">다음</a>
+                    </li>
+                    </c:when>
+                    <c:otherwise>
+                    <li class="page-item disabled">
+                        <span class="page-link">다음</span>
+                    </li>
+                    </c:otherwise>
+                    </c:choose>
+
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="GetBoardList.do?boardName=${boardName}&pageNumber=${paginationJson.lastPage}">마지막</a>
+                    </li>
+                </ul>
         </div>
     </div>
 </div>
