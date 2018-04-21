@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <%@ page import="java.io.PrintWriter" %>
@@ -9,30 +11,8 @@
 <%@ page import="reReply.ReReplyDAO" %>
 <%@ page import="reReply.ReReplyVO" %>
 
-
-<%
-    String userId = null;
-    String boardName = request.getParameter("boardName");
-
-    if (session.getAttribute("userID") != null) {
-        userId = (String) session.getAttribute("userID");
-    }
-
-    int boardNo = 0;
-    if (request.getParameter("boardNo") != null) {
-        boardNo = Integer.parseInt(request.getParameter("boardNo"));
-    }
-
-    if (boardNo == 0) {
-        PrintWriter script = response.getWriter();
-        script.println("<script>");
-        script.println("alert('유효하지 않은 글입니다.')");
-        script.println("location.href = '" + boardName + ".jsp'");
-        script.println("</script>");
-    }
-    BoardVO boardVO = new BoardDAO(boardName).getBoardVO(boardNo);
-%>
-
+<c:set var="userId" value="${sessionScope.userID}"></c:set>
+<c:set var="boardName" value="${param.boardName}"></c:set>
 
 <div class="container">
     <div class="row">
@@ -48,59 +28,51 @@
             <tr>
                 <td style="width: 20%;">글제목</td>
                 <td colspan="3" align="left">
-                    <%
-                        if (boardVO.getBoardAuthorize() == 2) {
-                    %><span class="glyphicon glyphicon-lock" style="color: #bbbbbb;">&nbsp;</span><%
-                    }
-                %>
-                    <%=boardVO.getBoardTitle().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;")
-                            .replaceAll(">", "&gt;").replaceAll("\n", "<br>")%>
+                    <c:if test="${boardVO.boardAuthorize==2}">
+                        <span class="glyphicon glyphicon-lock" style="color: #bbbbbb;">&nbsp;</span>
+                    </c:if>
+                    ${boardVO.boardTitle}
                 </td>
             </tr>
             <tr>
                 <td>작성자</td>
-                <td colspan="3" align="left"><%=boardVO.getBoardMakeUser()%>
+                <td colspan="3" align="left">
+                    ${boardVO.boardMakeUser}
                 </td>
             </tr>
             <tr>
                 <td>작성일자</td>
-                <td colspan="3" align="left"><%=boardVO.getBoardMakeDt().substring(0, 11)
-                        + boardVO.getBoardMakeDt().substring(11, 13) + "시"
-                        + boardVO.getBoardMakeDt().substring(14, 16) + "분"%>
+                <td colspan="3" align="left">
+                    ${boardVO.boardMakeDt}
                 </td>
             </tr>
             <tr>
                 <td>내용</td>
                 <td colspan="3" style="min-height: 200px; text-align: left;">
-                    <p><%=boardVO.getBoardContent()%>
+                    <p>
+                        ${boardVO.boardContent}
                     </p>
                 </td>
             </tr>
             </tbody>
         </table>
         <div style="margin-bottom: 10px;" align="right">
-            <%
-                if (userId != null && userId.equals(boardVO.getBoardMakeUser())) {
-            %>
-            <a href="boardUpdate.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>" class="btn btn-primary">수정</a>
-            <a onclick="return confirm('정말로 삭제하시겠습니까?')"
-               href="boardDeleteAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>" class="btn btn-primary">삭제</a>&nbsp;
-            <%
-            } else {
-            %>
-            <a href="#" class="btn btn-primary" style="background:gray;">수정</a>
-            <a href="#" class="btn btn-primary" style="background:gray;">삭제</a>&nbsp;
-            <%
-                }
-            %>
+            <c:choose>
+                <c:when test="${userId}==${boardVO.boardMakeUser}">
+                    <a href="boardUpdate.jsp?boardName=${boardName}&boardNo=${boardVO.boardNo}" class="btn btn-primary">수정</a>
+                    <a onclick="return confirm('정말로 삭제하시겠습니까?')"
+                       href="boardDeleteAction.jsp?boardName=${boardName}&boardNo=${boardVO.boardNo}" class="btn btn-primary">삭제</a>&nbsp;
+                </c:when>
+                <c:otherwise>
+                    <a href="#" class="btn btn-primary" style="background:gray;">수정</a>
+                    <a href="#" class="btn btn-primary" style="background:gray;">삭제</a>&nbsp;
+                </c:otherwise>
+            </c:choose>
         </div>
 
-        <table class="table table-striped">
+        <table id="replyListTable" class="table table-striped">
             <tbody>
             <%
-                ReplyDAO replyDAO = new ReplyDAO(boardName);
-                ArrayList<ReplyVO> list = replyDAO.getList(boardNo);
-
                 for (int i = 0; i < list.size(); i++) {
                     int replyNo = list.get(i).getReplyNo();
                     String replyContent = list.get(i).getReplyContent();
@@ -115,7 +87,8 @@
                 </td>
                 <td align="center" style="width: 10%;" onclick="event.cancelBubble = true;">
                     <a onclick="reReplyClick('<%=replyNo%>', '<%=replyContent%>')"
-                       type="button" class="glyphicon glyphicon-share-alt" style="color: seagreen; padding:0px 5px 0px 0px;"/>
+                       type="button" class="glyphicon glyphicon-share-alt"
+                       style="color: seagreen; padding:0px 5px 0px 0px;"/>
                     <%
                         if (userId != null && userId.equals(list.get(i).getReplyMakeUser())) {
                     %>
@@ -123,7 +96,7 @@
                        class="glyphicon glyphicon-pencil" style="color: limegreen; padding:5px;"/>
                     <a onclick="return confirm('정말 삭제하시겠습니까?')"
                        a href="replyDeleteAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>&replyNo=<%=replyNo%>"
-                       type="button" class="glyphicon glyphicon-remove" style="color: #a9a9a9; padding:5px;"/>  <%
+                       type="button" class="glyphicon glyphicon-remove" style="color: #a9a9a9; padding:5px;"/> <%
                     }
                 %>
                 </td>
@@ -134,9 +107,6 @@
                 </td>
             </tr>
             <%
-                ReReplyDAO reReplyDAO = new ReReplyDAO(boardName);
-                ArrayList<ReReplyVO> listReReply = reReplyDAO.getList(boardNo, replyNo);
-
                 for (int j = 0; j < listReReply.size(); j++) {
             %>
             <tr style="height: 1px; font-size: 0.875em; background-color: #FEFEF2; margin: 1em;">
@@ -150,14 +120,14 @@
                     <%
                         if (userId != null && userId.equals(listReReply.get(j).getReReplyMakeUser())) {
                     %>
-                        <a onclick="modifyClick('<%=listReReply.get(j).getReReplyContent()%>', '<%=listReReply.get(j).getReReplyNo()%>')"
-                           type="button" class="glyphicon glyphicon-pencil" style="color: #cccccc"/>
-                        <a onclick="return confirm('정말로 삭제하시겠습니까?')" a
-                           href="reReplyDeleteAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>&replyNo=<%=replyNo%>&reReplyNo=<%=listReReply.get(j).getReReplyNo()%>"
-                           type="button" class="glyphicon glyphicon-remove" style="color: #cccccc; padding:0px;"/><%
-                            }
-                        %>
-                    </td>
+                    <a onclick="modifyClick('<%=listReReply.get(j).getReReplyContent()%>', '<%=listReReply.get(j).getReReplyNo()%>')"
+                       type="button" class="glyphicon glyphicon-pencil" style="color: #cccccc"/>
+                    <a onclick="return confirm('정말로 삭제하시겠습니까?')" a
+                       href="reReplyDeleteAction.jsp?boardName=<%=boardName%>&boardNo=<%=boardNo%>&replyNo=<%=replyNo%>&reReplyNo=<%=listReReply.get(j).getReReplyNo()%>"
+                       type="button" class="glyphicon glyphicon-remove" style="color: #cccccc; padding:0px;"/><%
+                        }
+                    %>
+                </td>
                 <td style="border: none;">
 
                 </td>
@@ -174,7 +144,6 @@
                 <td style="border-top-style: none; border-bottom-style: dashed; border-right-style: none; border-left-style: none; border-bottom-color: lightskyblue; border-width: 0.1em;"></td>
                 <td align="center"
                     style="width: 5%; border-top-style: none; border-bottom-style: dashed; border-right-style: none; border-left-style: none; border-bottom-color: lightskyblue; border-width: 0.1em;">
-
                 </td>
             </tr>
             <%
@@ -235,7 +204,8 @@
 
     function reReplyClick(replyNo, replyContent) {
         _updateFlag = 3;
-        _replyNo = replyNo;document.getElementById("replyContent").focus();
+        _replyNo = replyNo;
+        document.getElementById("replyContent").focus();
         document.getElementById("replyContent").value = replyContent + "에 대한 대댓글을 작성하세요.";
     }
 
@@ -252,6 +222,30 @@
             document.replyForm.action = "reReplyAction.jsp?boardName=" + boardName + "&board_no=<%=boardNo%>&replyNo=" + _replyNo;
             document.replyForm.method = "post";
             document.replyForm.submit();
+        }
+    }
+
+    var request = new XMLHttpRequest();
+    function getReply(boardName, boardNo){
+        request.open("Post", "/GetReplyList.do?boardName="+boardName+"&boardNo="+boardNo, true);
+        request.onreadystatechange = displayReply;
+        request.send(null);
+    }
+
+    function displayReply(){
+        var table = document.getElementById("replyListTable");
+        table.innerHTML = "";
+        if(request.readyState==4 && request.status==200){
+            var object = eval('('+request.responseText+')');
+            var replyList = object.replyList;
+
+            for(i=0; i<replyList.length; i++){
+                var row = table.insertRow(0);
+                for(var j=0; j<replyList[j].length; j++){
+                    var cell = row.insertCell(j);
+                    cell.innerHTML = replyList[i][j].value;
+                }
+            }
         }
     }
 </script>

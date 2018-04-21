@@ -41,7 +41,7 @@
             <li><a href="GetBoardList.do?boardName=mountain">산악일기</a></li>
             <li><a href="GetBoardList.do?boardName=military">국방부학습지</a></li>
             <li><a href="/sketchbook/board.jsp?boardName=sketchbook">스케치북</a></li>
-            <%if (userID != null) {%> <li><a href="/board.jsp?boardName=myBoard">내가쓴글</a></li> <%}%>
+            <%if (userID != null) {%> <li><a href="GetBoardList.do?boardName=myBoard">내가쓴글</a></li> <%}%>
             <%if (userID != null) {%> <li><a href="/alarm.jsp">알림
             <%
                 if(alarmCount!=0) {%><span style="color: red;"><%=alarmCount%><%};%>
@@ -49,7 +49,7 @@
             <%
                 if (userID != null && (userID.equals("slop1434") || userID.equals("chatte777") || userID.equals("test"))) {
             %>
-            <li><a href="/board.jsp?boardName=thread">대화의 숲</a></li>
+            <li><a href="GetBoardList.do?boardName=thread">대화의 숲</a></li>
             <%
                 }
             %>

@@ -29,6 +29,25 @@ public class ReReplyDAO {
         conn = dbConn.getDbConnection();
     }
 
+    public ReReplyVO setReReplyVO(ReReplyVO reReplyVO, ResultSet rs){
+        try{
+            reReplyVO.setBoardNo(rs.getInt(1));
+            reReplyVO.setReplyNo(rs.getInt(2));
+            reReplyVO.setReReplyNo(rs.getInt(3));
+            reReplyVO.setReReplyContent(rs.getString(4));
+            reReplyVO.setReReplyMakeUser(rs.getString(5));
+            reReplyVO.setReReplyMakeDt(rs.getString(6));
+            reReplyVO.setReReplyLikeCnt(rs.getInt(7));
+            reReplyVO.setReReplyDislikeCnt(rs.getInt(8));
+            reReplyVO.setReReplyDeleteYn(rs.getInt(9));
+        } catch (Exception e){
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("reReplyVO:"+reReplyVO, "rs:"+rs, "", "", "reReplyDAO.setReReplyVO", e.getMessage().toString(), "");
+            e.printStackTrace();
+        }
+        return reReplyVO;
+    }
+
     public String getDate() {
         String SQL = "select now()";
         try {
@@ -124,15 +143,8 @@ public class ReReplyDAO {
 
             while (innerRs.next()) {
                 ReReplyVO reReplyVO = new ReReplyVO();
-                reReplyVO.setBoardNo(innerRs.getInt(1));
-                reReplyVO.setReplyNo(innerRs.getInt(2));
-                reReplyVO.setReReplyNo(innerRs.getInt(3));
-                reReplyVO.setReReplyContent(innerRs.getString(4));
-                reReplyVO.setReReplyMakeUser(innerRs.getString(5));
-                reReplyVO.setReReplyMakeDt(innerRs.getString(6));
-                reReplyVO.setReReplyLikeCnt(innerRs.getInt(7));
-                reReplyVO.setReReplyDislikeCnt(innerRs.getInt(8));
-                reReplyVO.setReReplyDeleteYn(innerRs.getInt(9));
+                setReReplyVO(reReplyVO, rs);
+
                 innerList.add(reReplyVO);
             }
 
@@ -180,5 +192,30 @@ public class ReReplyDAO {
             e.printStackTrace();
         }
         return -1; //Database error
+    }
+
+    public ArrayList<ReReplyVO> getReReplyList(int boardNo, int replyNo){
+        String SQL = "SELECT * from "+ this.boardName+"_re_reply" +" WHERE "+ this.colBoardNo +" = ? and reply_no = ? and re_reply_delete_yn = 1";
+        ArrayList<ReReplyVO> reReplyList = new ArrayList<ReReplyVO>();
+
+        try{
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setInt(1, boardNo);
+            pstmt.setInt(2, replyNo);
+
+            rs = pstmt.executeQuery();
+
+            while (rs.next()){
+                ReReplyVO reReplyVO = new ReReplyVO();
+                setReReplyVO(reReplyVO, rs);
+
+                reReplyList.add(reReplyVO);
+            }
+        } catch(Exception e){
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("boardNo:"+boardNo, "", "", "", "replyDAO.GetBoardList", e.getMessage().toString(), "");
+            e.printStackTrace();
+        }
+        return reReplyList; //Database error
     }
 }

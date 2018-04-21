@@ -9,6 +9,8 @@
 
 
 	<%
+		String boardName = request.getParameter("boardName");
+
 		String userId = null;
 		if(session.getAttribute("userID") != null){
 			userId = (String) session.getAttribute("userID");
@@ -30,11 +32,10 @@
 				PrintWriter script = response.getWriter();
 				script.println("<script>");
 				script.println("alert('유효하지 않은 글입니다.')");
-				script.println("location.href = 'board.jsp'");
+				script.println("location.href = 'GetBoardList.do?boardName="+boardName+"'");
 				script.println("</script>"); 
 			}
 
-			String boardName = request.getParameter("boardName");
 			BoardDAO boardDAO = new BoardDAO(boardName);
 			BoardVO boardVO = boardDAO.getBoardVO(boardNo);
 
@@ -58,7 +59,7 @@
 					{
 						PrintWriter script = response.getWriter();
 						script.println("<script>");
-						script.println("location.href='board.jsp?boardName="+boardName+"'");
+						script.println("location.href='GetBoardList.do?boardName="+boardName+"'");
 						script.println("</script>");
 					}
 		}

@@ -1,6 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="board.BoardDAO" %>
-<%@ page import="board.BoardVO" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="alarmMaster.AlarmMasterDAO" %>
 <%@ page import="alarmMaster.AlarmMaster" %>

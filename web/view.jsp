@@ -3,12 +3,9 @@
 <%@ page import="java.io.PrintWriter"%>
 <%@ page import="bbs.Bbs"%>
 <%@ page import="bbs.BbsDAO"%>
-<%@ page import="file.FileDAO"%>
-<%@ page import="file.FileDTO"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="reply.ReplyVO"%>
 <%@ page import="reply.ReplyDAO"%>
-<%@ page import="java.io.File"%>
 
 
 <!DOCTYPE html>

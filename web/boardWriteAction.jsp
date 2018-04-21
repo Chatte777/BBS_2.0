@@ -70,7 +70,7 @@
 				} else {
 						PrintWriter script = response.getWriter();
 						script.println("<script>");
-						script.println("location.href='board.jsp?boardName="+boardName+"'");
+						script.println("location.href='GetBoardList.do?boardName="+boardName+"'");
 						script.println("</script>");
 				}
 			}
