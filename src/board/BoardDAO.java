@@ -215,7 +215,8 @@ public class BoardDAO {
 
         String SQL = "SELECT * from "+ this.tableName
                 + " WHERE " + this.colDeleteYn +"=1 "
-                + " AND ("+ this.colAuthorize +"= 1 OR ("+ this.colAuthorize +"=2 and "+ this.colMakeUser +"=?))"
+                + " AND ("+ this.colAuthorize +"= 1 OR ("+ this.colAuthorize +"=2 and "+ this.colMakeUser +"=?))" +
+                "AND is_reboard = 1"
                 + " ORDER BY "+ this.colBoardNo +"  DESC LIMIT ?,?";
         ArrayList<BoardVO> list = new ArrayList<BoardVO>();
 
