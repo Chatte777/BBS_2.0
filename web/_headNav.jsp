@@ -37,9 +37,9 @@
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-            <li><a href="/board.jsp?boardName=notify">공지 및 건의</a></li>
-            <li><a href="/board.jsp?boardName=mountain">산악일기</a></li>
-            <li><a href="/board.jsp?boardName=military">국방부학습지</a></li>
+            <li><a href="GetBoardList.do?boardName=notify">공지 및 건의</a></li>
+            <li><a href="GetBoardList.do?boardName=mountain">산악일기</a></li>
+            <li><a href="GetBoardList.do?boardName=military">국방부학습지</a></li>
             <li><a href="/sketchbook/board.jsp?boardName=sketchbook">스케치북</a></li>
             <%if (userID != null) {%> <li><a href="/board.jsp?boardName=myBoard">내가쓴글</a></li> <%}%>
             <%if (userID != null) {%> <li><a href="/alarm.jsp">알림

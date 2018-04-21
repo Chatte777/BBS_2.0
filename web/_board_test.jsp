@@ -157,7 +157,7 @@
                     </li>
                     <!--현재 1페이지이면 '이전'탭을 disable시키고 그게 아니라면 이전페이지로 이동-->
                     <c:choose>
-                        <c:when test="${pageNumber==1}">
+                        <c:when test="${pageNumber!=1}">
                             <li class="page-item">
                                 <a class="page-link"
                                    href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber-1}">이전</a>
@@ -175,7 +175,7 @@
                         <c:when test="${pageNumber>3}">
                             <li class="page-item">
                                 <a class="page-link"
-                                   href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber}">
+                                   href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber-3}">
                                     <span class="glyphicon glyphicon-option-horizontal"></span></a>
                             </li>
                         </c:when>

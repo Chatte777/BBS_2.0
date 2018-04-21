@@ -94,6 +94,12 @@ public class GetBoardList extends HttpServlet {
                     }
                     boardColorFlag = reboardDAO.getBoardColor(reboardList.get(j).getBoardNo());
 
+                    JSONObject etcInformationJsonObj = new JSONObject();
+                    etcInformationJsonObj.put("replyCnt", String.valueOf(replyCnt));
+                    etcInformationJsonObj.put("boardColorFlag", String.valueOf(boardColorFlag));
+                    etcInformationJsonObj.put("replyColorFlag", String.valueOf(replyColorFlag));
+                    etcInformationJsonArr.add(etcInformationJsonObj);
+
                     returnList.add(reboardList.get(j));
                 }
             }
