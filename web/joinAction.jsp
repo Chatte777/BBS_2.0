@@ -32,7 +32,7 @@
 			script.println("</script>");
 		}
 		
-		if(user.getUserID()==null || user.getUserPassword()==null || user.getUserName()==null || user.getUserGender()==null || user.getUserEmail()==null){
+		if(user.getUserId()==null || user.getUserPassword()==null || user.getUserName()==null || user.getUserGender()==null || user.getUserEmail()==null){
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
 			script.println("alert('입력이 안된 사항이 있습니다.')");
@@ -51,7 +51,7 @@
 			}
 			else
 			{
-				session.setAttribute("userID", user.getUserID());
+				session.setAttribute("userID", user.getUserId());
 				
 				PrintWriter script = response.getWriter();
 				script.println("<script>");
