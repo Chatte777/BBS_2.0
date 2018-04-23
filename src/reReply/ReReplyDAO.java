@@ -143,14 +143,14 @@ public class ReReplyDAO {
 
             while (innerRs.next()) {
                 ReReplyVO reReplyVO = new ReReplyVO();
-                setReReplyVO(reReplyVO, rs);
+                setReReplyVO(reReplyVO, innerRs);
 
                 innerList.add(reReplyVO);
             }
 
         } catch (Exception e) {
             ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
-            errorMasterDAO.write("boardNo"+boardNo, "replyNo"+replyNo, "", "", "reReplyDAO.GetBoardList", e.getMessage().toString(), "");
+            errorMasterDAO.write("boardNo"+boardNo, "replyNo"+replyNo, "", "", "reReplyDAO.GetList", e.getMessage().toString(), "");
             e.printStackTrace();
         }
         return innerList; // Database error

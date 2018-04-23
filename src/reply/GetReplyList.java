@@ -64,7 +64,7 @@ public class GetReplyList extends HttpServlet {
         HttpSession session = request.getSession();
         String sessionId = session.getAttribute("userID").toString();
 
-        response.getWriter().print(getReplyList(request.getParameter("boardName"), Integer.parseInt(request.getParameter("boardNo")), sessionId));
+        response.getWriter().write(getReplyList(request.getParameter("boardName"), Integer.parseInt(request.getParameter("boardNo")), sessionId).toString());
     }
 
     public JSONArray getReplyList(String boardName, int boardNo, String sessionId){

@@ -15,6 +15,7 @@
 
 <c:set var="userId" value="${sessionScope.userID}"></c:set>
 <c:set var="boardName" value="${param.boardName}"></c:set>
+<c:set var="boardNo" value="${param.boardNo}"></c:set>
 
 <div class="container">
     <div class="row">
@@ -63,7 +64,8 @@
                 <c:when test="${userId}==${boardVO.boardMakeUser}">
                     <a href="boardUpdate.jsp?boardName=${boardName}&boardNo=${boardVO.boardNo}" class="btn btn-primary">수정</a>
                     <a onclick="return confirm('정말로 삭제하시겠습니까?')"
-                       href="boardDeleteAction.jsp?boardName=${boardName}&boardNo=${boardVO.boardNo}" class="btn btn-primary">삭제</a>&nbsp;
+                       href="boardDeleteAction.jsp?boardName=${boardName}&boardNo=${boardVO.boardNo}"
+                       class="btn btn-primary">삭제</a>&nbsp;
                 </c:when>
                 <c:otherwise>
                     <a href="#" class="btn btn-primary" style="background:gray;">수정</a>
@@ -73,13 +75,24 @@
         </div>
 
         <table id="replyListTable" class="table table-striped">
-            <button onClick="onClickTest('${boardName}', '${boardVO.boardNo}')"></button>
-            <tbody>
-
-            </tbody>
         </table>
     </div>
 
+    <form name="replyForm">
+        <table class="table table-condensed">
+            <tbody>
+            <tr>
+                <td style="width: 90%;"><textarea class="form-control" placeholder="댓글" name="replyContent"
+                                                  id="replyContent" maxlength="2048" style="height: 150px;"></textarea>
+                </td>
+                <td style="width: 10%; vertical-align: bottom;" align="center">
+                    <input type="button" onclick="replySubmit('${boardName}')" class="btn btn-primary pull-right" value="댓글작성">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <input type="hidden" name="boardNo" id="boardNo" value="${boardNo}">
+    </form>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -89,41 +102,48 @@
     var _updateFlag = 1;
     var _replyNo = 0;
 
-    function onClickTest(boardName, boardNo){
+    window.onload = function () {
         $.ajax({
-            type : "GET",
-            url: "GetReplyList.do?boardName="+boardName+"&boardNo="+boardNo,
-            dataType: "text",
+            type: "POST",
+            url: "GetReplyList.do?boardName=${boardName}&boardNo=${boardNo}",
+            dataType: "json",
             success: function (data) {
-                alert(data);
+
+                var row = "<tbody>";
+                for (var i = 0; i < data.length; i++) {
+                    row += "<tr>" +
+                        "<td></td>" +
+                        "<td align=\"left\" style=\"word-break: break-all;\">"+ data[i].replyContent +"</td>" +
+                        "<td align=\"center\" style=\"width: 10%;\" onclick=\"event.cancelBubble = true;\">" +
+                        "<a onclick=\"reReplyClick('${data[i].replyNo}', '"+ data[i].replyContent +"')\"" +
+                        "type=\"button\" class=\"glyphicon glyphicon-share-alt\" style=\"color: seagreen; padding:0px 5px 0px 0px;\"/>";
+
+                    if(data[i].replyMakeUser == '${userId}'){
+                        row += "<a onclick=\"modifyClick('"+ data[i].replyContent +"', '${data[i].replyNo}')\" type=\"button\"" +
+                            "class=\"glyphicon glyphicon-pencil\" style=\"color: limegreen; padding:5px;\"/>" +
+                            "<a onclick=\"return confirm('정말 삭제하시겠습니까?')\"" +
+                            "a href=\"replyDeleteAction.jsp?boardName=${boardName}&boardNo=${boardNo}&replyNo="+ data[i].replyNo +"\"" +
+                            "type=\"button\" class=\"glyphicon glyphicon-remove\" style=\"color: #a9a9a9; padding:5px;\"/>";
+                    }
+
+                    row += "</td>";
+
+                    row += "<td style=\"width: 10%;>" + data[i].replyMakeUser + "</td>" +
+                        "<td style=\"width: 15%;\">" + data[i].replyMakeDt + "</td>" +
+                        "</tr>";
+                }
+                row += "</tbody>";
+                $("#replyListTable").append(row);
             },
-            error: function () { alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error); }
+            error: function () {
+                alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+            }
         });
     };
 
-    var request = new XMLHttpRequest();
-    function getReply(boardName, boardNo){
-        request.open("Post", "/GetReplyList.do?boardName="+boardName+"&boardNo="+boardNo, true);
-        request.onreadystatechange = displayReply;
-        request.send(null);
-    }
-
-    function displayReply(){
-                var table = document.getElementById("replyListTable");
-        table.innerHTML = "";
-        if(request.readyState==4 && request.status==200){
-            var object = eval('('+request.responseText+')');
-            var replyList = object.replyListJsonArr;
-
-            alert(request.responseText);
-
-            for(i=0; i<replyList.length; i++){
-                var row = table.insertRow(0);
-                for(var j=0; j<replyList[j].length; j++){
-                    var cell = row.insertCell(j);
-                    cell.innerHTML = replyList[i][j].value;
-                }
-            }
-        }
-    }
+    function reReplyClick(replyNo, replyContent) {
+        _updateFlag = 3;
+        _replyNo = replyNo;document.getElementById("replyContent").focus();
+        document.getElementById("replyContent").value = replyContent + "에 대한 대댓글을 작성하세요.";
+    };
 </script>
