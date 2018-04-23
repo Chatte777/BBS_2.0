@@ -126,11 +126,12 @@
                             "type=\"button\" class=\"glyphicon glyphicon-remove\" style=\"color: #a9a9a9; padding:5px;\"/>";
                     }
 
-                    row += "</td>";
-
-                    row += "<td style=\"width: 10%;\">" + data[i].replyMakeUser + "</td>" +
+                    row += "</td>" +
+                        "<td style=\"width: 10%;\">" + data[i].replyMakeUser + "</td>" +
                         "<td style=\"width: 15%;\">" + data[i].replyMakeDt + "</td>" +
                         "</tr>";
+
+                    if(data[i].hasReReply==2) getReReplyList(data[i].replyNo);
                 }
                 row += "</tbody>";
                 $("#replyListTable").append(row);
@@ -147,11 +148,25 @@
             url: "GetReReplyList.do?boardName=${boardName}&boardNo=${boardNo}&replyNo="+replyNo,
             dataType: "json",
             success: function (data) {
+                for (var j = 0; j < data.length; j++) {
+                        row += "<tr style=\"height: 1px; font-size: 0.875em; background-color: #FEFEF2; margin: 1em;\">" +
+                        "<td align=\"center\" style=\"border: none;\"><span class=\"glyphicon glyphicon-menu-right\"" +
+                        "style=\"color: #bbbbbb;\">&nbsp;</span></td>" +
+                        "<td style=\"border: none;\" align=\"left\">"+ data[j].reReplyMakeUser + "&nbsp;" + data[j].reReplyMakeDt + "&nbsp;";
 
-
-                for (var i = 0; i < data.length; i++) {
-                    var row = "<tr>" +
-                        "</tr>";
+                        row += "<td style=\"border: none;\"></td>" +
+                            "<td style=\"border: none;\"></td>" +
+                            "<td style=\"border: none;\"></td>" +
+                            "</tr>" +
+                            "<tr style=\"height: 1px; font-size: 0.875em; background-color: #FEFEF2; margin: 1em;\">" +
+                            "<td style=\" border-top-style: none; border-bottom-style: dashed; border-right-style: none; border-left-style: none; border-bottom-color: lightskyblue; border-width: 0.1em;\"></td>" +
+                            "<td align=\"left\" style=\"word-break: break-all; border-top-style: none; border-bottom-style: dashed; border-right-style: none; border-left-style: none; border-bottom-color: lightskyblue; border-width: 0.1em;\">" +
+                            data[j].reReplyContent +
+                            "</td>" +
+                            "<td style=\"border-top-style: none; border-bottom-style: dashed; border-right-style: none; border-left-style: none; border-bottom-color: lightskyblue; border-width: 0.1em;\"></td>" +
+                            "<td style=\"border-top-style: none; border-bottom-style: dashed; border-right-style: none; border-left-style: none; border-bottom-color: lightskyblue; border-width: 0.1em;\"></td>" +
+                            "<td align=\"center\" style=\"width: 5%; border-top-style: none; border-bottom-style: dashed; border-right-style: none; border-left-style: none; border-bottom-color: lightskyblue; border-width: 0.1em;\"></td>" +
+                            "</tr>";
                 }
                 $("#replyListTable").append(row);
             },
@@ -159,6 +174,7 @@
                 alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
             }
         });
+    };
 
     function reReplyClick(replyNo, replyContent) {
         _updateFlag = 3;
