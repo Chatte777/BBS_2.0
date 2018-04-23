@@ -26,48 +26,12 @@ public class GetReplyList extends HttpServlet {
     }
 
     protected void requestPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        /*
-        HttpSession session = request.getSession();
-        String boardName = request.getParameter("boardName");
-        int boardNo = Integer.parseInt(request.getParameter("boardNo"));
-        ArrayList<ReReplyVO> reReplyList=null;
-
-        //세션에서 ID 받아오기
-        String userId = null;
-        if (session.getAttribute("userID") != null) {
-            userId = (String) session.getAttribute("userID");
-        }
-
-        ReplyDAO replyDAO = new ReplyDAO(boardName);
-        ArrayList<ReplyVO> replyList = replyDAO.getList(boardNo);
-
-
-        for (int i = 0; i < replyList.size(); i++) {
-            int replyNo = replyList.get(i).getReplyNo();
-            String replyContent = replyList.get(i).getReplyContent();
-            if (replyContent.length() >= 10) replyContent = "<" + replyContent.substring(0, 10) + "...>";
-            else replyContent = "<" + replyContent + ">";
-
-            if (replyList.get(i).getHasReReply() == 2) {
-                ReReplyDAO reReplyDAO = new ReReplyDAO(boardName);
-                reReplyList = reReplyDAO.getList(boardNo, replyNo);
-            }
-        }
-
-        request.setAttribute("replyList", replyList);
-        request.setAttribute("reReplyList", reReplyList);
-
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("board.jsp");
-        requestDispatcher.forward(request, response);
-        */
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession();
-        String sessionId = session.getAttribute("userID").toString();
 
-        response.getWriter().write(getReplyList(request.getParameter("boardName"), Integer.parseInt(request.getParameter("boardNo")), sessionId).toString());
+        response.getWriter().write(getReplyList(request.getParameter("boardName"), Integer.parseInt(request.getParameter("boardNo"))).toString());
     }
 
-    public JSONArray getReplyList(String boardName, int boardNo, String sessionId){
+    private JSONArray getReplyList(String boardName, int boardNo){
         ReplyDAO replyDAO = new ReplyDAO(boardName);
         ArrayList<ReplyVO> replyList = replyDAO.getList(boardNo);
 

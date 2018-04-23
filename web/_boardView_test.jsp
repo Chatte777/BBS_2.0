@@ -86,7 +86,7 @@
                                                   id="replyContent" maxlength="2048" style="height: 150px;"></textarea>
                 </td>
                 <td style="width: 10%; vertical-align: bottom;" align="center">
-                    <input type="button" onclick="replySubmit('${boardName}')" class="btn btn-primary pull-right" value="댓글작성">
+                    <input type="button" onclick="replySubmit()" class="btn btn-primary pull-right" value="댓글작성">
                 </td>
             </tr>
             </tbody>
@@ -102,7 +102,7 @@
     var _updateFlag = 1;
     var _replyNo = 0;
 
-    window.onload = function () {
+    window.onload = function getReplyList() {
         $.ajax({
             type: "POST",
             url: "GetReplyList.do?boardName=${boardName}&boardNo=${boardNo}",
@@ -115,11 +115,11 @@
                         "<td></td>" +
                         "<td align=\"left\" style=\"word-break: break-all;\">"+ data[i].replyContent +"</td>" +
                         "<td align=\"center\" style=\"width: 10%;\" onclick=\"event.cancelBubble = true;\">" +
-                        "<a onclick=\"reReplyClick('${data[i].replyNo}', '"+ data[i].replyContent +"')\"" +
+                        "<a onclick=\"reReplyClick('"+ data[i].replyNo +"', '"+ data[i].replyContent +"')\"" +
                         "type=\"button\" class=\"glyphicon glyphicon-share-alt\" style=\"color: seagreen; padding:0px 5px 0px 0px;\"/>";
 
                     if(data[i].replyMakeUser == '${userId}'){
-                        row += "<a onclick=\"modifyClick('"+ data[i].replyContent +"', '${data[i].replyNo}')\" type=\"button\"" +
+                        row += "<a onclick=\"modifyClick('"+ data[i].replyContent +"', '"+ data[i].replyNo +"')\" type=\"button\"" +
                             "class=\"glyphicon glyphicon-pencil\" style=\"color: limegreen; padding:5px;\"/>" +
                             "<a onclick=\"return confirm('정말 삭제하시겠습니까?')\"" +
                             "a href=\"replyDeleteAction.jsp?boardName=${boardName}&boardNo=${boardNo}&replyNo="+ data[i].replyNo +"\"" +
@@ -128,7 +128,7 @@
 
                     row += "</td>";
 
-                    row += "<td style=\"width: 10%;>" + data[i].replyMakeUser + "</td>" +
+                    row += "<td style=\"width: 10%;\">" + data[i].replyMakeUser + "</td>" +
                         "<td style=\"width: 15%;\">" + data[i].replyMakeDt + "</td>" +
                         "</tr>";
                 }
@@ -141,9 +141,51 @@
         });
     };
 
+    function getReReplyList(replyNo) {
+        $.ajax({
+            type: "POST",
+            url: "GetReReplyList.do?boardName=${boardName}&boardNo=${boardNo}&replyNo="+replyNo,
+            dataType: "json",
+            success: function (data) {
+
+
+                for (var i = 0; i < data.length; i++) {
+                    var row = "<tr>" +
+                        "</tr>";
+                }
+                $("#replyListTable").append(row);
+            },
+            error: function () {
+                alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+            }
+        });
+
     function reReplyClick(replyNo, replyContent) {
         _updateFlag = 3;
         _replyNo = replyNo;document.getElementById("replyContent").focus();
         document.getElementById("replyContent").value = replyContent + "에 대한 대댓글을 작성하세요.";
     };
+
+    function modifyClick(replyContent, replyNo) {
+        _updateFlag = 2;
+        _replyNo = replyNo;
+        document.getElementById("replyContent").focus();
+        document.getElementById("replyContent").value = replyContent;
+    };
+
+    function replySubmit() {
+        if (_updateFlag == 1) {
+            document.replyForm.action = "replyAction.jsp?boardName=${boardName}";
+            document.replyForm.method = "post";
+            document.replyForm.submit();
+        } else if (_updateFlag == 2) {
+            document.replyForm.action = "replyUpdateAction.jsp?boardName=${boardName}&replyNo=" + _replyNo;
+            document.replyForm.method = "post";
+            document.replyForm.submit();
+        } else if (_updateFlag == 3) {
+            document.replyForm.action = "reReplyAction.jsp?boardName=${boardName}&replyNo=" + _replyNo;
+            document.replyForm.method = "post";
+            document.replyForm.submit();
+        }
+    }
 </script>
