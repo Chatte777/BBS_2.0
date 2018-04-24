@@ -10,6 +10,6 @@
 </head>
 <body>
 <jsp:include page="_headNav.jsp" flush="false" />
-<jsp:include page="_boardView.jsp" flush="false" />
+<jsp:include page="_boardView_test.jsp" flush="false" />
 </body>
 </html>

@@ -41,7 +41,7 @@
 				{
 					PrintWriter script = response.getWriter();
 					script.println("<script>");
-					script.println("location.href='boardView.jsp?boardName="+boardName+"&boardNo=" + reReplyVO.getBoardNo() + "'");
+					script.println("location.href='GetBoard.do?boardName="+boardName+"&boardNo=" + reReplyVO.getBoardNo() + "'");
 					script.println("</script>");
 				}
 		}
