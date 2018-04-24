@@ -276,6 +276,10 @@
                            href="GetBoardList.do?boardName=${boardName}&pageNumber=${paginationJson.lastPage}">마지막</a>
                     </li>
                 </ul>
+
+                <a href="boardWrite.jsp?boardName=${boardName}" class="btn btn-primary pull-right">글쓰기</a>
+
+            %>
         </div>
     </div>
 </div>
