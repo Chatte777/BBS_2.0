@@ -148,6 +148,7 @@
             url: "GetReReplyList.do?boardName=${boardName}&boardNo=${boardNo}&replyNo="+replyNo,
             dataType: "json",
             success: function (data) {
+                var row = "";
                 for (var j = 0; j < data.length; j++) {
                         row += "<tr style=\"height: 1px; font-size: 0.875em; background-color: #FEFEF2; margin: 1em;\">" +
                         "<td align=\"center\" style=\"border: none;\"><span class=\"glyphicon glyphicon-menu-right\"" +
