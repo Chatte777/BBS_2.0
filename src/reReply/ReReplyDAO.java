@@ -158,6 +158,8 @@ public class ReReplyDAO {
 
     public int update(int boardNo, int replyNo, int reReplyNo, String replyContent) {
         String SQL = "UPDATE "+ this.tableName +" SET re_reply_content=? WHERE "+ this.colBoardNo +" =? and reply_no=? and re_reply_no = ?";
+        replyContent = replyContent.replaceAll("<br>", "&nbsp;").replaceAll("<p>", "&nbsp;").replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+
         try {
             PreparedStatement pstmt = conn.prepareStatement(SQL);
             pstmt.setString(1, replyContent);

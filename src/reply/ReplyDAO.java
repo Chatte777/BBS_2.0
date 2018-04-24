@@ -85,6 +85,8 @@ public class ReplyDAO {
 	public int write(int boardNo, String replyMakeUser, String replyContent){
 		String SQL = "INSERT INTO "+ this.boardName+"_reply" +" VALUES(?,?,?,?,?,?,?,?,?)";
 		int tmpNextNo = getNext(boardNo);
+		replyContent = replyContent.replaceAll("<br>", "&nbsp;").replaceAll("<p>", "&nbsp;").replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+
 		try{
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			pstmt.setInt(1, boardNo);
@@ -97,7 +99,6 @@ public class ReplyDAO {
 			pstmt.setInt(8,1);
 			pstmt.setInt(9, 1);
 
-			replyContent = replyContent.replaceAll("<br>", "&nbsp;").replaceAll("<p>", "&nbsp;").replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
 			if(replyContent.length()>70) replyContent=replyContent.substring(0,70);
 			AlarmMasterDAO alarmMasterDAO = new AlarmMasterDAO();
 			alarmMasterDAO.writeReplyAlarm(this.boardName, boardNo, tmpNextNo, replyContent);
