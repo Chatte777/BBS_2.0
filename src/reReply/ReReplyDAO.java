@@ -221,4 +221,28 @@ public class ReReplyDAO {
         }
         return reReplyList; //Database error
     }
+
+    public ReReplyVO getReReply(int boardNo, int replyNo, int reReplyNo){
+        String SQL = "SELECT * from "+ this.boardName+"_re_reply" +" WHERE "+ this.colBoardNo +" = ? and reply_no = ? and re_reply_no=?";
+
+        try{
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setInt(1, boardNo);
+            pstmt.setInt(2, replyNo);
+            pstmt.setInt(3, reReplyNo);
+
+            rs = pstmt.executeQuery();
+
+            if (rs.next()){
+                ReReplyVO reReplyVO = new ReReplyVO();
+                setReReplyVO(reReplyVO, rs);
+                return reReplyVO;
+            }
+        } catch(Exception e){
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("boardNo:"+boardNo, "replyNo:"+replyNo, "", "", "replyDAO.getReply", e.getMessage().toString(), "");
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
