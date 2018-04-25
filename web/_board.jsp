@@ -227,7 +227,8 @@
                             </a></li>
                         </c:when>
                         <c:otherwise>
-                            <li class="page-item disabled"><span class="page-link" style="color: darkgray;">X</span></li>
+                            <li class="page-item disabled"><span class="page-link" style="color: darkgray;">X</span>
+                            </li>
                         </c:otherwise>
                     </c:choose>
 
@@ -238,7 +239,8 @@
                             </a></li>
                         </c:when>
                         <c:otherwise>
-                            <li class="page-item disabled"><span class="page-link" style="color: darkgray;">X</span></li>
+                            <li class="page-item disabled"><span class="page-link" style="color: darkgray;">X</span>
+                            </li>
                         </c:otherwise>
                     </c:choose>
 
@@ -252,7 +254,8 @@
                         </c:when>
                         <c:otherwise>
                             <li class="page-item disabled">
-                                <span class="page-link"><span class="glyphicon glyphicon-option-horizontal"></span></span>
+                                <span class="page-link"><span
+                                        class="glyphicon glyphicon-option-horizontal"></span></span>
                             </li>
                         </c:otherwise>
                     </c:choose>
@@ -279,7 +282,7 @@
 
                 <a href="boardWrite.jsp?boardName=${boardName}" class="btn btn-primary pull-right">글쓰기</a>
 
-            %>
+                %>
         </div>
     </div>
 </div>

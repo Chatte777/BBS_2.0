@@ -47,7 +47,7 @@
                 <tbody>
                 <tr>
                     <td><input type="text" class="form-control" placeholder="글 제목" name="boardTitle" maxlength="50"
-                               value="${boardVO.boardTitle}"></td>
+                    value="${boardVO.boardTitle}"></td>
                     <td>
                         <select class="form-control" name="boardAuthorize" id="boardAuthorize">
                             <c:choose>
