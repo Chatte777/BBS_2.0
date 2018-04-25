@@ -111,19 +111,18 @@
 
                 $("#replyListTable").append("<tbody>");
                 for (var i = 0; i < data.length; i++) {
-                    var replyContent = data[i].replyContent.replace(/\r\n/g, "<br>");
-
+                    var replyContent = data[i].replyContent.replace(/\r\n/g, "<br>").replace(/\"/g, "〃").replace(/'/g, "＇");
                     var replyMakeDt = data[i].replyMakeDt.substring(0,11)+data[i].replyMakeDt.substring(11,13)+"시"+data[i].replyMakeDt.substring(14,16)+"분";
 
-                    var row = "<tr onclick=\"reReplyClick('"+data[i].replyNo+"', '"+replyContent.replace(/(<([^>]+)>)/ig,"") +"')\">" +
+                    var row = "<tr onclick=\"reReplyClick('"+data[i].replyNo+"', '"+replyContent +"')\">" +
                         "<td></td>" +
                         "<td align=\"left\" style=\"word-break: break-all;\">"+ replyContent +"</td>" +
                         "<td align=\"center\" style=\"width: 10%;\" onclick=\"event.cancelBubble = true;\">" +
-                        "<a onclick=\"reReplyClick('"+ data[i].replyNo +"', '"+ replyContent.replace(/(<([^>]+)>)/ig,"") +"')\"" +
+                        "<a onclick=\"reReplyClick('"+ data[i].replyNo +"', '"+ replyContent +"')\"" +
                         "type=\"button\" class=\"glyphicon glyphicon-share-alt\" style=\"color: seagreen; padding:0px 5px 0px 0px;\"/>";
 
                     if(data[i].replyMakeUser == '${userId}'){
-                        row += "<a onclick=\"replyModifyClick('"+ replyContent.replace(/(<([^>]+)>)/ig,"") +"', '"+ data[i].replyNo +"')\" type=\"button\"" +
+                        row += "<a onclick=\"replyModifyClick('"+ replyContent +"', '"+ data[i].replyNo +"')\" type=\"button\"" +
                             "class=\"glyphicon glyphicon-pencil\" style=\"color: limegreen; padding:5px;\"/>" +
                             "<a onclick=\"return confirm('정말 삭제하시겠습니까?')\"" +
                             "a href=\"replyDeleteAction.jsp?boardName=${boardName}&boardNo=${boardNo}&replyNo="+ data[i].replyNo +"\"" +
@@ -155,7 +154,7 @@
             success: function (data) {
                 var row="";
                 for (var j = 0; j < data.length; j++) {
-                    var reReplyContent = data[j].reReplyContent.replace(" ", "&nbsp;").replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>");
+                    var reReplyContent = data[j].reReplyContent.replace(/\r\n/g, "<br>").replace(/\"/g, "〃").replace(/'/g, "＇");
                     var reReplyMakeDt = data[j].reReplyMakeDt.substring(0,11)+data[j].reReplyMakeDt.substring(11,13)+"시"+data[j].reReplyMakeDt.substring(14,16)+"분";
 
                         row += "<tr style=\"height: 1px; font-size: 0.875em; background-color: #FEFEF2; margin: 1em;\">" +
@@ -164,7 +163,7 @@
                         "<td style=\"border: none;\" align=\"left\">"+ data[j].reReplyMakeUser + "&nbsp;" + reReplyMakeDt + "&nbsp;";
 
                         if(data[j].reReplyMakeUser == '${userId}'){
-                            row += "<a onclick=\"reReplyModifyClick('"+reReplyContent.replace(/(<([^>]+)>)/ig,"") +"', '"+data[j].replyNo+"', '"+data[j].reReplyNo+"')\"" +
+                            row += "<a onclick=\"reReplyModifyClick('"+reReplyContent  +"', '"+data[j].replyNo+"', '"+data[j].reReplyNo+"')\"" +
                                 "type=\"button\" class=\"glyphicon glyphicon-pencil\" style=\"color: #cccccc\"/>" +
                                 "<a onclick=\"return confirm('정말로 삭제하시겠습니까?')\"" +
                                 "a href=\"reReplyDeleteAction.jsp?boardName=${boardName}&boardNo=${boardNo}&replyNo="+data[j].replyNo+"&reReplyNo="+data[j].reReplyNo+"\"" +

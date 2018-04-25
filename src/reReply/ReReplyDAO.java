@@ -85,8 +85,9 @@ public class ReReplyDAO {
         return -1; // Database error
     }
 
-    public int write(int boardNo, int replyNo, String replyMakeUser, String replyContent) {
+    public int write(int boardNo, int replyNo, String replyMakeUser, String reReplyContent) {
         int tmpNextNo = getNext(boardNo, replyNo);
+        reReplyContent = reReplyContent.replaceAll("<br>", "&nbsp;").replaceAll("<p>", "&nbsp;").replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
 
         String SQL = "INSERT INTO "+ this.tableName +" VALUES(?,?,?,?,?,?,?,?,?)";
         String secondSQL = "UPDATE " + this.tableReplyName + " SET has_re_reply = 2 WHERE reply_no = " + replyNo;
@@ -104,7 +105,7 @@ public class ReReplyDAO {
             pstmt.setInt(1, boardNo);
             pstmt.setInt(2, replyNo);
             pstmt.setInt(3, tmpNextNo);
-            pstmt.setString(4, replyContent);
+            pstmt.setString(4, reReplyContent);
             pstmt.setString(5, replyMakeUser);
             pstmt.setString(6, getDate());
             pstmt.setInt(7, 1);
@@ -112,16 +113,16 @@ public class ReReplyDAO {
             pstmt.setInt(9, 1);
 
             if(boardNo!=0) {
-                replyContent = replyContent.replaceAll("<br>", "&nbsp;").replaceAll("<p>", "&nbsp;").replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
-                if(replyContent.length()>70) replyContent=replyContent.substring(0,70);
+                reReplyContent = reReplyContent.replaceAll("<br>", "&nbsp;").replaceAll("<p>", "&nbsp;").replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
+                if(reReplyContent.length()>70) reReplyContent=reReplyContent.substring(0,70);
 
                 AlarmMasterDAO alarmMasterDAO = new AlarmMasterDAO();
-                alarmMasterDAO.writeReReplyAlarm(this.boardName, boardNo, replyNo, tmpNextNo, replyContent);
+                alarmMasterDAO.writeReReplyAlarm(this.boardName, boardNo, replyNo, tmpNextNo, reReplyContent);
             }
             return pstmt.executeUpdate();
 
         } catch (Exception e) {
-            CommonDAO.writeContentLog("reReplyWrite", replyContent);
+            CommonDAO.writeContentLog("reReplyWrite", reReplyContent);
 
             ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
             errorMasterDAO.write("boardNo:"+boardNo, "replyNo:"+replyNo, "reReplyNo:"+tmpNextNo, "", "reReplyDAO.write()_updateHasReReply", e.getMessage().toString(), "");
@@ -156,13 +157,13 @@ public class ReReplyDAO {
         return innerList; // Database error
     }
 
-    public int update(int boardNo, int replyNo, int reReplyNo, String replyContent) {
+    public int update(int boardNo, int replyNo, int reReplyNo, String reReplyContent) {
+        reReplyContent = reReplyContent.replaceAll("<br>", "&nbsp;").replaceAll("<p>", "&nbsp;").replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
         String SQL = "UPDATE "+ this.tableName +" SET re_reply_content=? WHERE "+ this.colBoardNo +" =? and reply_no=? and re_reply_no = ?";
-        replyContent = replyContent.replaceAll("<br>", "&nbsp;").replaceAll("<p>", "&nbsp;").replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
 
         try {
             PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setString(1, replyContent);
+            pstmt.setString(1, reReplyContent);
             pstmt.setInt(2, boardNo);
             pstmt.setInt(3, replyNo);
             pstmt.setInt(4, reReplyNo);
@@ -170,7 +171,7 @@ public class ReReplyDAO {
             return pstmt.executeUpdate();
 
         } catch (Exception e) {
-            CommonDAO.writeContentLog("reReplyUpdate", replyContent);
+            CommonDAO.writeContentLog("reReplyUpdate", reReplyContent);
 
             e.printStackTrace();
             ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
