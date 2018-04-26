@@ -18,6 +18,29 @@
             text-decoration: none;
         }
     </style>
+
+
+    <script type="text/javascript">
+        function readClick(alarmNo, readType){
+            alert("asdf");
+            $.ajax({
+                type: "POST",
+                url: "AlarmReadCheck.do?alarmNo=${alarmNo}",
+                dataType: "text",
+                success: function (data) {
+
+                },
+                error: function () {
+                    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                }
+            });
+        }
+
+        function deleteClick(){
+
+        }
+    </script>
+
 </head>
 <body>
 <c:set var="boardName" value="${param.boardName}"></c:set>
@@ -56,13 +79,13 @@
             <tbody>
             <c:forEach items="${alarmList}" var="alarmVO" varStatus="status">
                 <c:choose>
-                    <c:when test="${alarmVO.alarmOrgboardName}=='notify'">
+                    <c:when test="${alarmVO.alarmOrgboardName == 'notify'}">
                         <c:set var="boardName" value="공지 및 건의"></c:set>
                     </c:when>
-                    <c:when test="${alarmVO.alarmOrgboardName}=='mountain'">
+                    <c:when test="${alarmVO.alarmOrgboardName == 'mountain'}">
                         <c:set var="boardName" value="산악일기"></c:set>
                     </c:when>
-                    <c:when test="${alarmVO.alarmOrgboardName}=='thread'">
+                    <c:when test="${alarmVO.alarmOrgboardName == 'thread'}">
                         <c:set var="boardName" value="대화의 숲"></c:set>
                     </c:when>
                 </c:choose>
@@ -74,13 +97,13 @@
                         <span style="color:purple;">
                             <c:choose>
                                 <c:when test="${alarmVO.alarmType==1}">
-                                    "${boardName}"게시판에 작성한【${alarmVO.alarmOrgContent}】글에 답글이 달렸습니다.
+                                    "${boardName}" 게시판에 작성한【${alarmVO.alarmOrgContent}】글에 답글이 달렸습니다.
                                 </c:when>
                                 <c:when test="${alarmVO.alarmType==2}">
                                     "${boardName}" 게시판에 작성한 【${alarmVO.alarmOrgContent}】 글에 댓글이 달렸습니다.
                                 </c:when>
                                 <c:when test="${alarmVO.alarmType==3}">
-                                    "${boardName}"게시판에 작성한【${alarmVO.alarmOrgContent}】댓글에 대댓글이 달렸습니다.
+                                    "${boardName}" 게시판에 작성한【${alarmVO.alarmOrgContent}】댓글에 대댓글이 달렸습니다.
                                 </c:when>
                             </c:choose>
                             </span>
@@ -130,26 +153,5 @@
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 </body>
-
-<script type="text/javascript">
-    function readClick(alarmNo, readType){
-        alert("asdf");
-        $.ajax({
-            type: "POST",
-            url: "AlarmReadCheck.do?alarmNo=${alarmNo}",
-            dataType: "text",
-            success: function (data) {
-
-            },
-            error: function () {
-                alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-            }
-        });
-    }
-
-    function deleteClick(){
-
-    }
-</script>
 
 </html>
