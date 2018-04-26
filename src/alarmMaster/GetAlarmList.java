@@ -21,16 +21,21 @@ public class GetAlarmList extends HttpServlet {
     }
 
     protected void requestPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
+        int pageNumber=1;
+        if(request.getParameter("pageNumber")!=null) pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
+
         HttpSession session = request.getSession();
-        String sessionId = session.getAttribute("userID").toString();
+        String sessionId = "";
+        if(session.getAttribute("userID")!=null) sessionId = session.getAttribute("userID").toString();
 
         AlarmMasterDAO alarmMasterDAO = new AlarmMasterDAO();
         ArrayList<AlarmMaster> alarmList = alarmMasterDAO.getList(pageNumber, sessionId);
+        int isNextPage = (alarmMasterDAO.isNextPage(pageNumber, sessionId))? 1:0;
 
         request.setAttribute("alarmList", alarmList);
+        request.setAttribute("isNextPage", isNextPage);
 
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("alarm.jsp");
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("alarm_test.jsp");
         requestDispatcher.forward(request, response);
     }
 }
