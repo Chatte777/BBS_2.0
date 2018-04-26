@@ -74,7 +74,13 @@
                         <span style="color:purple;">
                             <c:choose>
                                 <c:when test="${alarmVO.alarmType==1}">
-                                    ${boardName}게시판에 작성한 ${alarmVO.alarmOrgContent} 댓글에 대댓글이 달렸습니다.
+                                    "${boardName}"게시판에 작성한【${alarmVO.alarmOrgContent}】글에 답글이 달렸습니다.
+                                </c:when>
+                                <c:when test="${alarmVO.alarmType==2}">
+                                    "${boardName}" 게시판에 작성한 【${alarmVO.alarmOrgContent}】 글에 댓글이 달렸습니다.
+                                </c:when>
+                                <c:when test="${alarmVO.alarmType==3}">
+                                    "${boardName}"게시판에 작성한【${alarmVO.alarmOrgContent}】댓글에 대댓글이 달렸습니다.
                                 </c:when>
                             </c:choose>
                             </span>
