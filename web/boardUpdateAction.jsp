@@ -7,12 +7,12 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 
-		String userID = null;
+		String userId = null;
 
-		if (session.getAttribute("userID") != null) {
-			userID = (String) session.getAttribute("userID");
+		if (session.getAttribute("userId") != null) {
+			userId = (String) session.getAttribute("userId");
 		}
-		if (userID == null) {
+		if (userId == null) {
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
 			script.println("alert('로그인을 하세요.')");
@@ -38,7 +38,7 @@
 		BoardDAO boardDAO = new BoardDAO(boardName);
 		BoardVO boardVO = boardDAO.getBoardVO(boardNo);
 
-		if (!userID.equals(boardVO.getBoardMakeUser())) {
+		if (!userId.equals(boardVO.getBoardMakeUser())) {
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
 			script.println("alert('권한이 없습니다.')");

@@ -13,7 +13,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-<c:set var="userId" value="${sessionScope.userID}"></c:set>
+<c:set var="userId" value="${sessionScope.userId}"></c:set>
 <c:set var="boardName" value="${param.boardName}"></c:set>
 <c:set var="boardNo" value="${param.boardNo}"></c:set>
 

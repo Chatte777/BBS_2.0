@@ -14,13 +14,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width" , initial-scale="1">
 <link rel="stylesheet" href="css/bootstrap.css">
-<title>DREAMY CAT</title>
+<title>DREAMKY KAT</title>
 </head>
 <body>
 	<%
-		String userID = null;
-		if (session.getAttribute("userID") != null) {
-			userID = (String) session.getAttribute("userID");
+		String userId = null;
+		if (session.getAttribute("userId") != null) {
+			userId = (String) session.getAttribute("userId");
 		}
 
 		int bbsID = 0;
@@ -58,7 +58,7 @@
 					</tr>
 					<tr>
 						<td>작성자</td>
-						<td colspan="3"><%=bbs.getUserID()%></td>
+						<td colspan="3"><%=bbs.getuserId()%></td>
 					</tr>
 					<tr>
 						<td>작성일자</td>
@@ -103,12 +103,12 @@
 						.replaceAll(">", "&gt;").replaceAll("\n", "<br>")%></td>
 						<td align="center" style="width: 5%;">
 							<%
-								if (userID != null && userID.equals(list.get(i).getUserID())) {
+								if (userId != null && userId.equals(list.get(i).getuserId())) {
 							%> <a onclick="myFunction('<%=list.get(i).getReplyContent()%>', '<%=list.get(i).getReplyID()%>')" type="button" class="glyphicon glyphicon-pencil" style="color: #cccccc"></a> <a onclick="return confirm('정말로 삭제하시겠습니까?')" a href="boardDeleteAction.jsp?bbsId=<%=bbsID%>&replyNo=<%=list.get(i).getReplyID()%>" type="button" class="close" aria-label="close"> <span aria-hidden="true">&times;</span></a> <%
  	}
  %>
 						</td>
-						<td style="width: 10%;"><%=list.get(i).getUserID()%></td>
+						<td style="width: 10%;"><%=list.get(i).getuserId()%></td>
 						<td style="width: 15%;"><%=list.get(i).getReplyDate().substring(0, 11) + list.get(i).getReplyDate().substring(11, 13)
 						+ "시" + list.get(i).getReplyDate().substring(14, 16) + "분"%></td>
 					</tr>
@@ -136,7 +136,7 @@
 
 		<a href="bbs.jsp" class="btn btn-primary">목록</a>
 		<%
-			if (userID != null && userID.equals(bbs.getUserID())) {
+			if (userId != null && userId.equals(bbs.getuserId())) {
 		%>
 		<a href="update.jsp?bbsID=<%=bbsID%>" class="btn btn-priamry">수정</a> <a onclick="return confirm('정말로 삭제하시겠습니까?')" href="boardDeleteAction.jsp?bbsID=<%=bbsID%>" class="btn btn-priamry">삭제</a>
 		<%

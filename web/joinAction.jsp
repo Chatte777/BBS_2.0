@@ -6,7 +6,7 @@
 <% request.setCharacterEncoding("UTF-8"); %>
 
 <jsp:useBean id="user" class="user.User" scope="page"/> 
-<jsp:setProperty name="user" property="userID"/>
+<jsp:setProperty name="user" property="userId"/>
 <jsp:setProperty name="user" property="userPassword"/>
 <jsp:setProperty name="user" property="userName"/>
 <jsp:setProperty name="user" property="userGender"/>
@@ -16,15 +16,15 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>DREAMY CAT</title>
+<title>DREAMKY KAT</title>
 </head>
 <body>
 	<%
-		String userID = null;
-		if(session.getAttribute("userID") != null){
-			userID = (String) session.getAttribute("userID");
+		String userId = null;
+		if(session.getAttribute("userId") != null){
+			userId = (String) session.getAttribute("userId");
 		}
-		if (userID != null) {
+		if (userId != null) {
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
 			script.println("alert('이미 로그인되어있습니다.')");
@@ -32,7 +32,7 @@
 			script.println("</script>");
 		}
 		
-		if(user.getUserId()==null || user.getUserPassword()==null || user.getUserName()==null || user.getUserGender()==null || user.getUserEmail()==null){
+		if(user.getuserId()==null || user.getUserPassword()==null || user.getUserName()==null || user.getUserGender()==null || user.getUserEmail()==null){
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
 			script.println("alert('입력이 안된 사항이 있습니다.')");
@@ -51,7 +51,7 @@
 			}
 			else
 			{
-				session.setAttribute("userID", user.getUserId());
+				session.setAttribute("userId", user.getuserId());
 				
 				PrintWriter script = response.getWriter();
 				script.println("<script>");

@@ -18,7 +18,7 @@ public class UserDAO {
 	}
 	
 	public int login(String userId, String userPassword){
-		String SQL = "SELECT userPassword FROM USER WHERE userID= ?";
+		String SQL = "SELECT userPassword FROM USER WHERE userId= ?";
 		try{
 			pstmt = conn.prepareStatement(SQL);
 			pstmt.setString(1, userId);
@@ -45,7 +45,7 @@ public class UserDAO {
 		
 		try{
 			pstmt = conn.prepareStatement(SQL);
-			pstmt.setString(1, user.getUserId());
+			pstmt.setString(1, user.getuserId());
 			pstmt.setString(2, user.getUserPassword());
 			pstmt.setString(3, user.getUserName());
 			pstmt.setString(4, user.getUserGender());
@@ -53,7 +53,7 @@ public class UserDAO {
 			return pstmt.executeUpdate();
 		}catch(Exception e){
 			ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
-			errorMasterDAO.write("userId"+user.getUserId(), "userPassWord"+user.getUserPassword(), "userName"+user.getUserName(), "userEmail"+user.getUserEmail(), "userDAO.join", e.getMessage().toString(), "");
+			errorMasterDAO.write("userId"+user.getuserId(), "userPassWord"+user.getUserPassword(), "userName"+user.getUserName(), "userEmail"+user.getUserEmail(), "userDAO.join", e.getMessage().toString(), "");
 			e.printStackTrace();
 		}
 		return -1; //Database error

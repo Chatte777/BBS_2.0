@@ -215,31 +215,35 @@
 
                     <li class="page-item active">
                         <!-- 현재페이지는 항상 active, 활성화, 링크없음.-->
-                        <span class="page-link">
-        ${pageNumber}
-        <span class="sr-only">(current)</span>
-      </span>
+                        <span class="page-link">${pageNumber}
+                            <span class="sr-only">(current)</span>
+                        </span>
                     </li>
+
                     <c:choose>
                         <c:when test="${paginationJson.isNextPage==1}">
-                            <li class="page-item"><a class="page-link"
-                                                     href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber+1}">${pageNumber+1}
-                            </a></li>
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber+1}">${pageNumber+1}/>
+                            </li>
                         </c:when>
                         <c:otherwise>
-                            <li class="page-item disabled"><span class="page-link" style="color: darkgray;">X</span>
+                            <li class="page-item disabled">
+                                <span class="page-link" style="color: darkgray;">X</span>
                             </li>
                         </c:otherwise>
                     </c:choose>
 
                     <c:choose>
                         <c:when test="${paginationJson.isDoubleNextPage==1}">
-                            <li class="page-item"><a class="page-link"
-                                                     href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber+2}">${pageNumber+2}
-                            </a></li>
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber+2}">${pageNumber+2}/>
+                            </li>
                         </c:when>
                         <c:otherwise>
-                            <li class="page-item disabled"><span class="page-link" style="color: darkgray;">X</span>
+                            <li class="page-item disabled">
+                                <span class="page-link" style="color: darkgray;">X</span>
                             </li>
                         </c:otherwise>
                     </c:choose>
@@ -248,14 +252,16 @@
                         <c:when test="${paginationJson.isTripleNextPage==1}">
                             <li class="page-item">
                                 <a class="page-link"
-                                   href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber+3}"><span
-                                        class="glyphicon glyphicon-option-horizontal"></span></a>
+                                   href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber+3}">
+                                    <span class="glyphicon glyphicon-option-horizontal"></span>
+                                </a>
                             </li>
                         </c:when>
                         <c:otherwise>
                             <li class="page-item disabled">
-                                <span class="page-link"><span
-                                        class="glyphicon glyphicon-option-horizontal"></span></span>
+                                <span class="page-link">
+                                    <span class="glyphicon glyphicon-option-horizontal"/>
+                                </span>
                             </li>
                         </c:otherwise>
                     </c:choose>
@@ -276,13 +282,13 @@
 
                     <li class="page-item">
                         <a class="page-link"
-                           href="GetBoardList.do?boardName=${boardName}&pageNumber=${paginationJson.lastPage}">마지막</a>
+                           href="GetBoardList.do?boardName=${boardName}&pageNumber=${paginationJson.lastPage}">
+                            마지막
+                        </a>
                     </li>
                 </ul>
 
                 <a href="boardWrite.jsp?boardName=${boardName}" class="btn btn-primary pull-right">글쓰기</a>
-
-                %>
         </div>
     </div>
 </div>

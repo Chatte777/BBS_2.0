@@ -275,14 +275,13 @@ public class AlarmMasterDAO {
         return replyVO;
     }
 
-    public AlarmMaster getAlarmMaster(int alarmNo, String alarmTargetUser) {
+    public AlarmMaster getAlarmMaster(int alarmNo) {
         AlarmMaster alarmMaster = new AlarmMaster();
-        String SQL = "SELECT * FROM alarm_master WHERE alarm_no = ? AND alarm_target_user = ?";
+        String SQL = "SELECT * FROM alarm_master WHERE alarm_no = ?";
 
         try {
             PreparedStatement pstmt = conn.prepareStatement(SQL);
             pstmt.setInt(1, alarmNo);
-            pstmt.setString(2, alarmTargetUser);
 
             rs = pstmt.executeQuery();
 
@@ -308,13 +307,12 @@ public class AlarmMasterDAO {
         return alarmMaster;
     }
 
-    public int updateAlarmReadYn(int alarmNo, String alarmTargetUser) {
-        String SQL = "UPDATE alarm_master SET alarm_read_yn = 2 WHERE alarm_no = ? AND alarm_target_user = ?";
+    public int updateAlarmReadYn(int alarmNo) {
+        String SQL = "UPDATE alarm_master SET alarm_read_yn = 2 WHERE alarm_no = ?";
 
         try {
             PreparedStatement pstmt = conn.prepareStatement(SQL);
             pstmt.setInt(1, alarmNo);
-            pstmt.setString(2, alarmTargetUser);
 
             pstmt.executeUpdate();
 
@@ -326,12 +324,11 @@ public class AlarmMasterDAO {
     }
 
     public int updateAlarmDeleteYn(int alarmNo, String alarmTargetUser) {
-        String SQL = "UPDATE alarm_master SET alarm_delete_yn = 2 WHERE alarm_no = ? AND alarm_target_user = ?";
+        String SQL = "UPDATE alarm_master SET alarm_delete_yn = 2 WHERE alarm_no = ?";
 
         try {
             PreparedStatement pstmt = conn.prepareStatement(SQL);
             pstmt.setInt(1, alarmNo);
-            pstmt.setString(2, alarmTargetUser);
 
             pstmt.executeUpdate();
 

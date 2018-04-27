@@ -47,7 +47,7 @@ public class BbsDAO {
 		return -1; //Database error
 	}
 	
-	public int write(String bbsTitle, String userID, String bbsContent){
+	public int write(String bbsTitle, String userId, String bbsContent){
 		String SQL = "INSERT INTO bbs VALUES(?,?,?,?,?,?)";
 		int tmpNextNo = getNext();
 		
@@ -55,7 +55,7 @@ public class BbsDAO {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			pstmt.setInt(1, tmpNextNo);
 			pstmt.setString(2, bbsTitle);
-			pstmt.setString(3, userID);
+			pstmt.setString(3, userId);
 			pstmt.setString(4, getDate());
 			pstmt.setString(5, bbsContent);
 			pstmt.setInt(6, 1);
@@ -83,7 +83,7 @@ public class BbsDAO {
 				Bbs bbs = new Bbs();
 				bbs.setBbsID(rs.getInt(1));
 				bbs.setBbsTitle(rs.getString(2));
-				bbs.setUserID(rs.getString(3));
+				bbs.setuserId(rs.getString(3));
 				bbs.setBbsDate(rs.getString(4));
 				bbs.setBbsContent(rs.getString(5));
 				bbs.setBbsAvailable(rs.getInt(6));
@@ -126,7 +126,7 @@ public class BbsDAO {
 				Bbs bbs = new Bbs();
 				bbs.setBbsID(rs.getInt(1));
 				bbs.setBbsTitle(rs.getString(2));
-				bbs.setUserID(rs.getString(3));
+				bbs.setuserId(rs.getString(3));
 				bbs.setBbsDate(rs.getString(4));
 				bbs.setBbsContent(rs.getString(5));
 				bbs.setBbsAvailable(rs.getInt(6));

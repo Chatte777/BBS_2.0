@@ -84,7 +84,7 @@ public class ErrorMasterDAO {
         return ""; // Database error
     }
 
-    public int write(String errorVar1, String errorVar2, String errorVar3, String errorVar4, String errorVar5, String errorContent, String errorUserId) {
+    public int write(String errorVar1, String errorVar2, String errorVar3, String errorVar4, String errorVar5, String errorContent, String erroruserId) {
         String SQL = "INSERT INTO error_master VALUES(?,?,?,?,?,?,?,?,?)";
         int tmpNextNo = getNext();
 
@@ -97,7 +97,7 @@ public class ErrorMasterDAO {
             pstmt.setString(5, errorVar4);
             pstmt.setString(6, errorVar5);
             pstmt.setString(7, errorContent);
-            pstmt.setString(8, errorUserId);
+            pstmt.setString(8, erroruserId);
             pstmt.setString(9, getDate());
 
             pstmt.executeUpdate();

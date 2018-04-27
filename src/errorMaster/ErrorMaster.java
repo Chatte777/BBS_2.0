@@ -8,7 +8,7 @@ public class ErrorMaster {
     private String errorVar4;
     private String errorVar5;
     private String errorContent;
-    private String errorUserId;
+    private String erroruserId;
     private String errorMakeDt;
 
     public int getErrorNo() {
@@ -67,12 +67,12 @@ public class ErrorMaster {
         this.errorContent = errorContent;
     }
 
-    public String getErrorUserId() {
-        return errorUserId;
+    public String getErroruserId() {
+        return erroruserId;
     }
 
-    public void setErrorUserId(String errorUserId) {
-        this.errorUserId = errorUserId;
+    public void setErroruserId(String erroruserId) {
+        this.erroruserId = erroruserId;
     }
 
     public String getErrorMakeDt() {

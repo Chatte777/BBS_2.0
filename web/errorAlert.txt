@@ -1,0 +1,11 @@
+<script type="text/javascript">
+        function errorAlert(alertType, link){
+            if(alertType==1){
+                alert("로그인이 풀렸어요!");
+                location.href = "login.jsp?prevPage='GetAlarmList.do'";
+            } else if(alertType==2){
+                alert("이미 로그인 되어있는걸요?");
+				location.href = link;
+			}
+        }
+	</script>

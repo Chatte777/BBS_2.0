@@ -29,8 +29,8 @@ public class GetBoard extends HttpServlet {
 
         HttpSession session = request.getSession();
 
-        if (session.getAttribute("userID") != null) {
-            userId = (String) session.getAttribute("userID");
+        if (session.getAttribute("userId") != null) {
+            userId = (String) session.getAttribute("userId");
         }
 
         int boardNo = 0;

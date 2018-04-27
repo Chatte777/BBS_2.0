@@ -6,12 +6,12 @@
 <%
     request.setCharacterEncoding("UTF-8");
 
-    String userID = null;
+    String userId = null;
 
-    if (session.getAttribute("userID") != null) {
-        userID = (String) session.getAttribute("userID");
+    if (session.getAttribute("userId") != null) {
+        userId = (String) session.getAttribute("userId");
     }
-    if (userID == null) {
+    if (userId == null) {
         PrintWriter script = response.getWriter();
         script.println("<script>");
         script.println("alert('로그인을 하세요.')");
@@ -28,14 +28,14 @@
         PrintWriter script = response.getWriter();
         script.println("<script>");
         script.println("alert('유효하지 않은 알림입니다.')");
-        script.println("location.href = 'alarm.jsp'");
+        script.println("location.href = 'GetAlarmList.do'");
         script.println("</script>");
     }
 
     AlarmMasterDAO alarmMasterDAO = new AlarmMasterDAO();
-    AlarmMaster alarmMaster = alarmMasterDAO.getAlarmMaster(alarmNo, userID);
+    AlarmMaster alarmMaster = alarmMasterDAO.getAlarmMaster(alarmNo);
 
-    int result = alarmMasterDAO.updateAlarmReadYn(alarmMaster.getAlarmNo(), alarmMaster.getAlarmTargetUser());
+    int result = alarmMasterDAO.updateAlarmReadYn(alarmMaster.getAlarmNo());
 
     if(Integer.parseInt(request.getParameter("readType"))==1) {
         PrintWriter script = response.getWriter();
@@ -53,7 +53,7 @@
     } else {
         PrintWriter script = response.getWriter();
         script.println("<script>");
-        script.println("location.href='alarm.jsp'");
+        script.println("location.href='GetAlarmList.do'");
         script.println("</script>");
     }
 %>

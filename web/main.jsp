@@ -17,11 +17,11 @@
 
 
 	<%
-		String userID = null;
-		if (session.getAttribute("userID") != null) {
-			userID = (String) session.getAttribute("userID");
+		String userId = null;
+		if (session.getAttribute("userId") != null) {
+			userId = (String) session.getAttribute("userId");
 		}
-		if (userID != null && (userID.equals("slop1434") || userID.equals("chatte777"))) {
+		if (userId != null && (userId.equals("slop1434") || userId.equals("chatte777"))) {
 	%>
 	<div class="container">
 		<div class="jumbotron">

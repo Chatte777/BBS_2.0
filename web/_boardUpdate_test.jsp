@@ -11,11 +11,11 @@
 <c:set var="boardName" value="${param.boardName}"></c:set>
 
 <c:choose>
-    <c:when test="${sessionScope.userID==null}">
+    <c:when test="${sessionScope.userId==null}">
         로그인이 풀렸어요!
     </c:when>
     <c:otherwise>
-        <c:set var="sessionId" value="${sessionScope.userID}"></c:set>
+        <c:set var="sessionId" value="${sessionScope.userId}"></c:set>
     </c:otherwise>
 </c:choose>
 <c:if test="${sessionId!=boardVO.boardMakeUser}">

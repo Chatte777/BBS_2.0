@@ -42,8 +42,8 @@ public class GetBoardList extends HttpServlet {
 
         //세션에서 ID 받아오기
         String userId = null;
-        if (session.getAttribute("userID") != null) {
-            userId = (String) session.getAttribute("userID");
+        if (session.getAttribute("userId") != null) {
+            userId = (String) session.getAttribute("userId");
         }
 
         //Pagination

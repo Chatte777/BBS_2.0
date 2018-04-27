@@ -22,7 +22,7 @@ public class ReplyDelete extends HttpServlet {
 
     protected void requestPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        String sessionId = session.getAttribute("userID").toString();
+        String sessionId = session.getAttribute("userId").toString();
         String boardName = request.getParameter("boardName");
         int boardNo = Integer.parseInt(request.getParameter("boardNo"));
         int replyNo = Integer.parseInt(request.getParameter("replyNo"));

@@ -26,14 +26,15 @@ public class GetAlarmList extends HttpServlet {
 
         HttpSession session = request.getSession();
         String sessionId = "";
-        if(session.getAttribute("userID")!=null) sessionId = session.getAttribute("userID").toString();
+        if(session.getAttribute("userId")!=null) sessionId = session.getAttribute("userId").toString();
 
         AlarmMasterDAO alarmMasterDAO = new AlarmMasterDAO();
         ArrayList<AlarmMaster> alarmList = alarmMasterDAO.getList(pageNumber, sessionId);
-        int isNextPage = (alarmMasterDAO.isNextPage(pageNumber, sessionId))? 1:0;
+        boolean isNextPage = alarmMasterDAO.isNextPage(pageNumber, sessionId);
 
         request.setAttribute("alarmList", alarmList);
         request.setAttribute("isNextPage", isNextPage);
+        response.setContentType("text/html;charset=UTF-8");
 
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("alarm_test.jsp");
         requestDispatcher.forward(request, response);

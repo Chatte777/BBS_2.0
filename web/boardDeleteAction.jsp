@@ -12,8 +12,8 @@
 		String boardName = request.getParameter("boardName");
 
 		String userId = null;
-		if(session.getAttribute("userID") != null){
-			userId = (String) session.getAttribute("userID");
+		if(session.getAttribute("userId") != null){
+			userId = (String) session.getAttribute("userId");
 		}
 			if (userId == null) {
 				PrintWriter script = response.getWriter();

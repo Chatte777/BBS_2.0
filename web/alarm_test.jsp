@@ -1,9 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="alarmMaster.AlarmMasterDAO" %>
-<%@ page import="alarmMaster.AlarmMaster" %>
-
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
 <!DOCTYPE html>
 <html>
@@ -18,39 +15,23 @@
             text-decoration: none;
         }
     </style>
-
-
     <script type="text/javascript">
-        function readClick(alarmNo, readType){
-            alert("asdf");
-            $.ajax({
-                type: "POST",
-                url: "AlarmReadCheck.do?alarmNo=${alarmNo}",
-                dataType: "text",
-                success: function (data) {
-
-                },
-                error: function () {
-                    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-                }
-            });
-        }
-
-        function deleteClick(){
-
+        function errorAlert(alertType) {
+            if (alertType == 1) {
+                alert("로그인이 풀렸어요!");
+                location.href = "login.jsp?prevPage='GetAlarmList.do'";
+            }
         }
     </script>
-
 </head>
 <body>
-<c:set var="boardName" value="${param.boardName}"></c:set>
 
 <c:choose>
-    <c:when test="${sessionScope.userID==null}">
-        로그인이 풀렸어요!
+    <c:when test="${sessionScope.userId==null}">
+        <script>errorAlert('1');</script>
     </c:when>
     <c:otherwise>
-        <c:set var="sessionId" value="${sessionScope.userID}"></c:set>
+        <c:set var="sessionId" value="${sessionScope.userId}"></c:set>
     </c:otherwise>
 </c:choose>
 
@@ -67,7 +48,7 @@
 
 <div class="container">
     <div class="row">
-        <table class="table" style="text-align: center; border: 1px solid #dddddd">
+        <table class="table" style="text-align: center; border: 1px solid #dddddd" id="alarmTable">
             <thead>
             <tr>
                 <th style="background-color: #eeeeee; text-align: center;">알람내용</th>
@@ -78,32 +59,34 @@
 
             <tbody>
             <c:forEach items="${alarmList}" var="alarmVO" varStatus="status">
+                <c:set var="boardName" value="${alarmVO.alarmOrgboardName}"></c:set>
                 <c:choose>
                     <c:when test="${alarmVO.alarmOrgboardName == 'notify'}">
-                        <c:set var="boardName" value="공지 및 건의"></c:set>
+                        <c:set var="boardNameKor" value="공지 및 건의"></c:set>
                     </c:when>
                     <c:when test="${alarmVO.alarmOrgboardName == 'mountain'}">
-                        <c:set var="boardName" value="산악일기"></c:set>
+                        <c:set var="boardNameKor" value="산악일기"></c:set>
                     </c:when>
                     <c:when test="${alarmVO.alarmOrgboardName == 'thread'}">
-                        <c:set var="boardName" value="대화의 숲"></c:set>
+                        <c:set var="boardNameKor" value="대화의 숲"></c:set>
                     </c:when>
                 </c:choose>
 
                 <tr>
                     <td align="left">
                         <!-- 알람 컨텐츠를 클릭했을 때는 해당 게시글로 이동한다. (readType 1)-->
-                        <a onclick="readClick('${alarmVO.alarmNo}','1')">
+                        <a onclick="readClick('${alarmVO.alarmNo}','1','${alarmVO.alarmOrgBoardNo}', this)"
+                           style="cursor:pointer;">
                         <span style="color:purple;">
                             <c:choose>
                                 <c:when test="${alarmVO.alarmType==1}">
-                                    "${boardName}" 게시판에 작성한【${alarmVO.alarmOrgContent}】글에 답글이 달렸습니다.
+                                    "${boardNameKor}" 게시판에 작성한【${alarmVO.alarmOrgContent}】글에 답글이 달렸습니다.
                                 </c:when>
                                 <c:when test="${alarmVO.alarmType==2}">
-                                    "${boardName}" 게시판에 작성한 【${alarmVO.alarmOrgContent}】 글에 댓글이 달렸습니다.
+                                    "${boardNameKor}" 게시판에 작성한 【${alarmVO.alarmOrgContent}】 글에 댓글이 달렸습니다.
                                 </c:when>
                                 <c:when test="${alarmVO.alarmType==3}">
-                                    "${boardName}" 게시판에 작성한【${alarmVO.alarmOrgContent}】댓글에 대댓글이 달렸습니다.
+                                    "${boardNameKor}" 게시판에 작성한【${alarmVO.alarmOrgContent}】댓글에 대댓글이 달렸습니다.
                                 </c:when>
                             </c:choose>
                             </span>
@@ -115,16 +98,17 @@
                         <c:choose>
                             <c:when test="${alarmVO.alarmReadYn==1}">
                                 <!-- 읽음처리 버튼을 클릭했을 때는 버튼 css만 변경한다. (reqdType 2) -->
-                                <a  onclick="readClick('3','2')" class="btn" style="background-color: lightblue;">읽음처리</a>
+                                <a onclick="readClick('${alarmVO.alarmNo}','2', '${alarmVO.alarmOrgBoardNo}', this)"
+                                   class="btn" style="background-color: lightblue;">읽음처리</a>
                             </c:when>
                             <c:otherwise>
-                                <a  class="btn" style="background-color: gray;">읽음</a>
+                                <a class="btn" style="background-color: gray;">읽음</a>
                             </c:otherwise>
                         </c:choose>
                     </td>
                     <td>
-                        <a href="alarmDeleteAction.jsp?alarmNo=${alarmVO.alarmNo}%>&alarmTargetUser=${alarmVO.alarmTargetUser}"
-                           class="btn" style="background-color: lightpink;">삭제</a>
+                        <a onclick="deleteClick('${alarmVO.alarmNo}', this)" class="btn"
+                           style="background-color: lightpink;">삭제</a>
                     </td>
                 </tr>
             </c:forEach>
@@ -132,7 +116,7 @@
         </table>
         <c:choose>
             <c:when test="${pageNumber==1}">
-                <a  class="btn btn-primary btn-arrow-left" style="background: gray;">이전</a>
+                <a class="btn btn-primary btn-arrow-left" style="background: gray;">이전</a>
             </c:when>
             <c:otherwise>
                 <a href="GetAlarmList.do?pageNumber=${pageNumber-1}" class="btn btn-successs btn-arrow-left">이전</a>
@@ -144,14 +128,56 @@
                 <a href="GetAlarmList.do?pageNumber=${pageNumber+1}" class="btn btn-successs btn-arrow-right">다음</a>
             </c:when>
             <c:otherwise>
-                <a  class="btn btn-primary btn-arrow-right" style="background: gray;">다음</a>
+                <a class="btn btn-primary btn-arrow-right" style="background: gray;">다음</a>
             </c:otherwise>
         </c:choose>
     </div>
 </div>
 
+<script type="text/javascript">
+    function readClick(alarmNo, readType, alarmOrgBoardNo, thisObject) {
+        $.ajax({
+            type: "POST",
+            url: "AlarmReadCheck.do?alarmNo=" + alarmNo,
+            dataType: "text",
+            success: function (data) {
+                if (data == 1) {
+                    if (readType == 2) {
+                        thisObject.style.backgroundColor = "gray";
+                        thisObject.innerText = "읽음";
+                    } else if (readType == 1) {
+                        location.href = "GetBoard.do?boardName=${boardName}&boardNo=" + alarmOrgBoardNo;
+                    }
 
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+                } else {
+                    alert("알람 조회에 실패했어요!");
+                }
+            },
+            error: function () {
+                alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+            }
+        });
+    }
+
+    function deleteClick(alarmNo, thisObject) {
+        $.ajax({
+            type: "POST",
+            url: "AlarmDelete.do?alarmNo=" + alarmNo,
+            dataType: "text",
+            success: function (data) {
+                if (data == 1) {
+                    thisObject.closest("tr").remove();
+                } else {
+                    alert("알람 삭제에 실패했어요!");
+                }
+            },
+            error: function () {
+                alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+            }
+        });
+    }
+</script>
 </body>
+
 
 </html>

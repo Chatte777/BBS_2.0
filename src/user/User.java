@@ -8,11 +8,11 @@ public class User {
 	private String userGender;
 	private String userEmail;
 	
-	public String getUserId() {
+	public String getuserId() {
 		return userId;
 	}
-	public void setUserId(String userID) {
-		this.userId = userID;
+	public void setuserId(String userId) {
+		this.userId = userId;
 	}
 	public String getUserPassword() {
 		return userPassword;
