@@ -6,7 +6,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width" , initial-scale="1">
+    <meta name="viewport" content="width=device-width", initial-scale="1">
     <link rel="stylesheet" href="css/bootstrap.css">
     <title>DREAMY KAT</title>
     <style type="text/css">
@@ -28,14 +28,8 @@
 
 <jsp:include page="_headNav.jsp" flush="false"/>
 
-<c:choose>
-    <c:when test="${sessionScope.userId==null}">
-        <script>errorAlert('1');</script>
-    </c:when>
-    <c:otherwise>
-        <c:set var="sessionId" value="${sessionScope.userId}"></c:set>
-    </c:otherwise>
-</c:choose>
+
+<c:set var="sessionId" value="${sessionScope.userId}"></c:set>
 
 <c:choose>
     <c:when test="${param.pageNumber==null}">

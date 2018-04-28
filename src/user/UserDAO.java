@@ -34,7 +34,7 @@ public class UserDAO {
 			return -1; // no ID
 		}catch(Exception e){
 			ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
-			errorMasterDAO.write("userId"+userId, "userPassWord"+userPassword, "", "", "userDAO.login", e.getMessage().toString(), "");
+			errorMasterDAO.write("userId"+userId, "userPassWord"+userPassword, "", "", "userDAO.Login", e.getMessage().toString(), "");
 			e.printStackTrace();
 		}
 		return -2; //Database error

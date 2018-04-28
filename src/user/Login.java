@@ -7,8 +7,8 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet("/login.do")
-public class login extends HttpServlet {
+@WebServlet("/Login.do")
+public class Login extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         requestPro(request, response);
     }
@@ -44,7 +44,9 @@ public class login extends HttpServlet {
 
             PrintWriter script = response.getWriter();
             script.println("<script>");
-            script.println("location.href="+prevPage);
+            if(prevPage.charAt(prevPage.length()-1)=='p') script.println("location.href='"+prevPage+"'");
+            else script.println("location.href="+prevPage);
+
             script.println("</script>");
         }
         else if(result == 0)

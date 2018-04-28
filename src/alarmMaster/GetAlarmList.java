@@ -36,7 +36,7 @@ public class GetAlarmList extends HttpServlet {
         request.setAttribute("isNextPage", isNextPage);
         response.setContentType("text/html;charset=UTF-8");
 
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("alarm_test.jsp");
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("alarm.jsp");
         requestDispatcher.forward(request, response);
     }
 }

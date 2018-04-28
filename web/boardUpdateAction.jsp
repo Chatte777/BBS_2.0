@@ -16,7 +16,7 @@
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
 			script.println("alert('로그인을 하세요.')");
-			script.println("location.href = 'login.jsp'");
+			script.println("location.href = 'Login.jsp'");
 			script.println("</script>");
 		}
 
@@ -42,7 +42,7 @@
 			PrintWriter script = response.getWriter();
 			script.println("<script>");
 			script.println("alert('권한이 없습니다.')");
-			script.println("location.href = 'login.jsp'");
+			script.println("location.href = 'Login.jsp'");
 			script.println("</script>");
 		} else {
 			if (request.getParameter("boardTitle") == null
