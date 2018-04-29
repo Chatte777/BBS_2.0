@@ -19,7 +19,7 @@ function onlyNumber(obj) {
 
 function contentSubmit() {
     try {
-        if (boardType == 1) document.boardForm.action = "/boardWriteAction.jsp?boardName=" + boardName + "&boardNo=" + boardNo;
+        if (boardType == 1) document.boardForm.action = "/BoardWrite.do?boardName=" + boardName + "&boardNo=" + boardNo;
         else if (boardType == 2) document.boardForm.action = "/boardUpdateAction.jsp?boardName=" + boardName + "&boardNo=" + boardNo;
         document.boardForm.method = "post";
         document.boardForm.submit();

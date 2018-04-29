@@ -7,9 +7,7 @@
 
 <%
 	request.setCharacterEncoding("UTF-8");
-%>
 
-	<%
 		String userId = null;
 
 		if (session.getAttribute("userId") != null) {

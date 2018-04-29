@@ -11,17 +11,7 @@
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/custom.css">
     <title>DREAMKY KAT</title>
-    <script type="text/javascript">
-        function errorAlert(alertType, link) {
-            if (alertType == 1) {
-                alert("로그인이 풀렸어요!");
-                location.href = "login.jsp?prevPage='GetAlarmList.do'";
-            } else if (alertType == 2) {
-                alert("이미 로그인이 되어있는걸요?");
-                location.href = link;
-            }
-        }
-    </script>
+    <script src="js/errorAlert.js"></script>
 </head>
 <body>
 
@@ -38,12 +28,12 @@
     <script>errorAlert('2', '${prevPage}')</script>
 </c:if>
 
-<c:forEach var="aCookie" items="<%=request.getCookies()%>">
-    <c:if test="${aCookie.name=='idRemember'}">
-        <c:set var="userId" value="${aCookie.value}"/>
+<c:forEach var="cookie" items="<%=request.getCookies()%>">
+    <c:if test="${cookie.name=='idRemember'}">
+        <c:set var="userId" value="${cookie.value}"/>
     </c:if>
-    <c:if test="${aCookie.name=='pwRemember'}">
-        <c:set var="userPassword" value="${aCookie.value}"/>
+    <c:if test="${cookie.name=='pwRemember'}">
+        <c:set var="userPassword" value="${cookie.value}"/>
     </c:if>
 </c:forEach>
 

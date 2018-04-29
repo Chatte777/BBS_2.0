@@ -15,20 +15,17 @@
             text-decoration: none;
         }
     </style>
-    <script type="text/javascript">
-        function errorAlert(alertType) {
-            if (alertType == 1) {
-                alert("로그인이 풀렸어요!");
-                location.href = "login.jsp?prevPage='GetAlarmList.do'";
-            }
-        }
-    </script>
+    <script src="js/errorAlert.js"></script>
 </head>
 <body>
 
 <jsp:include page="_headNav.jsp" flush="false"/>
 
-
+<c:choose>
+    <c:when test="${sessionScope.userId==null}">
+        <script>errorAlert('1', 'login.jsp?prevPage=\'GetAlarmList.do\'')</script>
+    </c:when>
+</c:choose>
 <c:set var="sessionId" value="${sessionScope.userId}"></c:set>
 
 <c:choose>

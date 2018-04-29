@@ -22,6 +22,7 @@ public class Login extends HttpServlet {
         String userPassword = request.getParameter("userPassword");
         String prevPage = request.getParameter("prevPage");
         HttpSession session = request.getSession();
+        response.setContentType("text/html;charset=UTF-8");
 
         UserDAO userDAO = new UserDAO();
         int result = userDAO.login(userId, userPassword);
@@ -53,7 +54,7 @@ public class Login extends HttpServlet {
         {
             PrintWriter script = response.getWriter();
             script.println("<script>");
-            script.println("alert('비밀번호가 틀립니다.')");
+            script.println("alert('비밀번호가 틀린 것 같아요.')");
             script.println("history.back()");
             script.println("</script>");
         }
@@ -61,7 +62,7 @@ public class Login extends HttpServlet {
         {
             PrintWriter script = response.getWriter();
             script.println("<script>");
-            script.println("alert('존재하지 않는 아이디입니다.')");
+            script.println("alert('존재하지 않는 아이디인걸요?')");
             script.println("history.back()");
             script.println("</script>");
         }
