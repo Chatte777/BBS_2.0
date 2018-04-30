@@ -131,7 +131,7 @@
     function readClick(alarmNo, readType, alarmOrgBoardNo, thisObject) {
         $.ajax({
             type: "POST",
-            url: "AlarmReadCheck.do?alarmNo=" + alarmNo,
+            url: "AlarmReadCheck.ajax?alarmNo=" + alarmNo,
             dataType: "text",
             success: function (data) {
                 if (data == 1) {
@@ -139,7 +139,7 @@
                         thisObject.style.backgroundColor = "gray";
                         thisObject.innerText = "읽음";
                     } else if (readType == 1) {
-                        location.href = "GetBoard.do?boardName=${boardName}&boardNo=" + alarmOrgBoardNo;
+                        location.href = "GetBoard.do?boardName=${boardName}&boardNo=" + alarmOrgBoardNo+"&viewFlag=1";
                     }
 
                 } else {

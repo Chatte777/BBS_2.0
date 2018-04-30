@@ -23,12 +23,14 @@ public class GetBoard extends HttpServlet {
     }
 
     protected  void requestPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String userId = null;
-        String boardName = request.getParameter("boardName");
-        JSONObject etcInformationJsonObj = new JSONObject();
-
+        ////////// 변수선언 및 초기화
         HttpSession session = request.getSession();
 
+        // 서버에서는 특수한 경우에 발생할 수 있는 nullpointException에 대한 처리만 하였음.
+        String boardName = "";
+        if (request.getParameter("boardName") != null) boardName = request.getParameter("boardName");
+
+        String userId = null;
         if (session.getAttribute("userId") != null) {
             userId = (String) session.getAttribute("userId");
         }
@@ -38,18 +40,45 @@ public class GetBoard extends HttpServlet {
             boardNo = Integer.parseInt(request.getParameter("boardNo"));
         }
 
+        int viewFlag=1; //1: page redirect, 2: JSON Return
+        if (request.getParameter("viewFlag")!=null) viewFlag=Integer.parseInt(request.getParameter("viewFlag"));
         if (boardNo == 0) {
             PrintWriter script = response.getWriter();
             script.println("<script>");
-            script.println("alert('유효하지 않은 글입니다.')");
+            script.println("alert('서버로부터의 알림 : 유효하지 않은 글입니다.')");
             script.println("location.href = 'GetBoardList.do?boardName=" + boardName + "'");
             script.println("</script>");
         }
         BoardVO boardVO = new BoardDAO(boardName).getBoardVO(boardNo);
 
-        request.setAttribute("boardVO", boardVO);
+        if(viewFlag==1){
+            request.setAttribute("boardVO", boardVO);
 
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("boardView.jsp");
-        requestDispatcher.forward(request, response);
+            RequestDispatcher requestDispatcher = request.getRequestDispatcher("boardView.jsp");
+            requestDispatcher.forward(request, response);
+        } else if(viewFlag==2) {
+            JSONObject boardVOJson = new JSONObject();
+            boardVOJson.put("tableName", boardVO.getTableName());
+            boardVOJson.put("boardNo", boardVO.getBoardNo());
+            boardVOJson.put("boardTitle", boardVO.getBoardTitle());
+            boardVOJson.put("boardTm", boardVO.getBoardTm());
+            boardVOJson.put("boardContent", boardVO.getBoardContent());
+            boardVOJson.put("boardMakeUser", boardVO.getBoardMakeUser());
+            boardVOJson.put("boardMakeDt", boardVO.getBoardMakeDt());
+            boardVOJson.put("boardReplyCnt", boardVO.getBoardReplyCnt());
+            boardVOJson.put("boardLikeCnt", boardVO.getBoardLikeCnt());
+            boardVOJson.put("boardDislkeCnt", boardVO.getBoardDislikeCnt());
+            boardVOJson.put("boardDeleteYn", boardVO.getBoardDeleteYn());
+            boardVOJson.put("boardAuthorize", boardVO.getBoardAuthorize());
+            boardVOJson.put("boardReadCount", boardVO.getBoardReadCount());
+            boardVOJson.put("isReboard", boardVO.getIsRebaord());
+            boardVOJson.put("hasReboard", boardVO.getHasReboard());
+            boardVOJson.put("orgBoardNo", boardVO.getOrgBoardNo());
+            boardVOJson.put("boardPassword", boardVO.getBoardPassword());
+            boardVOJson.put("boardPriority", boardVO.getBoardPriority());
+
+            response.setContentType("text/html;charset=UTF-8");
+            response.getWriter().write(boardVOJson.toString());
+        }
     }
 }

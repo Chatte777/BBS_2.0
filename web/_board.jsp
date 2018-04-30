@@ -288,19 +288,19 @@
                     </li>
                 </ul>
 
-                <a href="boardWrite.jsp?boardName=${boardName}" class="btn btn-primary pull-right">글쓰기</a>
+                <a href="boardWrite.jsp?boardName=${boardName}&writeFlag=1" class="btn btn-primary pull-right">글쓰기</a>
         </div>
     </div>
 </div>
 
 <script>
     function onClickBoardTitle(boardName, boardNo, boardAuthorize, boardPassword) {
-        if (boardAuthorize == 1) location.href = "GetBoard.do?boardName=" + boardName + "&boardNo=" + boardNo;
+        if (boardAuthorize == 1) location.href = "GetBoard.do?boardName=" + boardName + "&boardNo=" + boardNo+"&viewFlag=1";
         else if (boardAuthorize == 2) {
             var inputPassword = prompt("비밀번호를 입력하세요.(4자리 이하의 숫자)", "0000");
 
             if (inputPassword != null) {
-                if (boardPassword == inputPassword) location.href = "GetBoard.do?boardName=" + boardName + "&boardNo=" + boardNo + "&boardPassword=" + inputPassword;
+                if (boardPassword == inputPassword) location.href = "GetBoard.do?boardName=" + boardName + "&boardNo=" + boardNo + "&boardPassword=" + inputPassword+"&viewFlag=1";
                 else {
                     alert("비밀번호 오류입니다.");
                 }

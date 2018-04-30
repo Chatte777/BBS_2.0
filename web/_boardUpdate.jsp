@@ -7,17 +7,36 @@
 <script src="js/bootstrap.js"></script>
 <link href="summernote-0.8.9-dist/dist/summernote.css" rel="stylesheet">
 <script src="summernote-0.8.9-dist/dist/summernote.js"></script>
+<script src="js/errorAlert.js"></script>
 
-<c:set var="boardName" value="${param.boardName}"></c:set>
+<c:choose>
+    <c:when test="${param.boardName==null}">
+        <script>errorAlert('21', 'main.jsp')</script>
+    </c:when>
+    <c:otherwise>
+        <c:set var="boardName" value="${param.boardName}"></c:set>
+    </c:otherwise>
+</c:choose>
+
+<c:choose>
+    <c:when test="${param.boardNo}==null">
+        <script>errorAlert('21', 'GetBoardList.do?boardName=${boardName}')</script>
+    </c:when>
+    <c:otherwise>
+        <c:set var="boardNo" value="${param.boardNo}"></c:set>
+        <script>getBoard('${boardNo}')</script>
+    </c:otherwise>
+</c:choose>
 
 <c:choose>
     <c:when test="${sessionScope.userId==null}">
-        로그인이 풀렸어요!
+        <script>errorAlert('1', 'boardUpdate.jsp?boardName=${boardName}&boardNo=${boardNo}')</script>
     </c:when>
     <c:otherwise>
         <c:set var="sessionId" value="${sessionScope.userId}"></c:set>
     </c:otherwise>
 </c:choose>
+
 <c:if test="${sessionId!=boardVO.boardMakeUser}">
     글 작성자가 아니신가봐요.. ㅠㅠ
 </c:if>

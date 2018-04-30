@@ -40,7 +40,7 @@
 				{
 					PrintWriter script = response.getWriter();
 					script.println("<script>");
-					script.println("location.href='GetBoard.do?boardName="+ boardName +"&boardNo=" + replyVO.getBoardNo() + "'");
+					script.println("location.href='GetBoard.do?boardName="+ boardName +"&boardNo=" + replyVO.getBoardNo() + "&viewFlag=1'");
 					script.println("</script>");
 				}
 		}

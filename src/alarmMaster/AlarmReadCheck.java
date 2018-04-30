@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/AlarmReadCheck.do")
+@WebServlet("/AlarmReadCheck.ajax")
 public class AlarmReadCheck extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         requestPro(request, response);

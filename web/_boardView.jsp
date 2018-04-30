@@ -52,9 +52,9 @@
         <div style="margin-bottom: 10px;" align="right">
             <c:choose>
                 <c:when test="${userId==boardVO.boardMakeUser}">
-                    <a href="BoardUpdate.do?boardName=${boardName}&boardNo=${boardVO.boardNo}" class="btn btn-primary">수정</a>
-                    <a onclick="return confirm('정말로 삭제하시겠습니까?')"
-                       href="boardDeleteAction.jsp?boardName=${boardName}&boardNo=${boardVO.boardNo}"
+                    <a href="/boardWrite.jsp?boardName=${boardName}&boardNo=${boardVO.boardNo}&writeFlag=2" class="btn btn-primary">수정</a>
+                    <a onclick="return confirm('정말 삭제하시려는거 맞죠?')"
+                       href="BoardDelete.do?boardName=${boardName}&boardNo=${boardVO.boardNo}"
                        class="btn btn-primary">삭제</a>&nbsp;
                 </c:when>
                 <c:otherwise>

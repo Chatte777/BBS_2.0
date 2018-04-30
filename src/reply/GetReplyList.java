@@ -22,14 +22,8 @@ public class GetReplyList extends HttpServlet {
     }
 
     protected void requestPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-
-        response.getWriter().write(getReplyList(request.getParameter("boardName"), Integer.parseInt(request.getParameter("boardNo"))).toString());
-    }
-
-    private JSONArray getReplyList(String boardName, int boardNo){
-        ReplyDAO replyDAO = new ReplyDAO(boardName);
-        ArrayList<ReplyVO> replyList = replyDAO.getList(boardNo);
+        ReplyDAO replyDAO = new ReplyDAO(request.getParameter("boardName"));
+        ArrayList<ReplyVO> replyList = replyDAO.getList(Integer.parseInt(request.getParameter("boardNo")));
 
         JSONArray replyListJsonArr = new JSONArray();
 
@@ -48,6 +42,7 @@ public class GetReplyList extends HttpServlet {
             replyListJsonArr.add(replyJsonObj);
         }
 
-        return replyListJsonArr;
+        response.setContentType("text/html;charset=UTF-8");
+        response.getWriter().write(replyListJsonArr.toString());
     }
 }

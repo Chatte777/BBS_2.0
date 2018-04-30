@@ -79,7 +79,7 @@
 						PrintWriter script = response.getWriter();
 						script.println("<script>");
 						script.println("alert('수정 되었습니다.')");
-						script.println("location.href='GetBoard.do?boardName="+boardName+"&boardNo="+boardNo+"'");
+						script.println("location.href='GetBoard.do?boardName="+boardName+"&boardNo="+boardNo+"&viewFlag=1'");
 						script.println("</script>");
 					}
 				}

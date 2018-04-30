@@ -43,7 +43,22 @@ public class BoardWrite extends HttpServlet {
             userId = (String) session.getAttribute("userId");
         }
         if (userId == null) {
+            Cookie reloadFlag = new Cookie("reloadFlag", "1");
+            reloadFlag.setMaxAge(5);
+            Cookie cookieBoardTitle = new Cookie("boardTitle", URLEncoder.encode(request.getParameter("boardTitle"),"utf-8"));
+            cookieBoardTitle.setMaxAge(5);
+            Cookie cookieBoardContent = new Cookie("boardContent", URLEncoder.encode(request.getParameter("boardContent"),"utf-8"));
+            cookieBoardContent.setMaxAge(5);
+            Cookie cookieBoardAuthorize = new Cookie("boardAuthorize", request.getParameter("boardAuthorize"));
+            cookieBoardAuthorize.setMaxAge(5);
+
+            response.addCookie(reloadFlag);
+            response.addCookie(cookieBoardTitle);
+            response.addCookie(cookieBoardContent);
+            response.addCookie(cookieBoardAuthorize);
+
             PrintWriter script = response.getWriter();
+
             script.println("<script>");
             script.println("alert('서버로부터의 알림: 로그인이 풀렸습니다.')");
             script.println("location.href = '/login.jsp?prevPage=\'boardWrite.jsp?boardName="+boardName+"&boardNo="+boardNo+"\''");
@@ -85,7 +100,7 @@ public class BoardWrite extends HttpServlet {
 
             script.println("<script>");
             script.println("alert('서버로부터의 알림 : 글쓰기에 실패했습니다.')");
-            script.println("location.href='boardWrite.jsp?boardName="+boardName+"'");
+            script.println("location.href='GetBoardList.do?boardName="+boardName+"'");
             script.println("</script>");
         } else {
             PrintWriter script = response.getWriter();
