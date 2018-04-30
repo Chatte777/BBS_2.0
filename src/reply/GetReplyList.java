@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-@WebServlet("/GetReplyList.do")
+@WebServlet("/GetReplyList.ajax")
 public class GetReplyList extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         requestPro(request, response);

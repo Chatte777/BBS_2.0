@@ -20,6 +20,6 @@
 	</c:if>
 
 	<jsp:include page="_headNav.jsp" flush="false" />
-	<jsp:include page="_boardWrite_test.jsp" flush="false" />
+	<jsp:include page="_boardWrite.jsp" flush="false" />
 </body>
 </html>

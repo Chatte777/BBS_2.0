@@ -8,6 +8,7 @@
 
 <nav class="navbar navbar-default">
     <div class="navbar-header">
+        <img src="/images/iStock-662195090.jpg">
         <button type="button" class="navbar-toggle collpased"
                 data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
                 aria-expanded="false">
@@ -22,7 +23,6 @@
             <li><a href="GetBoardList.do?boardName=notify">공지 및 건의</a></li>
             <li><a href="GetBoardList.do?boardName=mountain">산악일기</a></li>
             <li><a href="GetBoardList.do?boardName=military">국방부학습지</a></li>
-            <li><a href="/sketchbook/board.jsp?boardName=sketchbook">스케치북</a></li>
             <c:if test="${userId!=null}">
                 <li><a href="GetAlarmList.do">
                     알림

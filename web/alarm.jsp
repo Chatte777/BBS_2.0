@@ -155,7 +155,7 @@
     function deleteClick(alarmNo, thisObject) {
         $.ajax({
             type: "POST",
-            url: "AlarmDelete.do?alarmNo=" + alarmNo,
+            url: "AlarmDelete.ajax?alarmNo=" + alarmNo,
             dataType: "text",
             success: function (data) {
                 if (data == 1) {

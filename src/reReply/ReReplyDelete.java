@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet("/ReReplyDelete.do")
+@WebServlet("/ReReplyDelete.ajax")
 public class ReReplyDelete extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         requestPro(request,response);

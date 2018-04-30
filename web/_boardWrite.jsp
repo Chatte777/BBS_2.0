@@ -1,5 +1,4 @@
-<%@ page import="java.net.URLDecoder" %>
-<%@ page import="java.io.PrintWriter" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <link href="css/bootstrap.css" rel="stylesheet">
@@ -8,41 +7,31 @@
 <link href="summernote-0.8.9-dist/dist/summernote.css" rel="stylesheet">
 <script src="summernote-0.8.9-dist/dist/summernote.js"></script>
 
-<%
-    String userId=null;
+<c:set var="userId" value="${sessionScope.userId}"></c:set>
+<c:set var="boardName" value="${param.boardName}"></c:set>
+<c:set var="boardNo" value="${param.boardNo}"></c:set>
 
-    if (session.getAttribute("userId") != null) {
-        userId = (String) session.getAttribute("userId");
-    }
-    if (userId == null) {
-        PrintWriter script = response.getWriter();
-        script.println("<script>");
-        script.println("alert('로그인을 하세요.')");
-        script.println("location.href = '/Login.jsp'");
-        script.println("</script>");
-    }
+<!--글쓰기 에러시 reloadFlag를 '1'로 하여 쿠키를 굽는다.-->
+<c:forEach var="cookie" items="<%=request.getCookies()%>">
+    <c:if test="${cookie.name=='reloadFlag'}">
+        <c:set var="reloadFlag" value="${cookie.value}"/>
+    </c:if>
+</c:forEach>
 
-    String boardName = request.getParameter("boardName");
-    int boardNo = 0;
-
-    if(request.getParameter("boardNo")!=null) boardNo=Integer.parseInt(request.getParameter("boardNo"));
-    Cookie[] cookies = request.getCookies();
-    String boardTitle=null;
-    String boardContent=null;
-    String boardAuthorize=null;
-    String reloadFlag=null;
-
-    for(int i=0; i<cookies.length; i++){
-        if("reloadFlag".equals(cookies[i].getName())) reloadFlag=cookies[i].getValue();
-    }
-
-    if("1".equals(reloadFlag))
-    for(int i=0; i<cookies.length; i++){
-        if("boardTitle".equals(cookies[i].getName())) boardTitle=URLDecoder.decode(cookies[i].getValue(),"utf-8");
-        if("boardContent".equals(cookies[i].getName())) boardContent= URLDecoder.decode(cookies[i].getValue(),"utf-8");
-        if("boardAuthorize".equals(cookies[i].getName())) boardAuthorize=cookies[i].getValue();
-    }
-%>
+<!--reloadFlag가 1일경우 저장되어있던 값을 가져온다.-->
+<c:if test="${reloadFlag==1}">
+    <c:forEach var="cookie" items="<%=request.getCookies()%>">
+        <c:if test="${cookie.name=='boardTitle'}">
+            <c:set var="boardTitle" value="${cookie.value}"/>
+        </c:if>
+        <c:if test="${cookie.name=='boardContent'}">
+            <c:set var="boardContent" value="${cookie.value}"/>
+        </c:if>
+        <c:if test="${cookie.name=='boardAuthorize'}">
+            <c:set var="boardAuthorize" value="${cookie.value}"/>
+        </c:if>
+    </c:forEach>
+</c:if>
 
 <div class="container">
     <div class="row">
@@ -58,20 +47,37 @@
                 <tbody>
                 <tr>
                 <tr>
-                    <td width="80%"><input type="text" class="form-control"
-                               placeholder="글 제목" name="boardTitle" maxlength="50"></td>
-                    <td width="10%"><select class="form-control" name="boardAuthorize" id="boardAuthorize">
-                        <%
-                            if(boardAuthorize=="2"){
-                        %>
-                        <option value="1">전체공개</option><option value="2" selected>나만보기</option></select>
-                        <%
-                            } else {
-                        %>
-                        <option value="1" selected>전체공개</option><option value="2">나만보기</option></select>
-                        <%
-                            }
-                        %>
+                    <td width="80%">
+                        <c:choose>
+                            <c:when test="${reloadFlag==1}">
+                                <input type="text" class="form-control" placeholder="글 제목" name="boardTitle" maxlength="50" value="${boardTitle}">
+                            </c:when>
+                            <c:otherwise>
+                                <input type="text" class="form-control" placeholder="글 제목" name="boardTitle" maxlength="50">
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
+                    <td width="10%">
+                        <select class="form-control" name="boardAuthorize" id="boardAuthorize">
+                            <c:choose>
+                            <c:when test="${reloadFlag==1}">
+                            <c:choose>
+                            <c:when test="${boardAuthorize==1}">
+                            <option value="1" selected>전체공개</option>
+                            <option value="2">나만보기</option></select>
+                        </c:when>
+                        <c:when test="${boardAuthorize==2}">
+                            <option value="1">전체공개</option>
+                            <option value="2" selected>나만보기</option></select>
+                        </c:when>
+                        </c:choose>
+                        </c:when>
+                        <c:otherwise>
+                            <option value="1" selected>전체공개</option>
+                            <option value="2">나만보기</option></select>
+                        </c:otherwise>
+                        </c:choose>
+
                     </td>
                     <td width="10%">
                         <input type="text" class="form-control" disabled style="text-align: center;" onkeydown="onlyNumber(this)"
@@ -79,8 +85,18 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="3"><textarea name="boardContent" id="summernote"
-                                    maxlength="2048"></textarea></td>
+                    <td colspan="3">
+                        <c:choose>
+                            <c:when test="${reloadFlag==1}">
+                                <textarea name="boardContent" id="summernote"
+                                          maxlength="2048" value="${boardContent}"></textarea>
+                            </c:when>
+                            <c:otherwise>
+                                <textarea name="boardContent" id="summernote"
+                                          maxlength="2048"></textarea>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -89,4 +105,4 @@
     </div>
 </div>
 
-<script src="js/_boardFileUpload.js" boardName="<%=boardName%>" boardNo="<%=boardNo%>" boardType="1"></script>
+<script src="js/_boardFileUpload.js" boardName="${boardName}" boardNo="${boardNo}" boardType="1"></script>

@@ -100,7 +100,7 @@
     function getReplyList() {
         $.ajax({
             type: "POST",
-            url: "GetReplyList.do?boardName=${boardName}&boardNo=${boardNo}",
+            url: "GetReplyList.ajax?boardName=${boardName}&boardNo=${boardNo}",
             dataType: "json",
             success: function (data) {
                 $("#replyListTable").empty();
@@ -142,7 +142,7 @@
     function getReReplyList(replyNo) {
         $.ajax({
             type: "POST",
-            url: "GetReReplyList.do?boardName=${boardName}&boardNo=${boardNo}&replyNo=" + replyNo,
+            url: "GetReReplyList.ajax?boardName=${boardName}&boardNo=${boardNo}&replyNo=" + replyNo,
             async: false,
             dataType: "json",
             success: function (data) {
@@ -190,7 +190,7 @@
     function replyDeleteClick(replyNo) {
         $.ajax({
             type: "POST",
-            url: "ReplyDelete.do?boardName=${boardName}&boardNo=${boardNo}&replyNo=" + replyNo,
+            url: "ReplyDelete.ajax?boardName=${boardName}&boardNo=${boardNo}&replyNo=" + replyNo,
             dataType: "text",
             success: function (data) {
                 getReplyList();
@@ -204,7 +204,7 @@
     function reReplyDeleteClick(replyNo, reReplyNo) {
         $.ajax({
             type: "POST",
-            url: "ReReplyDelete.do?boardName=${boardName}&boardNo=${boardNo}&replyNo=" + replyNo + "&reReplyNo=" + reReplyNo,
+            url: "ReReplyDelete.ajax?boardName=${boardName}&boardNo=${boardNo}&replyNo=" + replyNo + "&reReplyNo=" + reReplyNo,
             dataType: "text",
             success: function (data) {
                 getReplyList();
