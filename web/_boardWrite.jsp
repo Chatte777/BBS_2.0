@@ -149,13 +149,14 @@
     });
 
     function contentSubmit() {
-        var writeFlag = '${writeFlag}';
+        var writeFlag = '${param.writeFlag}';
         var boardName = '${param.boardName}';
-
+        var boardNo = '${param.boardNo}';
 
         try {
-            if (writeFlag==1) document.boardForm.action = "BoardWrite.do?boardName=" + boardName + "&boardNo=" + boardNo;
-            else if (writeFlag==2) document.boardForm.action = "BoardUpdate.do?boardName=" + boardName + "&boardNo=" + boardNo;
+            if (writeFlag==1) document.boardForm.action = "BoardWrite.do?boardName=" + boardName+"&writeFlag=1";
+            else if (writeFlag==2) document.boardForm.action = "BoardUpdate.do?boardName=" + boardName + "&boardNo=" + boardNo+"&writeFlag=2";
+            else if (writeFlag==3) document.boardForm.action = "BoardWrite.do?boardName=" + boardName + "&boardNo=" + boardNo+"&writeFlag=3";
             document.boardForm.method = "post";
             document.boardForm.submit();
         } catch (e) {
