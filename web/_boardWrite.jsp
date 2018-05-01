@@ -3,6 +3,7 @@
 
 <link href="css/bootstrap.css" rel="stylesheet">
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+<script src="js/jquery.cookie.js"></script>
 <script src="js/bootstrap.js"></script>
 <link href="summernote-0.8.9-dist/dist/summernote.css" rel="stylesheet">
 <script src="summernote-0.8.9-dist/dist/summernote.js"></script>
@@ -54,24 +55,16 @@
 <script src="/js/errorAlert.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        var boardNo;
-        var boardTitle;
-        var boardAuthorize;
-        var boardPassword;
-        var boardContent;
-        var reloadFlag;
-
         var boardTitleElement = document.getElementById("boardTitle");
         var boardAuthorizeElement = document.getElementById("boardAuthorize");
         var boardPasswordElement = document.getElementById("boardPassword");
-        var boardContentElement = document.getElementById("summernote");
 
         var boardName;
         if(${param.boardName==null}) errorAlert('21', 'main.jsp');
         else boardName = '${param.boardName}';
 
         var sessionId;
-        if(${sessionScope.userId==null}) errorAlert('1', 'boardUpdate.jsp?boardName=${boardName}&boardNo=${boardNo}');
+        if(${sessionScope.userId==null}) errorAlert('1', 'boardUpdate.jsp?boardName='+boardName);
         else sessionId = '${sessionScope.userId}';
 
         var writeFlag;
@@ -82,34 +75,33 @@
         if(${param.boardNo==null}) boardNo=null;
         else boardNo='${param.boardNo}';
 
+        var reloadFlag=0;
+        if($.cookie("reloadFlag")) reloadFlag = 1;
 
-        if(${reloadFlag==1}){
-            boardTitle = $.cookie("boardTitle");
-            boardAuthorize = $.cookie("boardAuthorize");
-            boardPassword = $.cookie("boardPassword");
-            boardContent = $.cookie("boardContent");
 
-            boardTitleElement.value = boardTitle;
-            boardAuthorize.value = boardAuthorize;
-            boardPassword.value = boardPassword;
-            boardContent.value = boardContent;
+        if(reloadFlag==1){
+            boardTitleElement.value = $.cookie("boardTitle");
+            boardAuthorizeElement.value = $.cookie("boardAuthorize");
+            boardPasswordElement.value = $.cookie("boardPassword");
+            $('#summernote').summernote ('code', $.cookie("boardContent"));
+
+            if ($("#boardAuthorize option:selected").val() == 1) $("#boardPassword").attr('disabled', true);
+            else if ($("#boardAuthorize option:selected").val() == 2) $("#boardPassword").removeAttr('disabled');
         }
 
         if(writeFlag==2){
             $.ajax({
                 type: "POST",
-                url: "GetBoard.do?boardName=${boardName}&boardNo=${boardNo}&viewFlag=2",
+                url: "GetBoard.do?boardName="+boardName+"&boardNo="+boardNo+"&viewFlag=2",
                 dataType: "JSON",
                 success: function (data) { // 처리가 성공할 경우
-                    boardTitle=data.boardTitle;
-                    boardAuthorize=data.boardAuthorize;
-                    boardPassword=data.boardPassword;
-                    boardContent=data.boardContent;
+                    boardTitleElement.value = data.boardTitle;
+                    boardAuthorizeElement.value = data.boardAuthorize;
+                    boardPasswordElement.value = data.boardPassword;
+                    $('#summernote').summernote ('code', data.boardContent);
 
-                    boardTitleElement.value = boardTitle;
-                    boardAuthorize.value = boardAuthorize;
-                    boardPassword.value = boardPassword;
-                    boardContent.value = boardContent;
+                    if ($("#boardAuthorize option:selected").val() == 1) $("#boardPassword").attr('disabled', true);
+                    else if ($("#boardAuthorize option:selected").val() == 2) $("#boardPassword").removeAttr('disabled');
                 }
                 , error: function (request, status, error) {
                     alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error + request.dataType);
@@ -155,7 +147,7 @@
 
         try {
             if (writeFlag==1) document.boardForm.action = "BoardWrite.do?boardName=" + boardName+"&writeFlag=1";
-            else if (writeFlag==2) document.boardForm.action = "BoardUpdate.do?boardName=" + boardName + "&boardNo=" + boardNo+"&writeFlag=2";
+            else if (writeFlag==2) document.boardForm.action = "BoardWrite.do?boardName=" + boardName + "&boardNo=" + boardNo+"&writeFlag=2";
             else if (writeFlag==3) document.boardForm.action = "BoardWrite.do?boardName=" + boardName + "&boardNo=" + boardNo+"&writeFlag=3";
             document.boardForm.method = "post";
             document.boardForm.submit();

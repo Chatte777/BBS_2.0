@@ -68,7 +68,7 @@
         </table>
     </div>
 
-    <form name="replyForm">
+    <form name="replyForm" id="replyForm">
         <table class="table table-condensed">
             <tbody>
             <tr>
@@ -239,9 +239,20 @@
 
     function replySubmit() {
         if (_updateFlag == 1) {
-            document.replyForm.action = "replyAction.jsp?boardName=${boardName}";
-            document.replyForm.method = "post";
-            document.replyForm.submit();
+
+            $.ajax({
+                type: "POST",
+                url: "ReplyWrite.ajax?boardName=${boardName}&boardNo=${boardNo}",
+                data: queryString,
+                dataType: "text",
+                success: function (data) {
+                    alert(data.result);
+                    if(data.result==1)  getReplyList();
+                },
+                error: function () {
+                    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                }
+            });
         } else if (_updateFlag == 2) {
             document.replyForm.action = "replyUpdateAction.jsp?boardName=${boardName}&replyNo=" + _replyNo;
             document.replyForm.method = "post";

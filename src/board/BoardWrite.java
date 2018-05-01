@@ -34,11 +34,6 @@ public class BoardWrite extends HttpServlet {
         String boardName="";
         if(request.getParameter("boardName")!=null) boardName = request.getParameter("boardName");
 
-        // boardAuthorize에 대한 validation체크 및 값 가져오기
-
-
-
-
         // 세션 userId에 대한 Validation 체크
         String userId = null;
         if (session.getAttribute("userId") != null) {
