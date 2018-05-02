@@ -100,34 +100,6 @@
         getReplyList();
     };
 
-    function appendReplyListRow(data){
-        var replyContent = data.replyContent.replace(/\r\n/g, "<br>").replace(/\"/g, "〃").replace(/'/g, "＇");
-        var replyMakeDt = data.replyMakeDt.substring(0, 11) + data.replyMakeDt.substring(11, 13) + "시" + data.replyMakeDt.substring(14, 16) + "분";
-
-        var row = "<tr onclick=\"reReplyClick('" + data.replyNo + "', '" + replyContent + "')\">" +
-            "<td></td>" +
-            "<td align=\"left\" style=\"word-break: break-all;\">" + replyContent + "</td>" +
-            "<td align=\"center\" style=\"width: 10%;\" onclick=\"event.cancelBubble = true;\">" +
-            "<a onclick=\"reReplyClick('" + data.replyNo + "', '" + replyContent + "')\"" +
-            "type=\"button\" class=\"glyphicon glyphicon-share-alt\" style=\"color: seagreen; padding:0px 5px 0px 0px;\"/>";
-
-        if (data.replyMakeUser == '${userId}') {
-            row += "<a onclick=\"replyModifyClick('" + replyContent + "', '" + data.replyNo + "')\" type=\"button\"" +
-                "class=\"glyphicon glyphicon-pencil\" style=\"color: limegreen; padding:5px;\"/>" +
-                "<a onclick=\"if(confirm('정말 삭제하시겠습니까?')) replyDeleteClick('" + data.replyNo + "', this)\"" +
-                "type=\"button\" class=\"glyphicon glyphicon-remove\" style=\"color: #a9a9a9; padding:5px;\"/>";
-        }
-
-        row += "</td>" +
-            "<td style=\"width: 10%;\">" + data.replyMakeUser + "</td>" +
-            "<td style=\"width: 15%;\">" + replyMakeDt + "</td>" +
-            "</tr>";
-
-        $("#replyListTable").append(row);
-        if (data.hasReReply == 2) getReReplyList(data.replyNo);
-    }
-
-
     function getReplyList() {
         $.ajax({
             type: "POST",
@@ -136,7 +108,30 @@
             success: function (data) {
                 $("#replyListTable").empty();
                 for (var i = 0; i < data.length; i++) {
-                    appendReplyListRow(data[i]);
+                    var replyContent = data[i].replyContent.replace(/\r\n/g, "<br>").replace(/\"/g, "〃").replace(/'/g, "＇");
+                    var replyMakeDt = data[i].replyMakeDt.substring(0, 11) + data[i].replyMakeDt.substring(11, 13) + "시" + data[i].replyMakeDt.substring(14, 16) + "분";
+
+                    var row = "<tr onclick=\"reReplyClick('" + data[i].replyNo + "', '" + replyContent + "')\">" +
+                        "<td></td>" +
+                        "<td align=\"left\" style=\"word-break: break-all;\">" + replyContent + "</td>" +
+                        "<td align=\"center\" style=\"width: 10%;\" onclick=\"event.cancelBubble = true;\">" +
+                        "<a onclick=\"reReplyClick('" + data[i].replyNo + "', '" + replyContent + "')\"" +
+                        "type=\"button\" class=\"glyphicon glyphicon-share-alt\" style=\"color: seagreen; padding:0px 5px 0px 0px;\"/>";
+
+                    if (data[i].replyMakeUser == '${userId}') {
+                        row += "<a onclick=\"replyModifyClick('" + replyContent + "', '" + data[i].replyNo + "')\" type=\"button\"" +
+                            "class=\"glyphicon glyphicon-pencil\" style=\"color: limegreen; padding:5px;\"/>" +
+                            "<a onclick=\"if(confirm('정말 삭제하시겠습니까?')) replyDeleteClick('" + data[i].replyNo + "', this)\"" +
+                            "type=\"button\" class=\"glyphicon glyphicon-remove\" style=\"color: #a9a9a9; padding:5px;\"/>";
+                    }
+
+                    row += "</td>" +
+                        "<td style=\"width: 10%;\">" + data[i].replyMakeUser + "</td>" +
+                        "<td style=\"width: 15%;\">" + replyMakeDt + "</td>" +
+                        "</tr>";
+
+                    $("#replyListTable").append(row);
+                    if (data[i].hasReReply == 2) getReReplyList(data[i].replyNo);
                 }
             },
             error: function () {
@@ -245,26 +240,15 @@
 
     function replySubmit() {
         if (_updateFlag == 1) {
+
             $.ajax({
                 type: "POST",
                 url: "ReplyWrite.ajax?boardName=${boardName}&boardNo=${boardNo}",
                 data: $("#replyForm").serialize(),
                 dataType: "text",
                 success: function (data) {
-                    if(data==1) {
-                        //insert에 성공했으면 해당 댓글을 댓글리스트에 추가한다.
-                        //날짜 변환
-                        var date = new Date();
-                        var dateReformat =date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2) + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2) + ":" + ("0" + date.getSeconds()).slice(-2);
-                        //replyContent는 입력한 값 그대로 가져오고
-                        var trContent = document.getElementById('replyContent').value;
-                        //나머지 값들은 여기저기서 가져옴(DB에서 가져오는게 아니라 입력할 당시에 설정했던 값들로)
-                        var trData = {replyDislikeCnt: '1', replyContent: trContent, replyMakeUser: '${userId}', replyLikeCnt: '1', replyMakeDt: dateReformat};
-                        appendReplyListRow(trData);
-                        //댓글 textarea 초기화
-                        document.getElementById('replyContent').value="";
-                    }
-                    else if(data==2) errorAlert('1', 'login.jsp?prevPage=GetBoard.do?boardName=${boardName}&boardNo=${boardNo}')
+                    if(data==1) getReplyList(); document.getElementById('replyContent').value="";
+                    if(data==2) errorAlert('1', 'login.jsp?prevPage=GetBoard.do?boardName=${boardName}&boardNo=${boardNo}')
                 },
                 error: function () {
                     alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);

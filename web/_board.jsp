@@ -224,7 +224,8 @@
                         <c:when test="${paginationJson.isNextPage==1}">
                             <li class="page-item">
                                 <a class="page-link"
-                                   href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber+1}">${pageNumber+1}/>
+                                   href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber+1}">${pageNumber+1}
+                                </a>
                             </li>
                         </c:when>
                         <c:otherwise>
@@ -238,7 +239,8 @@
                         <c:when test="${paginationJson.isDoubleNextPage==1}">
                             <li class="page-item">
                                 <a class="page-link"
-                                   href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber+2}">${pageNumber+2}/>
+                                   href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber+2}">${pageNumber+2}
+                                </a>
                             </li>
                         </c:when>
                         <c:otherwise>
