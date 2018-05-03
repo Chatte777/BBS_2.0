@@ -264,16 +264,29 @@
                         //댓글 textarea 초기화
                         document.getElementById('replyContent').value="";
                     }
-                    else if(data==2) errorAlert('1', 'login.jsp?prevPage=GetBoard.do?boardName=${boardName}&boardNo=${boardNo}')
+                    else if(data==2) alert('로그인이 풀렸어요!');
                 },
                 error: function () {
                     alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
                 }
             });
         } else if (_updateFlag == 2) {
-            document.replyForm.action = "replyUpdateAction.jsp?boardName=${boardName}&replyNo=" + _replyNo;
-            document.replyForm.method = "post";
-            document.replyForm.submit();
+            $.ajax({
+                type: "POST",
+                url: "ReplyUpdate.ajax?boardName=${boardName}&boardNo=${boardNo}&replyNo="+_replyNo,
+                data: $("#replyForm").serialize(),
+                dataType: "text",
+                success: function (data) {
+                    if(data==1) {
+                        getReplyList();
+                        document.getElementById('replyContent').value="";
+                    }
+                    else if(data==2) alert('로그인이 풀렸어요!');
+                },
+                error: function () {
+                    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                }
+            });
         } else if (_updateFlag == 3) {
             document.replyForm.action = "reReplyAction.jsp?boardName=${boardName}&replyNo=" + _replyNo;
             document.replyForm.method = "post";
