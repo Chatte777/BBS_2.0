@@ -212,7 +212,7 @@
             type: "POST",
             url: "ReReplyDelete.ajax?boardName=${boardName}&boardNo=${boardNo}&replyNo=" + replyNo + "&reReplyNo=" + reReplyNo,
             dataType: "text",
-            success: function (data) {
+            success: function () {
                 thisObject.closest("tr").remove();
             },
             error: function () {
@@ -244,6 +244,7 @@
     }
 
     function replySubmit() {
+        //_updateFlag==1 : 댓글작성
         if (_updateFlag == 1) {
             $.ajax({
                 type: "POST",
@@ -270,6 +271,7 @@
                     alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
                 }
             });
+            //updateFlag==2 : 댓글수정
         } else if (_updateFlag == 2) {
             $.ajax({
                 type: "POST",
@@ -287,10 +289,12 @@
                     alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
                 }
             });
+            //updateFlag==3 : 대댓글작성
         } else if (_updateFlag == 3) {
             document.replyForm.action = "reReplyAction.jsp?boardName=${boardName}&replyNo=" + _replyNo;
             document.replyForm.method = "post";
             document.replyForm.submit();
+            //updateFlag==4 : 대댓글수정
         } else if (_updateFlag == 4) {
             document.replyForm.action = "reReplyUpdateAction.jsp?boardName=${boardName}&replyNo=" + _replyNo + "&reReplyNo=" + _reReplyNo;
             document.replyForm.method = "post";
