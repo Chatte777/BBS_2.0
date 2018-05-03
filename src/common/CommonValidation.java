@@ -1,6 +1,7 @@
 package common;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -34,5 +35,29 @@ public class CommonValidation {
         String replyContent="";
         if(request.getParameter("replyContent")!=null) replyContent=request.getParameter("replyContent");
         return replyContent;
+    }
+
+    static public int boardAuthorizeValidation(HttpServletRequest request){
+        int boardAuthorize=0;
+        if(request.getParameter("boardAuthorize")!=null) boardAuthorize=Integer.parseInt(request.getParameter("boardAuthorize"));
+        return boardAuthorize;
+    }
+
+    static public String boardTitleValildation(HttpServletRequest request){
+        String boardTitle="";
+        if(request.getParameter("boardTitle")!=null) boardTitle=request.getParameter("boardTitle");
+        return boardTitle;
+    }
+
+    static public String boardContentValidation(HttpServletRequest request){
+        String boardContent="";
+        if(request.getParameter("boardContent")!=null) boardContent=request.getParameter("boardContent");
+        return boardContent;
+    }
+
+    static public int writeFlagValidation(HttpServletRequest request){
+        int writeFlag=0;
+        if(request.getParameter("writeFlag")!=null) writeFlag=Integer.parseInt(request.getParameter("writeFlag"));
+        return writeFlag;
     }
 }

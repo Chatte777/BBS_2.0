@@ -214,6 +214,7 @@
             dataType: "text",
             success: function () {
                 thisObject.closest("tr").remove();
+                thisObject.closest("tr").next("tr").remove();
             },
             error: function () {
                 alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
@@ -291,9 +292,22 @@
             });
             //updateFlag==3 : 대댓글작성
         } else if (_updateFlag == 3) {
-            document.replyForm.action = "reReplyAction.jsp?boardName=${boardName}&replyNo=" + _replyNo;
-            document.replyForm.method = "post";
-            document.replyForm.submit();
+            $.ajax({
+                type: "POST",
+                url: "ReReplyWrite.ajax?boardName=${boardName}&boardNo=${boardNo}&replyNo="+_replyNo,
+                data: $("#replyForm").serialize(),
+                dataType: "text",
+                success: function (data) {
+                    if(data==1) {
+                        getReplyList();
+                        document.getElementById('replyContent').value="";
+                    }
+                    else if(data==2) alert('로그인이 풀렸어요!');
+                },
+                error: function () {
+                    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                }
+            });
             //updateFlag==4 : 대댓글수정
         } else if (_updateFlag == 4) {
             document.replyForm.action = "reReplyUpdateAction.jsp?boardName=${boardName}&replyNo=" + _replyNo + "&reReplyNo=" + _reReplyNo;
