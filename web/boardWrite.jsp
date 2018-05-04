@@ -16,7 +16,7 @@
 		<script>errorAlert('12')</script>
 	</c:if>
 	<c:if test="${sessionScope.userId==null}">
-		<script>errorAlert('1', 'login.jsp?prevPage=\'boardWrite.jsp?boardName=${param.boardName}\'')</script>
+		<script>errorAlert('1')</script>
 	</c:if>
 
 	<jsp:include page="_headNav.jsp" flush="false" />

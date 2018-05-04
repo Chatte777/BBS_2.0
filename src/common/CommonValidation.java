@@ -66,4 +66,28 @@ public class CommonValidation {
         if(request.getParameter("reReplyNo")!=null) reReplyNo=Integer.parseInt(request.getParameter("reReplyNo"));
         return reReplyNo;
     }
+
+    static public String userIdValidation(HttpServletRequest request) {
+        String userId="";
+        if(request.getParameter("userId")!=null) userId=request.getParameter("userId");
+        return userId;
+    }
+
+    static public String userPasswordValidation(HttpServletRequest request){
+        String userPassword="";
+        if(request.getParameter("userPassword")!=null) userPassword=request.getParameter("userPassword");
+        return userPassword;
+    }
+
+    static public int accountRemeberYnValidation(HttpServletRequest request){
+        int accountRememberYn=0;
+        if(request.getParameter("accountRememberYn")!=null) accountRememberYn=Integer.parseInt(request.getParameter("accountRememberYn"));
+        return accountRememberYn;
+    }
+
+    static public int initialLoginFlagValidation(HttpServletRequest request){
+        int initialLoginFlag=0;
+        if(request.getParameter("initialLoginFlag")!=null) initialLoginFlag = Integer.parseInt(request.getParameter("initialLoginFlag"));
+        return initialLoginFlag;
+    }
 }

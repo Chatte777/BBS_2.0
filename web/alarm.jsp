@@ -23,7 +23,7 @@
 
 <c:choose>
     <c:when test="${sessionScope.userId==null}">
-        <script>errorAlert('1', 'login.jsp?prevPage=\'GetAlarmList.do\'')</script>
+        <script>errorAlert('1')</script>
     </c:when>
 </c:choose>
 <c:set var="sessionId" value="${sessionScope.userId}"></c:set>

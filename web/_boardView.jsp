@@ -3,6 +3,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="js/errorAlert.js"></script>
 
 <c:set var="userId" value="${sessionScope.userId}"></c:set>
 <c:set var="boardName" value="${param.boardName}"></c:set>
@@ -267,6 +268,7 @@
                         document.getElementById('replyContent').value="";
                     }
                     else if(data==2) alert('로그인이 풀렸어요!');
+                    else if(data=='-1') alert('서버로부터의 알림 : 댓글 등록에 실패했습니다.');
                 },
                 error: function () {
                     alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
@@ -285,6 +287,7 @@
                         document.getElementById('replyContent').value="";
                     }
                     else if(data==2) alert('로그인이 풀렸어요!');
+                    else if(data=='-1') alert('서버로부터의 알림 : 댓글 수정에 실패했습니다.');
                 },
                 error: function () {
                     alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
@@ -303,6 +306,7 @@
                         document.getElementById('replyContent').value="";
                     }
                     else if(data==2) alert('로그인이 풀렸어요!');
+                    else if(data=='-1') alert('서버로부터의 알림 : 대댓글 등록에 실패했습니다.');
                 },
                 error: function () {
                     alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
@@ -321,6 +325,7 @@
                         document.getElementById('replyContent').value="";
                     }
                     else if(data==2) alert('로그인이 풀렸어요!');
+                    else if(data=='-1') alert('서버로부터의 알림 : 대댓글 수정에 실패했습니다.');
                 },
                 error: function () {
                     alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);

@@ -60,11 +60,11 @@
         var boardPasswordElement = document.getElementById("boardPassword");
 
         var boardName;
-        if(${param.boardName==null}) errorAlert('21', 'main.jsp');
+        if(${param.boardName==null}) errorAlert('21');
         else boardName = '${param.boardName}';
 
         var sessionId;
-        if(${sessionScope.userId==null}) errorAlert('1', 'boardUpdate.jsp?boardName='+boardName);
+        if(${sessionScope.userId==null}) errorAlert('1');
         else sessionId = '${sessionScope.userId}';
 
         var writeFlag;

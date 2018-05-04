@@ -1,5 +1,7 @@
 package user;
 
+import common.CommonValidation;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,61 +20,57 @@ public class Login extends HttpServlet {
     }
 
     protected void requestPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String userId = request.getParameter("userId");
-        String userPassword = request.getParameter("userPassword");
-        String prevPage = request.getParameter("prevPage");
+        String userId = CommonValidation.userIdValidation(request);
+        String userPassword = CommonValidation.userPasswordValidation(request);
+        int accountRememberYn = CommonValidation.accountRemeberYnValidation(request);
+        int initialLoginFlag = CommonValidation.initialLoginFlagValidation(request);
         HttpSession session = request.getSession();
         response.setContentType("text/html;charset=UTF-8");
 
         UserDAO userDAO = new UserDAO();
         int result = userDAO.login(userId, userPassword);
 
+        PrintWriter script = response.getWriter();
+        script.println("<script>");
+
         if(result == 1) {
-            if (request.getParameter("accountRememberYn") != null) {
-                if (Integer.parseInt(request.getParameter("accountRememberYn")) == 1) {
-                    Cookie idRemember = new Cookie("idRemember", userId);
-                    idRemember.setMaxAge(60 * 60 * 24 * 365);
+            Cookie cookieAccountRememberYn = new Cookie("accountRememberYn", String.valueOf(accountRememberYn));
+            cookieAccountRememberYn.setMaxAge(60 * 60 * 24 * 365);
 
-                    Cookie pwRemember = new Cookie("pwRemember", userPassword);
-                    pwRemember.setMaxAge(60 * 60 * 24 * 365);
+            if (accountRememberYn == 1) {
+                    Cookie cookieIdRemember = new Cookie("idRemember", userId);
+                    cookieIdRemember.setMaxAge(60 * 60 * 24 * 365);
 
-                    response.addCookie(idRemember);
-                    response.addCookie(pwRemember);
+                    Cookie cookiePwRemember = new Cookie("pwRemember", userPassword);
+                    cookiePwRemember.setMaxAge(60 * 60 * 24 * 365);
+
+                    response.addCookie(cookieIdRemember);
+                    response.addCookie(cookiePwRemember);
                 }
-            }
+
+            response.addCookie(cookieAccountRememberYn);
             session.setAttribute("userId", userId);
             session.setMaxInactiveInterval(60*60*24*7);
 
-            PrintWriter script = response.getWriter();
-            script.println("<script>");
-            if(prevPage.charAt(prevPage.length()-1)=='p') script.println("location.href='"+prevPage+"'");
-            else script.println("location.href="+prevPage);
-
-            script.println("</script>");
+            if(initialLoginFlag==1) script.println("location.href='main.jsp'");
+            else script.println("history.go(-2)");
         }
         else if(result == 0)
         {
-            PrintWriter script = response.getWriter();
-            script.println("<script>");
             script.println("alert('비밀번호가 틀린 것 같아요.')");
             script.println("history.back()");
-            script.println("</script>");
         }
         else if(result == -1)
         {
-            PrintWriter script = response.getWriter();
-            script.println("<script>");
             script.println("alert('존재하지 않는 아이디인걸요?')");
             script.println("history.back()");
-            script.println("</script>");
         }
         else if(result == -2)
         {
-            PrintWriter script = response.getWriter();
-            script.println("<script>");
             script.println("alert('데이터베이스 오류가 발생했습니다..')");
             script.println("history.back()");
-            script.println("</script>");
         }
+
+        script.println("</script>");
     }
 }
