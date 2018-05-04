@@ -60,4 +60,10 @@ public class CommonValidation {
         if(request.getParameter("writeFlag")!=null) writeFlag=Integer.parseInt(request.getParameter("writeFlag"));
         return writeFlag;
     }
+
+    static public int reReplyNoValidation(HttpServletRequest request){
+        int reReplyNo=0;
+        if(request.getParameter("reReplyNo")!=null) reReplyNo=Integer.parseInt(request.getParameter("reReplyNo"));
+        return reReplyNo;
+    }
 }
