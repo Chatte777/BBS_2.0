@@ -1,6 +1,7 @@
 package alarmMaster;
 
 import com.sun.xml.fastinfoset.algorithm.IntEncodingAlgorithm;
+import common.CommonValidation;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,8 +21,9 @@ public class AlarmReadCheck extends HttpServlet {
     }
 
     protected void requestPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int alarmNo = CommonValidation.alarmNoValidation(request);
         AlarmMasterDAO alarmMasterDAO = new AlarmMasterDAO();
-        int result = alarmMasterDAO.updateAlarmReadYn(Integer.parseInt(request.getParameter("alarmNo")));
+        int result = alarmMasterDAO.updateAlarmReadYn(alarmNo);
         if(result==1) response.getWriter().write("1");
     }
 }

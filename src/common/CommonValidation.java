@@ -3,6 +3,7 @@ package common;
 import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class CommonValidation {
@@ -90,4 +91,24 @@ public class CommonValidation {
         if(request.getParameter("initialLoginFlag")!=null) initialLoginFlag = Integer.parseInt(request.getParameter("initialLoginFlag"));
         return initialLoginFlag;
     }
+
+    static public int alarmNoValidation(HttpServletRequest request){
+        int alarmNo=0;
+        if(request.getParameter("alarmNo")!=null) alarmNo=Integer.parseInt(request.getParameter("alarmNo"));
+        return alarmNo;
+    }
+
+    static public String alarmTargetUserValidation(HttpServletRequest request){
+        String alarmTargetUser="";
+        if(request.getParameter("alarmTargetUser")!=null) alarmTargetUser=request.getParameter("alarmTargetUser");
+        return alarmTargetUser;
+    }
+
+    static public int pageNumberValidation(HttpServletRequest request){
+        int pageNumber=1;
+        if(request.getParameter("pageNumber")!=null) pageNumber=Integer.parseInt(request.getParameter("pageNumber"));
+        return pageNumber;
+    }
+
+
 }

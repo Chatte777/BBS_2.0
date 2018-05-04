@@ -1,5 +1,7 @@
 package alarmMaster;
 
+import common.CommonValidation;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,8 +22,9 @@ public class GetAlarmCount extends HttpServlet {
     }
 
     protected void requestPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String userId = CommonValidation.userIdValidation(request);
         AlarmMasterDAO alarmMasterDAO = new AlarmMasterDAO();
-        int alarmCount = alarmMasterDAO.getAlarmCount(request.getParameter("userId"));
+        int alarmCount = alarmMasterDAO.getAlarmCount(userId);
 
         response.getWriter().write(String.valueOf(alarmCount));
     }

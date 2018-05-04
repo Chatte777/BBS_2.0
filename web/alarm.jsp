@@ -25,8 +25,11 @@
     <c:when test="${sessionScope.userId==null}">
         <script>errorAlert('1')</script>
     </c:when>
+    <c:otherwise>
+        <c:set var="sessionId" value="${sessionScope.userId}"></c:set>
+    </c:otherwise>
 </c:choose>
-<c:set var="sessionId" value="${sessionScope.userId}"></c:set>
+
 
 <c:choose>
     <c:when test="${param.pageNumber==null}">

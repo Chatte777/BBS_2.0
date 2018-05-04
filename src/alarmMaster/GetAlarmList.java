@@ -1,5 +1,7 @@
 package alarmMaster;
 
+import common.CommonValidation;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,16 +23,12 @@ public class GetAlarmList extends HttpServlet {
     }
 
     protected void requestPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int pageNumber=1;
-        if(request.getParameter("pageNumber")!=null) pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
-
-        HttpSession session = request.getSession();
-        String sessionId = "";
-        if(session.getAttribute("userId")!=null) sessionId = session.getAttribute("userId").toString();
+        int pageNumber= CommonValidation.pageNumberValidation(request);
+        String sessionUserId = CommonValidation.sessionUserIdValidation(request);
 
         AlarmMasterDAO alarmMasterDAO = new AlarmMasterDAO();
-        ArrayList<AlarmMaster> alarmList = alarmMasterDAO.getList(pageNumber, sessionId);
-        boolean isNextPage = alarmMasterDAO.isNextPage(pageNumber, sessionId);
+        ArrayList<AlarmMaster> alarmList = alarmMasterDAO.getList(pageNumber, sessionUserId);
+        boolean isNextPage = alarmMasterDAO.isNextPage(pageNumber, sessionUserId);
 
         request.setAttribute("alarmList", alarmList);
         request.setAttribute("isNextPage", isNextPage);
