@@ -158,9 +158,8 @@
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
-
 <script>
-    window.onload = function myfunction(){
+    window.onload = function myFunction() {
         getBoardList();
     };
 
@@ -176,8 +175,8 @@
                     appendBoardListRow(data.boardDataJsonArray[i], data.etcInformationJsonArray[i]);
                 }
             },
-            error: function () {
-                alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+            error: function (request, status, error) {
+                alert(error);
             }
         });
     }

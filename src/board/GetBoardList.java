@@ -4,13 +4,11 @@ import common.CommonValidation;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -56,20 +54,13 @@ public class GetBoardList extends HttpServlet {
         paginationJsonObj.put("lastPage", String.valueOf(lastPage));
 
         //getBoardList
-        if ("myBoard".equals(boardName)) {
-            boardList = boardDAO.getMyList(pageNumber, sessionUserId);
-        } else {
-            boardList = boardDAO.getList(pageNumber, sessionUserId);
-        }
+        boardList = boardDAO.getList(pageNumber, sessionUserId);
 
         for (int i = 0; i < boardList.size(); i++) {
-            if ("myBoard".equals(boardName)) {
-                replyCnt = boardDAO.getMyReplyCnt(boardList.get(i).getTableName(), boardList.get(i).getBoardNo());
-                replyColorFlag = boardDAO.getMyReplyColor(boardList.get(i).getTableName(), boardList.get(i).getBoardNo());
-            } else {
-                replyCnt = boardDAO.getReplyCnt(boardList.get(i).getBoardNo());
-                replyColorFlag = boardDAO.getReplyColor(boardList.get(i).getBoardNo());
-            }
+
+            replyCnt = boardDAO.getReplyCnt(boardList.get(i).getBoardNo());
+            replyColorFlag = boardDAO.getReplyColor(boardList.get(i).getBoardNo());
+
             boardColorFlag = boardDAO.getBoardColor(boardList.get(i).getBoardNo());
 
             returnList.add(boardList.get(i));
@@ -80,13 +71,10 @@ public class GetBoardList extends HttpServlet {
 
                 for (int j = 0; j < reboardList.size(); j++) {
 
-                    if ("myBoard".equals(boardName)) {
-                        replyCnt = reboardDAO.getMyReplyCnt(reboardList.get(j).getTableName(), reboardList.get(j).getBoardNo());
-                        replyColorFlag = reboardDAO.getMyReplyColor(reboardList.get(j).getTableName(), reboardList.get(j).getBoardNo());
-                    } else {
-                        replyCnt = reboardDAO.getReplyCnt(reboardList.get(j).getBoardNo());
-                        replyColorFlag = reboardDAO.getReplyColor(reboardList.get(j).getBoardNo());
-                    }
+
+                    replyCnt = reboardDAO.getReplyCnt(reboardList.get(j).getBoardNo());
+                    replyColorFlag = reboardDAO.getReplyColor(reboardList.get(j).getBoardNo());
+
                     boardColorFlag = reboardDAO.getBoardColor(reboardList.get(j).getBoardNo());
 
                     JSONObject etcInformationJsonObj = new JSONObject();
@@ -116,8 +104,10 @@ public class GetBoardList extends HttpServlet {
         requestDispatcher.forward(request, response);
         */
 
+        JSONArray tmp = new JSONArray();
+
         totalJsonObj.put("etcInformationJson", etcInformationJsonArr);
-        totalJsonObj.put("boardList", returnList);
+        totalJsonObj.put("boardList", returnList.toArray());
         totalJsonObj.put("paginationJson", paginationJsonObj);
 
         response.setContentType("text/html;charset=UTF-8");
