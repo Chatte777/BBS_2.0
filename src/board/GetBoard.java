@@ -71,7 +71,7 @@ public class GetBoard extends HttpServlet {
             boardVOJson.put("boardDeleteYn", boardVO.getBoardDeleteYn());
             boardVOJson.put("boardAuthorize", boardVO.getBoardAuthorize());
             boardVOJson.put("boardReadCount", boardVO.getBoardReadCount());
-            boardVOJson.put("isReboard", boardVO.getIsRebaord());
+            boardVOJson.put("isReboard", boardVO.getIsReboard());
             boardVOJson.put("hasReboard", boardVO.getHasReboard());
             boardVOJson.put("orgBoardNo", boardVO.getOrgBoardNo());
             boardVOJson.put("boardPassword", boardVO.getBoardPassword());

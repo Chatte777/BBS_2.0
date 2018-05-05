@@ -3,9 +3,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-
 <c:set var="i" value="0"></c:set>
 <c:set var="boardName" value="${param.boardName}"></c:set>
 <c:choose>
@@ -151,13 +148,152 @@
             </c:forEach>
             </tbody>
         </table>
+        <div class="text-center">
+            <nav aria-label="...">
+                <ul class="pagination">
+                    <!--1페이지로 이동-->
+                    <li class="page-item">
+                        <a class="page-link" href="GetBoardList.do?boardName=${boardName}&pageNumber=1">처음</a>
+                    </li>
+                    <!--현재 1페이지이면 '이전'탭을 disable시키고 그게 아니라면 이전페이지로 이동-->
+                    <c:choose>
+                        <c:when test="${pageNumber!=1}">
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber-1}">이전</a>
+                            </li>
+                        </c:when>
+                        <c:otherwise>
+                            <li class="page-item disabled">
+                                <span class="page-link">이전</span>
+                            </li>
+                        </c:otherwise>
+                    </c:choose>
 
+                    <!--현재 페이지가 3페이지 이상이면 '...'탭을 활성화 시키고, 클릭시 이전 페이지묶음 목록을 로드. 그게 아니라면 버튼 비활성화-->
+                    <c:choose>
+                        <c:when test="${pageNumber>3}">
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber-3}">
+                                    <span class="glyphicon glyphicon-option-horizontal"></span></a>
+                            </li>
+                        </c:when>
+                        <c:otherwise>
+                            <li class="page-item disabled">
+                                <span class="page-link"><span
+                                        class="glyphicon glyphicon-option-horizontal"></span></span>
+                            </li>
+                        </c:otherwise>
+                    </c:choose>
 
+                    <!--현재 페이지가 2페이지 초과라면 -2페이지를 활성화시키고 -2페이지로 이동. 2페이지 이하라면 -2페이지를 비활성화.-->
+                    <c:choose>
+                        <c:when test="${pageNumber>2}">
+                            <li class="page-item"><a class="page-link"
+                                                     href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber-2}">${pageNumber-2}
+                            </a></li>
+                        </c:when>
+                        <c:otherwise>
+                            <li class="page-item disabled"><span class="page-link" style="color: darkgrey;">X</span>
+                            </li>
+                        </c:otherwise>
+                    </c:choose>
+
+                    <!--현재 페이지가 1페이지 초과이면 -1페이지를 활성화시키고 -1페이지로 이동. 1페이지 이하면 -1페이지를 비활성화.-->
+                    <c:choose>
+                        <c:when test="${pageNumber>1}">
+                            <li class="page-item"><a class="page-link"
+                                                     href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber-1}">${pageNumber-1}
+                            </a></li>
+                        </c:when>
+                        <c:otherwise>
+                            <li class="page-item disabled"><span class="page-link" style="color: darkgray;">X</span>
+                            </li>
+                        </c:otherwise>
+                    </c:choose>
+
+                    <li class="page-item active">
+                        <!-- 현재페이지는 항상 active, 활성화, 링크없음.-->
+                        <span class="page-link">${pageNumber}
+                            <span class="sr-only">(current)</span>
+                        </span>
+                    </li>
+
+                    <c:choose>
+                        <c:when test="${paginationJson.isNextPage==1}">
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber+1}">${pageNumber+1}
+                                </a>
+                            </li>
+                        </c:when>
+                        <c:otherwise>
+                            <li class="page-item disabled">
+                                <span class="page-link" style="color: darkgray;">X</span>
+                            </li>
+                        </c:otherwise>
+                    </c:choose>
+
+                    <c:choose>
+                        <c:when test="${paginationJson.isDoubleNextPage==1}">
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber+2}">${pageNumber+2}
+                                </a>
+                            </li>
+                        </c:when>
+                        <c:otherwise>
+                            <li class="page-item disabled">
+                                <span class="page-link" style="color: darkgray;">X</span>
+                            </li>
+                        </c:otherwise>
+                    </c:choose>
+
+                    <c:choose>
+                        <c:when test="${paginationJson.isTripleNextPage==1}">
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber+3}">
+                                    <span class="glyphicon glyphicon-option-horizontal"></span>
+                                </a>
+                            </li>
+                        </c:when>
+                        <c:otherwise>
+                            <li class="page-item disabled">
+                                <span class="page-link">
+                                    <span class="glyphicon glyphicon-option-horizontal"/>
+                                </span>
+                            </li>
+                        </c:otherwise>
+                    </c:choose>
+
+                    <c:choose>
+                        <c:when test="${paginationJson.isNextPage==1}">
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber+1}">다음</a>
+                            </li>
+                        </c:when>
+                        <c:otherwise>
+                            <li class="page-item disabled">
+                                <span class="page-link">다음</span>
+                            </li>
+                        </c:otherwise>
+                    </c:choose>
+
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="GetBoardList.do?boardName=${boardName}&pageNumber=${paginationJson.lastPage}">
+                            마지막
+                        </a>
+                    </li>
+                </ul>
+
+                <a href="boardWrite.jsp?boardName=${boardName}&writeFlag=1" class="btn btn-primary pull-right">글쓰기</a>
+        </div>
     </div>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-
 
 <script>
     window.onload = function myfunction(){
@@ -172,8 +308,7 @@
             success: function (data) {
                 $("#boardListTbody").empty();
                 for (var i = 0; i < data.length; i++) {
-                    alert(data);
-                    appendBoardListRow(data.boardDataJsonArray[i], data.etcInformationJsonArray[i]);
+                    appendReplyListRow(data[i]);
                 }
             },
             error: function () {
@@ -182,141 +317,34 @@
         });
     }
 
-    function appendBoardListRow(boardData, etcInformation){
-        var boardReadCount = boardData.boardReadCount;
-        var boardTitle = boardData.boardTitle.replyCnt;
-        var replyCnt = etcInformation.replyCnt;
-        var boardMakeUser =  boardData.boardMakeUser;
-        var boardMakeDt = boardData.boardMakeDt;
-        var boardAuthorize = boardData.boardAuthorize;
-        var isReboard = boardData.isReboard;
-        var tableName = boardData.tableName;
-        var boardPassword = boardData.boardPassword;
-        var boardColorFlag = etcInformation.boardColorFlag;
-        var replyColorFlag = etcInformation.replyColorFlag;
+    function appendBoardListRow(data){
+        var readCount = data.replyCnt;
+        var boardTitle = data.replyMakeDt.substring(0, 11) + data.replyMakeDt.substring(11, 13) + "시" + data.replyMakeDt.substring(14, 16) + "분";
+        var replyCnt
+        var boardMakeUser
+        var boardMakeDt
 
-        var row = "";
+        var row = "<tr onclick=\"reReplyClick('" + data.replyNo + "', '" + replyContent + "')\">" +
+            "<td></td>" +
+            "<td align=\"left\" style=\"word-break: break-all;\">" + replyContent + "</td>" +
+            "<td align=\"center\" style=\"width: 10%;\" onclick=\"event.cancelBubble = true;\">" +
+            "<a onclick=\"reReplyClick('" + data.replyNo + "', '" + replyContent + "')\"" +
+            "type=\"button\" class=\"glyphicon glyphicon-share-alt\" style=\"color: seagreen; padding:0px 5px 0px 0px;\"/>";
 
-        if(isReboard==1){
-            row +=
-                "<tr>" +
-                "<td>"+boardReadCount+"</td>" +
-                "<td align=\"left\" colspan=\"2\">";
-
-            if(boardAuthorize==2) row += "<span class=\"glyphicon glyphicon-lock\" style=\"color: #bbbbbb;\">&nbsp;</span>";
-
-            row +=
-                "<span onclick=\"onClickBoardTitle('"+tableName+"', '"+boardNo+"', '"+boardAuthorize+"', '"+boardPassword+"')\"" +
-                "style=\"cursor: pointer;\">";
-
-            switch (boardColorFlag){
-                case 1:
-                    row += "<span style=\"color: #DE2A45;\">"+boardTitle+"</span>";
-                    break;
-                case 2:
-                    row += "<span style=\"color: #10BF00;\">"+boardTitle+"</span>";
-                    break;
-                case 3:
-                    row += "<span style=\"color: #2865BF;\">"+boardTitle+"</span>";
-                    break;
-                case 4:
-                    row += "<span style=\"color: black;\">"+boardTitle+"</span>";
-                    break;
-            }
-
-            row +=
-                "</span>" +
-                "</td>" +
-                "<td>";
-
-            switch (replyColorFlag){
-                case 1:
-                    row += "<span style=\"color: #7A447A;\">"+replyCnt+"</span>";
-                    break;
-                case 2:
-                    row += "<span style=\"color: #DE2A45;\">"+replyCnt+"</span>";
-                    break;
-                case 3:
-                    row += "<span style=\"color: #F5762C;\">"+replyCnt+"</span>";
-                    break;
-                case 4:
-                    row += "<span style=\"color: #10BF00;\">"+replyCnt+"</span>";
-                    break;
-                case 5:
-                    row += "<span style=\"color: #2865BF;\">"+replyCnt+"</span>";
-                    break;
-                case 6:
-                    row += "<span style=\"color: black;\">"+replyCnt+"</span>";
-                    break;
-            }
-
-            row +=
-                "</td>" +
-                "<td>" + boardMakeUser + "</td>" +
-                "<td>" + boardMakeDt + "</td>" +
-                "</tr>";
-        } else {
-            row +=
-                "<tr style=\"height: 1px; font-size: 0.875em; background-color: #FEFEF2; margin: 1em;\">" +
-                "<td>" + boardReadCount + "</td>" +
-                "<td align=\"left\" colspan=\"2\"" +
-                "<span class=\"glyphicon glyphicon-menu-right\" style=\"color: #bbbbbb;\">&nbsp;</span>";
-
-            if(boardAuthorize==2) row += "<span class=\"glyphicon glyphicon-lock\" style=\"color: #bbbbbb;\">&nbsp;</span>";
-
-            row +=
-                "<span onclick=\"onClickBoardTitle('"+ tableName +"', '"+ boardNo +"', '"+ boardAuthorize +"', '"+boardPassword+"')\"" +
-                "style=\"cursor: pointer;\">";
-
-            switch(boardColorFlag){
-                case 1:
-                    row += "<span style=\"color: #DE2A45;\">"+boardTitle+"</span>";
-                    break;
-                case 2:
-                    row += "<span style=\"color: #10BF00;\">"+boardTitle+"</span>";
-                    break;
-                case 3:
-                    row += "<span style=\"color: #2865BF;\">"+boardTitle+"</span>";
-                    break;
-                case 4:
-                    row += "<span style=\"color: black;\">"+boardTitle+"</span>";
-                    break;
-            }
-
-            row +=
-                "</span>" +
-                "</td>" +
-                "<td>";
-
-            switch (replyColorFlag){
-                case 1:
-                    row += "<span style=\"color: #7A447A;\">"+replyCnt+"</span>";
-                    break;
-                case 2:
-                    row += "<span style=\"color: #DE2A45;\">"+replyCnt+"</span>";
-                    break;
-                case 3:
-                    row += "<span style=\"color: #F5762C;\">"+replyCnt+"</span>";
-                    break;
-                case 4:
-                    row += "<span style=\"color: #10BF00;\">"+replyCnt+"</span>";
-                    break;
-                case 5:
-                    row += "<span style=\"color: #2865BF;\">"+replyCnt+"</span>";
-                    break;
-                case 6:
-                    row += "<span style=\"color: black;\">"+replyCnt+"</span>";
-                    break;
-            }
-
-            row+=
-                "</td>" +
-                "<td>" + boardMakeUser + "</td>" +
-                "<td>" + boardMakeDt + "</td>" +
-                "</tr>";
+        if (data.replyMakeUser == '${userId}') {
+            row += "<a onclick=\"replyModifyClick('" + replyContent + "', '" + data.replyNo + "')\" type=\"button\"" +
+                "class=\"glyphicon glyphicon-pencil\" style=\"color: limegreen; padding:5px;\"/>" +
+                "<a onclick=\"if(confirm('정말 삭제하시겠습니까?')) replyDeleteClick('" + data.replyNo + "', this)\"" +
+                "type=\"button\" class=\"glyphicon glyphicon-remove\" style=\"color: #a9a9a9; padding:5px;\"/>";
         }
 
-        $("#boardListTbody").append(row);
+        row += "</td>" +
+            "<td style=\"width: 10%;\">" + data.replyMakeUser + "</td>" +
+            "<td style=\"width: 15%;\">" + replyMakeDt + "</td>" +
+            "</tr>";
+
+        $("#replyListTable").append(row);
+        if (data.hasReReply == 2) getReReplyList(data.replyNo);
     }
 
     function onClickBoardTitle(boardName, boardNo, boardAuthorize, boardPassword) {

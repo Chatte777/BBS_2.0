@@ -51,6 +51,9 @@
             </tbody>
         </table>
         <div style="margin-bottom: 10px;" align="right">
+            <c:if test="${boardVO.isReboard==1}">
+                <a href="/boardWrite.jsp?boardName=${boardName}&boardNo=${boardVO.boardNo}&writeFlag=3" class="btn btn-primary">답글달기</a>
+            </c:if>
             <c:choose>
                 <c:when test="${userId==boardVO.boardMakeUser}">
                     <a href="/boardWrite.jsp?boardName=${boardName}&boardNo=${boardVO.boardNo}&writeFlag=2" class="btn btn-primary">수정</a>
@@ -105,7 +108,10 @@
         var replyContent = data.replyContent.replace(/\r\n/g, "<br>").replace(/\"/g, "〃").replace(/'/g, "＇");
         var replyMakeDt = data.replyMakeDt.substring(0, 11) + data.replyMakeDt.substring(11, 13) + "시" + data.replyMakeDt.substring(14, 16) + "분";
 
-        var row = "<tr onclick=\"reReplyClick('" + data.replyNo + "', '" + replyContent + "')\">" +
+        var row = "";
+
+        row +=
+            "<tr onclick=\"reReplyClick('" + data.replyNo + "', '" + replyContent + "')\">" +
             "<td></td>" +
             "<td align=\"left\" style=\"word-break: break-all;\">" + replyContent + "</td>" +
             "<td align=\"center\" style=\"width: 10%;\" onclick=\"event.cancelBubble = true;\">" +
@@ -113,13 +119,15 @@
             "type=\"button\" class=\"glyphicon glyphicon-share-alt\" style=\"color: seagreen; padding:0px 5px 0px 0px;\"/>";
 
         if (data.replyMakeUser == '${userId}') {
-            row += "<a onclick=\"replyModifyClick('" + replyContent + "', '" + data.replyNo + "')\" type=\"button\"" +
+            row +=
+                "<a onclick=\"replyModifyClick('" + replyContent + "', '" + data.replyNo + "')\" type=\"button\"" +
                 "class=\"glyphicon glyphicon-pencil\" style=\"color: limegreen; padding:5px;\"/>" +
                 "<a onclick=\"if(confirm('정말 삭제하시겠습니까?')) replyDeleteClick('" + data.replyNo + "', this)\"" +
                 "type=\"button\" class=\"glyphicon glyphicon-remove\" style=\"color: #a9a9a9; padding:5px;\"/>";
         }
 
-        row += "</td>" +
+        row +=
+            "</td>" +
             "<td style=\"width: 10%;\">" + data.replyMakeUser + "</td>" +
             "<td style=\"width: 15%;\">" + replyMakeDt + "</td>" +
             "</tr>";

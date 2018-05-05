@@ -56,7 +56,7 @@ public class BoardWrite extends HttpServlet {
                 else boardPassword = "0000";
             }
 
-            //writeFlag==1 : 글 작성, writeFlag==2 : 글 수정, writeFlag==3 : 답글
+            //writeFlag==1 : 글 작성, writeFlag==2 : 글 수정, writeFlag==3 : 답글작성
             if(writeFlag==1){
                 // DAO.write 호출
                 result = boardDAO.write(boardTitle, sessionUserId, boardContent, boardAuthorize, boardNo, boardPassword);

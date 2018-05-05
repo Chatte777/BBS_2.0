@@ -102,7 +102,7 @@ public class BoardDAO {
             boardVO.setBoardDeleteYn(rs.getInt(11));
             boardVO.setBoardAuthorize(rs.getInt(12));
             boardVO.setBoardReadCount(rs.getInt(13));
-            boardVO.setIsRebaord(rs.getInt(14));
+            boardVO.setIsReboard(rs.getInt(14));
             boardVO.setHasReboard(rs.getInt(15));
             boardVO.setOrgBoardNo(rs.getInt(16));
             boardVO.setBoardPassword(rs.getString(17));

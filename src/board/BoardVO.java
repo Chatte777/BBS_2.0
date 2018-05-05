@@ -14,7 +14,7 @@ public class BoardVO {
     private int boardDeleteYn;
     private int boardAuthorize;
     private int boardReadCount;
-    private int isRebaord;
+    private int isReboard;
     private int hasReboard;
     private int orgBoardNo;
     private String boardPassword;
@@ -99,12 +99,12 @@ public class BoardVO {
     public void setBoardReadCount(int boardReadCount) {
         this.boardReadCount = boardReadCount;
     }
-    public int getIsRebaord() {
-        return isRebaord;
+    public int getIsReboard() {
+        return isReboard;
     }
 
-    public void setIsRebaord(int isRebaord) {
-        this.isRebaord = isRebaord;
+    public void setIsReboard(int isReboard) {
+        this.isReboard = isReboard;
     }
 
     public int getHasReboard() {
