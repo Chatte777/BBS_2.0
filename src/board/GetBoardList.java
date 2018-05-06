@@ -1,5 +1,7 @@
 package board;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import common.CommonValidation;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -104,10 +106,14 @@ public class GetBoardList extends HttpServlet {
         requestDispatcher.forward(request, response);
         */
 
-        JSONArray tmp = new JSONArray();
+        //JSONArray tmp = new JSONArray();
+        String tmpString = "";
+        Gson gson = new Gson();
+        tmpString = gson.toJson(returnList);
+
 
         totalJsonObj.put("etcInformationJson", etcInformationJsonArr);
-        totalJsonObj.put("boardList", returnList.toArray());
+        totalJsonObj.put("boardList", tmpString);
         totalJsonObj.put("paginationJson", paginationJsonObj);
 
         response.setContentType("text/html;charset=UTF-8");

@@ -169,6 +169,7 @@
             url: "GetBoardList.ajax?boardName=${boardName}&pageNumber=${pageNumber}",
             dataType: "json",
             success: function (data) {
+                alert(data.etcInformationJson[1].replyCnt);
                 $("#boardListTbody").empty();
                 for (var i = 0; i < data.length; i++) {
                     alert(data);
