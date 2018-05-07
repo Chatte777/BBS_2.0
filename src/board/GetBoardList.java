@@ -1,7 +1,5 @@
 package board;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import common.CommonValidation;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -94,27 +92,36 @@ public class GetBoardList extends HttpServlet {
             etcInformationJsonObj.put("boardColorFlag", String.valueOf(boardColorFlag));
             etcInformationJsonObj.put("replyColorFlag", String.valueOf(replyColorFlag));
             etcInformationJsonArr.add(etcInformationJsonObj);
+        }
 
+        JSONArray returnJsonArray = new JSONArray();
+
+
+        for(int i=0; i<returnList.size(); i++){
+            JSONObject returnJsonObject = new JSONObject();
+            returnJsonObject.put("boardReadCount", returnList.get(i).getBoardReadCount());
+            returnJsonObject.put("boardTitle", returnList.get(i).getBoardTitle());
+            returnJsonObject.put("boardMakeUser", returnList.get(i).getBoardMakeUser());
+            returnJsonObject.put("boardMakeDT", returnList.get(i).getBoardMakeDt());
+            returnJsonObject.put("boardAuthorize", returnList.get(i).getBoardAuthorize());
+            returnJsonObject.put("isReboard", returnList.get(i).getIsReboard());
+            returnJsonObject.put("tableName", returnList.get(i).getTableName());
+            returnJsonObject.put("boardPassword", returnList.get(i).getBoardPassword());
+            returnJsonArray.add(returnJsonObject);
         }
 
         /*
         request.setAttribute("etcInformationJson", etcInformationJsonArr);
-        request.setAttribute("boardList", returnList);
+        request.setAttribute("boardList", returnJsonArray);
         request.setAttribute("paginationJson", paginationJsonObj);
+
 
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("board.jsp");
         requestDispatcher.forward(request, response);
-        */
-
-        //JSONArray tmp = new JSONArray();
-        String tmpString = "";
-        Gson gson = new Gson();
-        tmpString = gson.toJson(returnList);
-
-
-        totalJsonObj.put("etcInformationJson", etcInformationJsonArr);
-        totalJsonObj.put("boardList", tmpString);
-        totalJsonObj.put("paginationJson", paginationJsonObj);
+*/
+        totalJsonObj.put("boardData", returnJsonArray);
+        totalJsonObj.put("etcInformation", etcInformationJsonArr);
+        totalJsonObj.put("pagination", paginationJsonObj );
 
         response.setContentType("text/html;charset=UTF-8");
         response.getWriter().write(totalJsonObj.toString());

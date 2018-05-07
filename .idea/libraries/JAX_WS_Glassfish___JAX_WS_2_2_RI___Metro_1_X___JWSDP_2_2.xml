@@ -33,6 +33,8 @@
     <JAVADOC>
       <root url="file://C:/WebApp/commons-collections4-4.1/apidocs" />
     </JAVADOC>
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://C:/WebApp/gson-2.8.4-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

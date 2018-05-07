@@ -169,11 +169,9 @@
             url: "GetBoardList.ajax?boardName=${boardName}&pageNumber=${pageNumber}",
             dataType: "json",
             success: function (data) {
-                alert(data.etcInformationJson[1].replyCnt);
                 $("#boardListTbody").empty();
                 for (var i = 0; i < data.length; i++) {
-                    alert(data);
-                    appendBoardListRow(data.boardDataJsonArray[i], data.etcInformationJsonArray[i]);
+                    appendBoardListRow(data.boardData[i], data.etcInformation[i]);
                 }
             },
             error: function (request, status, error) {
@@ -183,6 +181,7 @@
     }
 
     function appendBoardListRow(boardData, etcInformation){
+        alert(boardData);
         var boardReadCount = boardData.boardReadCount;
         var boardTitle = boardData.boardTitle.replyCnt;
         var replyCnt = etcInformation.replyCnt;
