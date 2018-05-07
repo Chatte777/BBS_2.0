@@ -30,11 +30,6 @@ public class GetBoard extends HttpServlet {
         String boardName = "";
         if (request.getParameter("boardName") != null) boardName = request.getParameter("boardName");
 
-        String userId = null;
-        if (session.getAttribute("userId") != null) {
-            userId = (String) session.getAttribute("userId");
-        }
-
         int boardNo = 0;
         if (request.getParameter("boardNo") != null) {
             boardNo = Integer.parseInt(request.getParameter("boardNo"));

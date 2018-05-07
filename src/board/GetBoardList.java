@@ -102,11 +102,12 @@ public class GetBoardList extends HttpServlet {
             returnJsonObject.put("boardReadCount", returnList.get(i).getBoardReadCount());
             returnJsonObject.put("boardTitle", returnList.get(i).getBoardTitle());
             returnJsonObject.put("boardMakeUser", returnList.get(i).getBoardMakeUser());
-            returnJsonObject.put("boardMakeDT", returnList.get(i).getBoardMakeDt());
+            returnJsonObject.put("boardMakeDt", returnList.get(i).getBoardMakeDt());
             returnJsonObject.put("boardAuthorize", returnList.get(i).getBoardAuthorize());
             returnJsonObject.put("isReboard", returnList.get(i).getIsReboard());
             returnJsonObject.put("tableName", returnList.get(i).getTableName());
             returnJsonObject.put("boardPassword", returnList.get(i).getBoardPassword());
+            returnJsonObject.put("boardNo", returnList.get(i).getBoardNo());
             returnJsonArray.add(returnJsonObject);
         }
 

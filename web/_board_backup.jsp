@@ -214,7 +214,6 @@
                     </c:choose>
 
                     <li class="page-item active">
-                        <!-- 현재페이지는 항상 active, 활성화, 링크없음.-->
                         <span class="page-link">${pageNumber}
                             <span class="sr-only">(current)</span>
                         </span>
@@ -296,57 +295,6 @@
 </div>
 
 <script>
-    window.onload = function myfunction(){
-        getBoardList();
-    };
-
-    function getBoardList(){
-        $.ajax({
-            type: "POST",
-            url: "GetBoardList.ajax?boardName=${boardName}&pageNumber=${pageNumber}",
-            dataType: "json",
-            success: function (data) {
-                $("#boardListTbody").empty();
-                for (var i = 0; i < data.length; i++) {
-                    appendReplyListRow(data[i]);
-                }
-            },
-            error: function () {
-                alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-            }
-        });
-    }
-
-    function appendBoardListRow(data){
-        var readCount = data.replyCnt;
-        var boardTitle = data.replyMakeDt.substring(0, 11) + data.replyMakeDt.substring(11, 13) + "시" + data.replyMakeDt.substring(14, 16) + "분";
-        var replyCnt
-        var boardMakeUser
-        var boardMakeDt
-
-        var row = "<tr onclick=\"reReplyClick('" + data.replyNo + "', '" + replyContent + "')\">" +
-            "<td></td>" +
-            "<td align=\"left\" style=\"word-break: break-all;\">" + replyContent + "</td>" +
-            "<td align=\"center\" style=\"width: 10%;\" onclick=\"event.cancelBubble = true;\">" +
-            "<a onclick=\"reReplyClick('" + data.replyNo + "', '" + replyContent + "')\"" +
-            "type=\"button\" class=\"glyphicon glyphicon-share-alt\" style=\"color: seagreen; padding:0px 5px 0px 0px;\"/>";
-
-        if (data.replyMakeUser == '${userId}') {
-            row += "<a onclick=\"replyModifyClick('" + replyContent + "', '" + data.replyNo + "')\" type=\"button\"" +
-                "class=\"glyphicon glyphicon-pencil\" style=\"color: limegreen; padding:5px;\"/>" +
-                "<a onclick=\"if(confirm('정말 삭제하시겠습니까?')) replyDeleteClick('" + data.replyNo + "', this)\"" +
-                "type=\"button\" class=\"glyphicon glyphicon-remove\" style=\"color: #a9a9a9; padding:5px;\"/>";
-        }
-
-        row += "</td>" +
-            "<td style=\"width: 10%;\">" + data.replyMakeUser + "</td>" +
-            "<td style=\"width: 15%;\">" + replyMakeDt + "</td>" +
-            "</tr>";
-
-        $("#replyListTable").append(row);
-        if (data.hasReReply == 2) getReReplyList(data.replyNo);
-    }
-
     function onClickBoardTitle(boardName, boardNo, boardAuthorize, boardPassword) {
         if (boardAuthorize == 1) location.href = "GetBoard.do?boardName=" + boardName + "&boardNo=" + boardNo+"&viewFlag=1";
         else if (boardAuthorize == 2) {
