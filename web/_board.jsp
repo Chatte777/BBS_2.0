@@ -4,7 +4,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="js/jquery.cookie.js"></script>
 
 <c:set var="i" value="0"></c:set>
 <c:set var="boardName" value="${param.boardName}"></c:set>
@@ -43,14 +44,15 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
 
 <script>
     var _currentPageNumber = 1;
 
-    window.onload = function myFunction() {
+    $(document).ready(function myFunction() {
+        if($.cookie('${boardName}')) _currentPageNumber=$.cookie('${boardName}');
         getBoardList(_currentPageNumber);
-    };
+    });
 
     function getBoardList(currentPageNumber){
         $.ajax({
@@ -63,6 +65,7 @@
                     appendBoardListRow(data.boardData[i], data.etcInformation[i]);
                 }
                 pagination(currentPageNumber, data.pagination);
+                $.cookie('${boardName}' , currentPageNumber, { expires : 1000*60*60*24 });
             },
             error: function (request, status, error) {
                 alert(error);

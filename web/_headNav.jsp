@@ -8,14 +8,14 @@
 
 <nav class="navbar navbar-default">
     <div class="navbar-header">
-        <img src="/images/iStock-662195090.jpg">
         <button type="button" class="navbar-toggle collpased"
                 data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
                 aria-expanded="false">
             <span class="icon-bar"></span> <span class="icon-bar"></span> <span
                 class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="/main.jsp">DREAMY KAT</a>
+        <a class="navbar-brand" href="/main.jsp">
+            <img src="/images/iStock-662195090.jpg" style="max-width: 100px; margin-top: -7px">DREAMY KAT</a>
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -61,7 +61,8 @@
 </nav>
 
 <script type="text/javascript">
-    window.onload = function getAlarmCount() {
+    $(document).ready(function getAlarmCount() {
+        alert("asfd");
         $.ajax({
             type: "POST",
             url: "GetAlarmCount.do?userId=${userId}",
@@ -69,7 +70,7 @@
             success: function (data) {
                 if(data!=0)  document.getElementById("alarmCount").innerText = data;
             },
-            error: function () {
+            error: function (request, status, error) {
                 alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
             }
         });

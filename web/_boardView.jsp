@@ -51,6 +51,7 @@
             </tbody>
         </table>
         <div style="margin-bottom: 10px;" align="right">
+            <a href="/board.jsp?boardName=${boardName}" class="btn btn-primary">목록</a>
             <c:if test="${boardVO.isReboard==1}">
                 <a href="/boardWrite.jsp?boardName=${boardName}&boardNo=${boardVO.boardNo}&writeFlag=3" class="btn btn-primary">답글달기</a>
             </c:if>
@@ -222,8 +223,8 @@
             url: "ReReplyDelete.ajax?boardName=${boardName}&boardNo=${boardNo}&replyNo=" + replyNo + "&reReplyNo=" + reReplyNo,
             dataType: "text",
             success: function () {
+                thisObject.closest("tr").nextElementSibling.remove();
                 thisObject.closest("tr").remove();
-                thisObject.closest("tr").next("tr").remove();
             },
             error: function () {
                 alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
@@ -242,7 +243,7 @@
         _updateFlag = 2;
         _replyNo = replyNo;
         document.getElementById("replyContent").focus();
-        document.getElementById("replyContent").value = replyContent;
+        document.getElementById("replyContent").value = replyContent.replace(/<br>/g, "\n");
     }
 
     function reReplyModifyClick(reReplyContent, replyNo, reReplyNo) {
@@ -250,7 +251,7 @@
         _replyNo = replyNo;
         _reReplyNo = reReplyNo;
         document.getElementById("replyContent").focus();
-        document.getElementById("replyContent").value = reReplyContent;
+        document.getElementById("replyContent").value = reReplyContent.replace(/<br>/g, "\n");
     }
 
     function replySubmit() {
@@ -296,6 +297,7 @@
                     }
                     else if(data==2) alert('로그인이 풀렸어요!');
                     else if(data=='-1') alert('서버로부터의 알림 : 댓글 수정에 실패했습니다.');
+                    _updateFlag = 1;
                 },
                 error: function () {
                     alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
@@ -312,6 +314,7 @@
                     if(data==1) {
                         getReplyList();
                         document.getElementById('replyContent').value="";
+                        _updateFlag = 1;
                     }
                     else if(data==2) alert('로그인이 풀렸어요!');
                     else if(data=='-1') alert('서버로부터의 알림 : 대댓글 등록에 실패했습니다.');
@@ -331,6 +334,7 @@
                     if(data==1) {
                         getReplyList();
                         document.getElementById('replyContent').value="";
+                        _updateFlag = 1;
                     }
                     else if(data==2) alert('로그인이 풀렸어요!');
                     else if(data=='-1') alert('서버로부터의 알림 : 대댓글 수정에 실패했습니다.');

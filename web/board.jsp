@@ -24,7 +24,6 @@
 <jsp:include page="_headNav.jsp" flush="false"/>
 <jsp:include page="_board.jsp" flush="false" />
 
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script src="js/bootstrap.js"></script>
 </body>
 </html>
