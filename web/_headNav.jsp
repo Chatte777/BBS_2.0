@@ -20,9 +20,9 @@
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-            <li><a href="GetBoardList.do?boardName=notify">공지 및 건의</a></li>
-            <li><a href="GetBoardList.do?boardName=mountain">산악일기</a></li>
-            <li><a href="GetBoardList.do?boardName=military">국방부학습지</a></li>
+            <li><a href="board.jsp?boardName=notify">공지 및 건의</a></li>
+            <li><a href="board.jsp?boardName=mountain">산악일기</a></li>
+            <li><a href="board.jsp?boardName=military">국방부학습지</a></li>
             <c:if test="${userId!=null}">
                 <li><a href="GetAlarmList.do">
                     알림
@@ -30,7 +30,7 @@
                 </a></li>
             </c:if>
             <c:if test="${userId=='slop1434'||userId=='chatte777'}">
-                <li><a href="GetBoardList.do?boardName=thread">대화의 숲</a></li>
+                <li><a href="board.jsp?boardName=thread">대화의 숲</a></li>
             </c:if>
         </ul>
 

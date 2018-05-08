@@ -74,9 +74,9 @@ public class BoardWrite extends HttpServlet {
                 setCookie(boardTitle, boardContent, boardAuthorize, response);
 
                 script.println("alert('서버로부터의 알림 : 글쓰기에 실패했습니다.')");
-                script.println("location.href='GetBoardList.do?boardName="+boardName+"'");
+                script.println("location.href='board.jsp?boardName="+boardName+"'");
             } else {
-                script.println("location.href='GetBoardList.do?boardName="+boardName+"'");
+                script.println("location.href='board.jsp?boardName="+boardName+"'");
             }
         }
 

@@ -41,7 +41,7 @@ public class GetBoard extends HttpServlet {
             PrintWriter script = response.getWriter();
             script.println("<script>");
             script.println("alert('서버로부터의 알림 : 유효하지 않은 글입니다.')");
-            script.println("location.href = 'GetBoardList.do?boardName=" + boardName + "'");
+            script.println("location.href = 'board.jsp?boardName=" + boardName + "'");
             script.println("</script>");
         }
         BoardVO boardVO = new BoardDAO(boardName).getBoardVO(boardNo);

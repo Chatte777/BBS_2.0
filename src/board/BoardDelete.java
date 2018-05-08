@@ -48,7 +48,7 @@ public class BoardDelete extends HttpServlet {
                     script.println("alert('서버로부터의 알림 : 글 삭제에 실패했습니다.')");
                     script.println("history.back()");
                 } else {
-                    script.println("location.href='GetBoardList.do?boardName=" + boardName + "'");
+                    script.println("location.href='board.jsp?boardName=" + boardName + "'");
                 }
             }
         }

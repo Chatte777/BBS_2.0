@@ -153,14 +153,14 @@
                 <ul class="pagination">
                     <!--1페이지로 이동-->
                     <li class="page-item">
-                        <a class="page-link" href="GetBoardList.do?boardName=${boardName}&pageNumber=1">처음</a>
+                        <a class="page-link" href="board.jsp?boardName=${boardName}&pageNumber=1">처음</a>
                     </li>
                     <!--현재 1페이지이면 '이전'탭을 disable시키고 그게 아니라면 이전페이지로 이동-->
                     <c:choose>
                         <c:when test="${pageNumber!=1}">
                             <li class="page-item">
                                 <a class="page-link"
-                                   href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber-1}">이전</a>
+                                   href="board.jsp?boardName=${boardName}&pageNumber=${pageNumber-1}">이전</a>
                             </li>
                         </c:when>
                         <c:otherwise>
@@ -175,7 +175,7 @@
                         <c:when test="${pageNumber>3}">
                             <li class="page-item">
                                 <a class="page-link"
-                                   href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber-3}">
+                                   href="board.jsp?boardName=${boardName}&pageNumber=${pageNumber-3}">
                                     <span class="glyphicon glyphicon-option-horizontal"></span></a>
                             </li>
                         </c:when>
@@ -191,7 +191,7 @@
                     <c:choose>
                         <c:when test="${pageNumber>2}">
                             <li class="page-item"><a class="page-link"
-                                                     href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber-2}">${pageNumber-2}
+                                                     href="board.jsp?boardName=${boardName}&pageNumber=${pageNumber-2}">${pageNumber-2}
                             </a></li>
                         </c:when>
                         <c:otherwise>
@@ -204,7 +204,7 @@
                     <c:choose>
                         <c:when test="${pageNumber>1}">
                             <li class="page-item"><a class="page-link"
-                                                     href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber-1}">${pageNumber-1}
+                                                     href="board.jsp?boardName=${boardName}&pageNumber=${pageNumber-1}">${pageNumber-1}
                             </a></li>
                         </c:when>
                         <c:otherwise>
@@ -223,7 +223,7 @@
                         <c:when test="${paginationJson.isNextPage==1}">
                             <li class="page-item">
                                 <a class="page-link"
-                                   href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber+1}">${pageNumber+1}
+                                   href="board.jsp?boardName=${boardName}&pageNumber=${pageNumber+1}">${pageNumber+1}
                                 </a>
                             </li>
                         </c:when>
@@ -238,7 +238,7 @@
                         <c:when test="${paginationJson.isDoubleNextPage==1}">
                             <li class="page-item">
                                 <a class="page-link"
-                                   href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber+2}">${pageNumber+2}
+                                   href="board.jsp?boardName=${boardName}&pageNumber=${pageNumber+2}">${pageNumber+2}
                                 </a>
                             </li>
                         </c:when>
@@ -253,7 +253,7 @@
                         <c:when test="${paginationJson.isTripleNextPage==1}">
                             <li class="page-item">
                                 <a class="page-link"
-                                   href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber+3}">
+                                   href="board.jsp?boardName=${boardName}&pageNumber=${pageNumber+3}">
                                     <span class="glyphicon glyphicon-option-horizontal"></span>
                                 </a>
                             </li>
@@ -271,7 +271,7 @@
                         <c:when test="${paginationJson.isNextPage==1}">
                             <li class="page-item">
                                 <a class="page-link"
-                                   href="GetBoardList.do?boardName=${boardName}&pageNumber=${pageNumber+1}">다음</a>
+                                   href="board.jsp?boardName=${boardName}&pageNumber=${pageNumber+1}">다음</a>
                             </li>
                         </c:when>
                         <c:otherwise>
@@ -283,7 +283,7 @@
 
                     <li class="page-item">
                         <a class="page-link"
-                           href="GetBoardList.do?boardName=${boardName}&pageNumber=${paginationJson.lastPage}">
+                           href="board.jsp?boardName=${boardName}&pageNumber=${paginationJson.lastPage}">
                             마지막
                         </a>
                     </li>
