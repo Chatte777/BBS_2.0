@@ -7,12 +7,13 @@
 </c:if>
 
 <nav class="navbar navbar-default">
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggle collpased"
+    <div class="navbar-header ">
+        <button type="button" class="navbar-toggle collapsed"
                 data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
                 aria-expanded="false">
-            <span class="icon-bar"></span> <span class="icon-bar"></span> <span
-                class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="/main.jsp">
             <img src="/images/iStock-662195090.jpg" style="max-width: 100px; margin-top: -7px">DREAMY KAT</a>
