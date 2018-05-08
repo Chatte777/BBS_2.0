@@ -5,6 +5,14 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="js/errorAlert.js"></script>
 
+<style>
+    .btn {
+        background-color: transparent;
+        color:blue;
+        border-color:powderblue;
+    }
+</style>
+
 <c:set var="userId" value="${sessionScope.userId}"></c:set>
 <c:set var="boardName" value="${param.boardName}"></c:set>
 <c:set var="boardNo" value="${param.boardNo}"></c:set>
@@ -51,10 +59,6 @@
             </tbody>
         </table>
         <div style="margin-bottom: 10px;" align="right">
-            <a href="/board.jsp?boardName=${boardName}" class="btn btn-primary">목록</a>
-            <c:if test="${boardVO.isReboard==1}">
-                <a href="/boardWrite.jsp?boardName=${boardName}&boardNo=${boardVO.boardNo}&writeFlag=3" class="btn btn-primary">답글달기</a>
-            </c:if>
             <c:choose>
                 <c:when test="${userId==boardVO.boardMakeUser}">
                     <a href="/boardWrite.jsp?boardName=${boardName}&boardNo=${boardVO.boardNo}&writeFlag=2" class="btn btn-primary">수정</a>
@@ -90,6 +94,13 @@
         </table>
         <input type="hidden" name="boardNo" id="boardNo" value="${boardNo}">
     </form>
+    <div class="row" style="align-: right">
+        <a href="/board.jsp?boardName=${boardName}" class="btn">목록</a>
+        <c:if test="${boardVO.isReboard==1}">
+            <a href="/boardWrite.jsp?boardName=${boardName}&boardNo=${boardVO.boardNo}&writeFlag=3" class="btn">답글달기</a>
+        </c:if>
+    </div>
+
 </div>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
