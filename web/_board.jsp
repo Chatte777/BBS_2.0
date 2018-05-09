@@ -3,9 +3,10 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="js/jquery.cookie.js"></script>
+<script src="js/errorAlert.js"></script>
 
 <c:set var="i" value="0"></c:set>
 <c:set var="boardName" value="${param.boardName}"></c:set>
@@ -49,10 +50,29 @@
 <script>
     var _currentPageNumber = 1;
 
-    $(document).ready(function myFunction() {
-        if($.cookie('${boardName}')) _currentPageNumber=$.cookie('${boardName}');
-        getBoardList(_currentPageNumber);
-    });
+    function getBoardListSwitch(currentPageNumber){
+        if(${boardName=='myBoard'}) getMyBoardList(currentPageNumber);
+        else getBoardList(currentPageNumber);
+    }
+
+    function getMyBoardList(currentPageNumber){
+        $.ajax({
+            type: "POST",
+            url: "GetMyBoardList.ajax?pageNumber="+currentPageNumber,
+            dataType: "json",
+            success: function (data) {
+                $("#boardListTbody").empty();
+                for (var i = 0; i < data.boardData.length; i++) {
+                    appendBoardListRow(data.boardData[i], data.etcInformation[i]);
+                }
+                pagination(currentPageNumber, data.pagination);
+                $.cookie('${boardName}' , currentPageNumber, { expires : 1000*60*60*24 });
+            },
+            error: function (request, status, error) {
+                alert(error);
+            }
+        });
+    }
 
     function getBoardList(currentPageNumber){
         $.ajax({
@@ -73,7 +93,16 @@
         });
     }
 
-    function appendBoardListRow(boardData, etcInformation){
+    $(document).ready(function myFunction() {
+        if(${sessionScope.userId==null}) errorAlert('1');
+
+        if($.cookie('${boardName}')) _currentPageNumber=$.cookie('${boardName}');
+        if(${param.boardName=='myBoard'}) getMyBoardList(_currentPageNumber);
+        else getBoardList(_currentPageNumber);
+
+    });
+
+    function appendBoardListRow(boardData, etcInformation){;
         var boardReadCount = boardData.boardReadCount;
         var boardTitle = boardData.boardTitle.replace(/\r\n/g, "<br>").replace(/\"/g, "〃").replace(/'/g, "＇");
         var replyCnt = etcInformation.replyCnt;
@@ -235,7 +264,7 @@
         // '처음으로'페이지는 항상 1페이지 링크로 활성화
         row +=
             "<li class=\"page-item\">" +
-            "<a class=\"page-link\" onclick=\"getBoardList('1')\">처음</a>" +
+            "<a class=\"page-link\" onclick=\"getBoardListSwitch('1')\">처음</a>" +
             "</li>";
 
         // 현재 페이지가 1페이지가 아니면(첫 페이지가 아니면) '이전'버튼 활성화
@@ -243,7 +272,7 @@
             row +=
                 "<li class=\"page-item\">" +
                 "<a class=\"page-link\"" +
-                "onclick=\"getBoardList('" + (currentPageNumber-1) + "')\">이전</a>" +
+                "onclick=\"getBoardListSwitch('" + (currentPageNumber-1) + "')\">이전</a>" +
                 "</li>";
         } else {
             row +=
@@ -257,7 +286,7 @@
             row +=
                 "<li class=\"page-item\">" +
                 "<a class=\"page-link\"" +
-                "onclick=\"getBoardList('"+ (currentPageNumber-3) +"')\">" +
+                "onclick=\"getBoardListSwitch('"+ (currentPageNumber-3) +"')\">" +
                 "<span class=\"glyphicon glyphicon-option-horizontal\">" +
                 "</span>" +
                 "</a>" +
@@ -276,7 +305,7 @@
         if(currentPageNumber > 2){
             row +=
                 "<li class=\"page-item\">" +
-                "<a class=\"page-link\" onclick=\"getBoardList('"+ (currentPageNumber-2) +"')\">" +
+                "<a class=\"page-link\" onclick=\"getBoardListSwitch('"+ (currentPageNumber-2) +"')\">" +
                 (currentPageNumber-2) +
                 "</a></li>";
         } else {
@@ -290,7 +319,7 @@
         if(currentPageNumber > 1){
             row +=
                 "<li class=\"page-item\">" +
-                "<a class=\"page-link\" onclick=\"getBoardList("+ (currentPageNumber-1) +")\">"+
+                "<a class=\"page-link\" onclick=\"getBoardListSwitch("+ (currentPageNumber-1) +")\">"+
                 (currentPageNumber-1) +
                 "</a></li>";
         } else {
@@ -313,7 +342,7 @@
         if(pagination.isNextPage==1){
             row +=
                 "<li class=\"page-item\">" +
-                "<a class=\"page-link\" onclick=\"getBoardList('"+(currentPageNumber+1)+"')\">" +
+                "<a class=\"page-link\" onclick=\"getBoardListSwitch('"+(currentPageNumber+1)+"')\">" +
                 (currentPageNumber+1) +
                 "</a>" +
                 "</li>";
@@ -328,7 +357,7 @@
         if(pagination.isDoubleNextPage==1){
             row +=
                 "<li class=\"page-item\">" +
-                "<a class=\"page-link\" onclick=\"getBoardList('"+ (currentPageNumber+2) +"')\">"+
+                "<a class=\"page-link\" onclick=\"getBoardListSwitch('"+ (currentPageNumber+2) +"')\">"+
                 (currentPageNumber+2) +
                 "</a>" +
                 "</li>";
@@ -343,7 +372,7 @@
         if(pagination.isTripleNextPage==1){
             row +=
                 "<li class=\"page-item\">" +
-                "<a class=\"page-link\" onclick=\"getBoardList('"+ (currentPageNumber+3) +"')\">" +
+                "<a class=\"page-link\" onclick=\"getBoardListSwitch('"+ (currentPageNumber+3) +"')\">" +
                 "<span class=\"glyphicon glyphicon-option-horizontal\"></span>" +
                 "</a>" +
                 "</li>";
@@ -360,7 +389,7 @@
         if(pagination.isNextPage==1){
             row +=
                 "<li class=\"page-item\">" +
-                "<a class=\"page-link\" onclick=\"getBoardList('"+ (currentPageNumber+1) +"')\">다음</a>" +
+                "<a class=\"page-link\" onclick=\"getBoardListSwitch('"+ (currentPageNumber+1) +"')\">다음</a>" +
                 "</li>";
         } else {
             row +=
@@ -372,7 +401,7 @@
         // 마지막 페이지로 이동
         row +=
             "<li class=\"page-item\">" +
-            "<a class=\"page-link\" onclick=\"getBoardList('"+pagination.lastPage+"')\">" +
+            "<a class=\"page-link\" onclick=\"getBoardListSwitch('"+pagination.lastPage+"')\">" +
             "마지막" +
             "</a>" +
             "</li>";

@@ -29,6 +29,7 @@
                     알림
                     <span style="color: red;" id="alarmCount"></span>
                 </a></li>
+                <li><a href="board.jsp?boardName=myBoard">내가 쓴 글</a></li>
             </c:if>
             <c:if test="${userId=='slop1434'||userId=='chatte777'}">
                 <li><a href="board.jsp?boardName=thread">대화의 숲</a></li>

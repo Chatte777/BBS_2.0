@@ -23,17 +23,22 @@ public class GetBoardList extends HttpServlet {
     }
 
     protected void requestPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //변수 선언 및 초기화
+        // 변수 선언 및 초기화
         String boardName = CommonValidation.boardNameValidation(request);
         String sessionUserId = CommonValidation.sessionUserIdValidation(request);
         int pageNumber = CommonValidation.pageNumberValidation(request);
 
         BoardDAO boardDAO = new BoardDAO(boardName);
+        // 최종적으로 return할 게시글 리스트(원글, 답글)
         ArrayList<BoardVO> returnList = new ArrayList<BoardVO>();
+        JSONArray returnJsonArray = new JSONArray();
+        // for문을 돌리기 위한 게시글 리스트
         ArrayList<BoardVO> boardList;
-
+        // replyCnt, boardColorFlag, replyColorFlag
         JSONArray etcInformationJsonArr = new JSONArray();
+        // isNextPage, isDoubleNextPage, isTripleNextPage, lastPage
         JSONObject paginationJsonObj = new JSONObject();
+        // returList, etcInformation, pagination을 한번에 담아서 넘길 JsonObj
         JSONObject totalJsonObj = new JSONObject();
 
         int replyCnt = 0;
@@ -94,7 +99,7 @@ public class GetBoardList extends HttpServlet {
             etcInformationJsonArr.add(etcInformationJsonObj);
         }
 
-        JSONArray returnJsonArray = new JSONArray();
+
 
 
         for(int i=0; i<returnList.size(); i++){

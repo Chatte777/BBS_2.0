@@ -247,7 +247,7 @@
         _updateFlag = 3;
         _replyNo = replyNo;
         document.getElementById("replyContent").focus();
-        document.getElementById("replyContent").value = replyContent + "에 대한 대댓글을 작성하세요.";
+        document.getElementById("replyContent").value = replyContent.replace(/<br>/g, " ") + "에 대한 대댓글을 작성하세요.";
     }
 
     function replyModifyClick(replyContent, replyNo) {
@@ -350,7 +350,7 @@
                     else if(data==2) alert('로그인이 풀렸어요!');
                     else if(data=='-1') alert('서버로부터의 알림 : 대댓글 수정에 실패했습니다.');
                 },
-                error: function () {
+                error: function (request, status, error) {
                     alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
                 }
             });
