@@ -62,9 +62,10 @@
     </div>
 </nav>
 
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function getAlarmCount() {
-        alert("asfd");
         $.ajax({
             type: "POST",
             url: "GetAlarmCount.do?userId=${userId}",
