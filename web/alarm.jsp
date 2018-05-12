@@ -93,7 +93,7 @@
                             <c:when test="${alarmVO.alarmReadYn==1}">
                                 <!-- 읽음처리 버튼을 클릭했을 때는 버튼 css만 변경한다. (reqdType 2) -->
                                 <a onclick="readClick('${alarmVO.alarmNo}','2', '${alarmVO.alarmOrgBoardNo}', this)"
-                                   class="btn" style="background-color: lightblue;">읽음처리</a>
+                                   class="btn btn-read" style="background-color: lightblue;">읽음처리</a>
                             </c:when>
                             <c:otherwise>
                                 <a class="btn" style="background-color: gray;">읽음</a>
@@ -125,6 +125,9 @@
                 <a class="btn btn-primary btn-arrow-right" style="background: gray;">다음</a>
             </c:otherwise>
         </c:choose>
+
+        <a class="btn btn-primary btn-arrow-left" onclick="allReadClick()">모두읽음처리</a>
+        <a class="btn btn-primary btn-arrow-left" onclick="allDeleteClick()">모두삭제</a>
     </div>
 </div>
 
@@ -149,7 +152,43 @@
                     alert("알람 조회에 실패했어요!");
                 }
             },
-            error: function () {
+            error: function (request, status, error) {
+                alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+            }
+        });
+    }
+
+    function allReadClick() {
+        $.ajax({
+            type: "POST",
+            url: "AlarmAllReadCheck.ajax?alarmTargetUser=${sessionId}",
+            dataType: "text",
+            success: function (data) {
+                if (data == 1) {
+                    location.reload();
+                } else if (data==-1) {
+                    alert("데이터베이스 오류입니다!");
+                }
+            },
+            error: function (request, status, error) {
+                alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+            }
+        });
+    }
+
+    function allDeleteClick() {
+        $.ajax({
+            type: "POST",
+            url: "AlarmAllDelete.ajax?alarmTargetUser=${sessionId}",
+            dataType: "text",
+            success: function (data) {
+                if (data == 1) {
+                    location.reload();
+                } else if (data==-1) {
+                    alert("데이터베이스 오류입니다!");
+                }
+            },
+            error: function (request, status, error) {
                 alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
             }
         });
@@ -167,7 +206,7 @@
                     alert("알람 삭제에 실패했어요!");
                 }
             },
-            error: function () {
+            error: function (request, status, error) {
                 alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
             }
         });

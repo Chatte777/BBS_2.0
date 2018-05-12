@@ -323,6 +323,38 @@ public class AlarmMasterDAO {
         return -1;
     }
 
+    public int updateAlarmAllReadYn(String alarmTargetUser) {
+        String SQL = "UPDATE alarm_master SET alarm_read_yn = 2 WHERE alarm_target_user = ?";
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setString(1, alarmTargetUser);
+
+            pstmt.executeUpdate();
+
+            return 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public int updateAlarmAllDeleteYn(String alarmTargetUser) {
+        String SQL = "UPDATE alarm_master SET alarm_delete_yn = 2 WHERE alarm_target_user = ?";
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setString(1, alarmTargetUser);
+
+            pstmt.executeUpdate();
+
+            return 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
     public int updateAlarmDeleteYn(int alarmNo, String alarmTargetUser) {
         String SQL = "UPDATE alarm_master SET alarm_delete_yn = 2 WHERE alarm_no = ?";
 
