@@ -247,7 +247,7 @@
         _updateFlag = 3;
         _replyNo = replyNo;
         document.getElementById("replyContent").focus();
-        document.getElementById("replyContent").value = replyContent.replace(/<br>/g, " ") + "에 대한 대댓글을 작성하세요.";
+        document.getElementById("replyContent").placeholder = replyContent.replace(/<br>/g, " ") + "에 대한 대댓글을 작성하세요.";
     }
 
     function replyModifyClick(replyContent, replyNo) {
