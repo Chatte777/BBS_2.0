@@ -94,8 +94,6 @@
     }
 
     $(document).ready(function myFunction() {
-        if(${sessionScope.userId==null}) errorAlert('1');
-
         if($.cookie('${boardName}')) _currentPageNumber=$.cookie('${boardName}');
         if(${param.boardName=='myBoard'}) getMyBoardList(_currentPageNumber);
         else getBoardList(_currentPageNumber);

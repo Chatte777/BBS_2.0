@@ -141,6 +141,7 @@
     });
 
     function contentSubmit() {
+        //writeFlag==1 : 글 작성, writeFlag==2 : 글 수정, writeFlag==3 : 답글작성
         var writeFlag = '${param.writeFlag}';
         var boardName = '${param.boardName}';
         var boardNo = '${param.boardNo}';

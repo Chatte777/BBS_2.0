@@ -76,7 +76,9 @@ public class BoardWrite extends HttpServlet {
                 script.println("alert('서버로부터의 알림 : 글쓰기에 실패했습니다.')");
                 script.println("location.href='board.jsp?boardName="+boardName+"'");
             } else {
-                script.println("location.href='board.jsp?boardName="+boardName+"'");
+                //1: page redirect, 2: JSON Return
+                if(writeFlag==2) script.println("location.href='GetBoard.do?boardName="+boardName+"&boardNo="+boardNo+"&viewFlag=1'");
+                else script.println("location.href='board.jsp?boardName="+boardName+"'");
             }
         }
 
