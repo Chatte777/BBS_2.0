@@ -763,4 +763,36 @@ public class BoardDAO {
         }
         return;
     }
+
+    public ArrayList<BoardVO> getFixedBoardList(int pageNumber, String makeUser){
+        int startBoardIndex = 0+((pageNumber-1)*boardCountPerPage);
+
+        String SQL = "SELECT * from "+ this.tableName
+                + " WHERE " + this.colDeleteYn +"=1 "
+                + " AND ("+ this.colAuthorize +"= 1 OR ("+ this.colAuthorize +"=2 and "+ this.colMakeUser +"=?))" +
+                "AND is_reboard = 1"
+                + " ORDER BY "+ this.colBoardNo +"  DESC LIMIT ?,?";
+        ArrayList<BoardVO> list = new ArrayList<BoardVO>();
+
+        try{
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setString(1, makeUser);
+            pstmt.setInt(2, startBoardIndex);
+            pstmt.setInt(3, boardCountPerPage);
+
+            rs = pstmt.executeQuery();
+
+            while (rs.next()){
+                BoardVO boardVO = new BoardVO();
+                setBoardVO(boardVO, rs);
+
+                list.add(boardVO);
+            }
+        } catch(Exception e){
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("makeUser:"+makeUser, "pageNumber:"+pageNumber, "", "", "boardDAO.GetBoardList", e.getMessage().toString(), "");
+            e.printStackTrace();
+        }
+        return list; //Database error
+    }
 }
