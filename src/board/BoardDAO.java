@@ -33,6 +33,7 @@ public class BoardDAO {
     private String reReplyTableName;
 
     private int boardCountPerPage=15;
+    private int _boardNo = 0;
 
     public BoardDAO(String boardName) {
         this.boardName = boardName;
@@ -121,6 +122,7 @@ public class BoardDAO {
 
         String SQL = "INSERT INTO "+ this.tableName +" VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         int tmpNextNo = getNext();
+        if(boardNo==0) this._boardNo = tmpNextNo;
 
         if("".equals(boardTitle)) boardTitle = "<span style=\"color:lightgray;\">제목을 작성하지 않은 글입니다._"+boardContent.replaceAll("<br>", "&nbsp;").replaceAll("<p>", "&nbsp;").replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "").substring(0,20)+"</span>";
 
@@ -716,5 +718,49 @@ public class BoardDAO {
             e.printStackTrace();
         }
         return -1;
+    }
+
+    //////////////////
+    ///////// Fixed Board
+    //////////////////
+    public void writeFixedBoard(String boardMakeUser, String tableName, int boardNo){
+        String SQL = "INSERT INTO fixed_board VALUES(?,?,?) ON DUPLICATE KEY UPDATE board_no = ? ";
+        if(boardNo==0) boardNo = this._boardNo;
+
+        try{
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setString(1, boardMakeUser);
+            pstmt.setString(2, tableName);
+            pstmt.setInt(3, boardNo);
+            pstmt.setInt(4, boardNo);
+
+            pstmt.executeUpdate();
+            return;
+        } catch(Exception e){
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("tableName:"+tableName, "boardNo:"+boardNo, "", "", "boardDAO.writeFixedBoard", e.getMessage().toString(), boardMakeUser);
+            e.printStackTrace();
+        }
+        return;
+    }
+
+    public void deleteFixedBoard(String boardMakeUser, String tableName, int boardNo){
+        String SQL = "DELETE fixed_board VALUES(?,?,?)";
+        if(boardNo==0) boardNo = this._boardNo;
+
+        try{
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setString(1, boardMakeUser);
+            pstmt.setString(2, tableName);
+            pstmt.setInt(3, boardNo);
+
+            pstmt.executeUpdate();
+            return;
+        } catch(Exception e){
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("tableName:"+tableName, "boardNo:"+boardNo, "", "", "boardDAO.deleteFixedBoard", e.getMessage().toString(), boardMakeUser);
+            e.printStackTrace();
+        }
+        return;
     }
 }

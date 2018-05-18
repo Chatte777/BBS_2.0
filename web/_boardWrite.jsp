@@ -47,6 +47,9 @@
                 </tr>
                 </tbody>
             </table>
+            <div align="right" style="margin-bottom: 3px;">
+                <input type="checkbox" name="fixedYn" value="1" checked="checked"> 이 게시글을 상단에 고정시킬까요?
+            </div>
             <input type="button" onclick="contentSubmit()" class="btn btn-primary pull-right" value="작성완료">
         </form>
     </div>

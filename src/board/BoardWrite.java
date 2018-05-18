@@ -31,9 +31,8 @@ public class BoardWrite extends HttpServlet {
         String boardPassword = "";
         String boardContent = CommonValidation.boardContentValidation(request);
         int writeFlag = CommonValidation.writeFlagValidation(request);
+        int fixedYn = CommonValidation.fixedYnValidation(request);
 
-
-        // 세션 userId에 대한 Validation 체크
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter script = response.getWriter();
 
@@ -67,6 +66,9 @@ public class BoardWrite extends HttpServlet {
             } else if(writeFlag==3){
                 result = boardDAO.write(boardTitle, sessionUserId, boardContent, boardAuthorize, boardNo, boardPassword);
             }
+
+            if(fixedYn==1) boardDAO.writeFixedBoard(sessionUserId, boardName, boardNo);
+            else boardDAO.deleteFixedBoard(sessionUserId, boardName, boardNo);
 
 
             // 실패했을 경우 작성한 값들을 쿠키에 임시 저장 및 reoloadFlag를 1로 변경.

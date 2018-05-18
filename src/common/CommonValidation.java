@@ -110,5 +110,11 @@ public class CommonValidation {
         return pageNumber;
     }
 
+    static public int fixedYnValidation(HttpServletRequest request){
+        int fixedYn=1;
+        if(request.getParameter("fixedYn")!=null) fixedYn=Integer.parseInt(request.getParameter("fixedYn"));
+        return fixedYn;
+    }
+
 
 }
