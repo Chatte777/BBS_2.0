@@ -32,8 +32,6 @@ public class GetBoardList extends HttpServlet {
         // 최종적으로 return할 게시글 리스트(원글, 답글)
         ArrayList<BoardVO> returnList = new ArrayList<BoardVO>();
         JSONArray returnJsonArray = new JSONArray();
-        // 상단에 고정시킬 게시글 리스트
-        JSONArray fixedBoardJsonArray = new JSONArray();
         // for문을 돌리기 위한 게시글 리스트
         ArrayList<BoardVO> boardList;
         // replyCnt, boardColorFlag, replyColorFlag
