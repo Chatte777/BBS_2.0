@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width", initial-scale="1">
 <link rel="stylesheet" href="css/bootstrap.css">
 <link rel="stylesheet" href="css/custom.css">
-<title>DREAMKY KAT</title>
+<title>DREAMY KAT</title>
 </head>
 <body>
 	<jsp:include page="_headNav.jsp" flush="false"/>
