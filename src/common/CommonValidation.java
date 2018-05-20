@@ -111,9 +111,15 @@ public class CommonValidation {
     }
 
     static public int fixedYnValidation(HttpServletRequest request){
-        int fixedYn=1;
+        int fixedYn=2;
         if(request.getParameter("fixedYn")!=null) fixedYn=Integer.parseInt(request.getParameter("fixedYn"));
         return fixedYn;
+    }
+
+    static public int viewFlagValidation(HttpServletRequest request){
+        int viewFlag=1;
+        if(request.getParameter("viewFlag")!=null) viewFlag=Integer.parseInt(request.getParameter("viewFlag"));
+        return viewFlag;
     }
 
 

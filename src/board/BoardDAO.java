@@ -724,7 +724,7 @@ public class BoardDAO {
     ///////// Fixed Board
     //////////////////
     public void writeFixedBoard(String boardMakeUser, String tableName, int boardNo){
-        String SQL = "INSERT INTO fixed_board VALUES(?,?,?) ON DUPLICATE KEY UPDATE board_no = ? ";
+        String SQL = "INSERT INTO fixed_board VALUES(?,?,?,1) ON DUPLICATE KEY UPDATE board_no = ? ";
         if(boardNo==0) boardNo = this._boardNo;
 
         try{
@@ -745,7 +745,7 @@ public class BoardDAO {
     }
 
     public void deleteFixedBoard(String boardMakeUser, String tableName, int boardNo){
-        String SQL = "DELETE fixed_board VALUES(?,?,?)";
+        String SQL = "UPDATE fixed_board SET fixed_yn=2 WHERE board_make_user=? AND table_name=? AND board_no=?";
         if(boardNo==0) boardNo = this._boardNo;
 
         try{
@@ -764,21 +764,44 @@ public class BoardDAO {
         return;
     }
 
-    public ArrayList<BoardVO> getFixedBoardList(int pageNumber, String makeUser){
-        int startBoardIndex = 0+((pageNumber-1)*boardCountPerPage);
+    public int getFixedYn(String boardMakeUser, String tableName, int boardNo){
+        String SQL = "SELECT fixed_yn FROM fixed_board WHERE board_make_user=? AND table_name=? AND board_no=?";
+        if(boardNo==0) boardNo = this._boardNo;
+        int result=0;
 
-        String SQL = "SELECT * from "+ this.tableName
-                + " WHERE " + this.colDeleteYn +"=1 "
-                + " AND ("+ this.colAuthorize +"= 1 OR ("+ this.colAuthorize +"=2 and "+ this.colMakeUser +"=?))" +
-                "AND is_reboard = 1"
-                + " ORDER BY "+ this.colBoardNo +"  DESC LIMIT ?,?";
-        ArrayList<BoardVO> list = new ArrayList<BoardVO>();
 
         try{
             PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setString(1, makeUser);
-            pstmt.setInt(2, startBoardIndex);
-            pstmt.setInt(3, boardCountPerPage);
+            pstmt.setString(1, boardMakeUser);
+            pstmt.setString(2, tableName);
+            pstmt.setInt(3, boardNo);
+
+            rs = pstmt.executeQuery();
+
+            while (rs.next()){
+                result = rs.getInt(1);
+                return result;
+            }
+        } catch(Exception e){
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("tableName:"+tableName, "boardNo:"+boardNo, "", "", "boardDAO.getFixedYn", e.getMessage().toString(), boardMakeUser);
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public ArrayList<BoardVO> getFixedList(String boardMakeUser, String tableName){
+        String SQL = "SELECT * " +
+                "FROM "+ tableName + "_master a" +
+                "INNER JOIN fixed_board b" +
+                "ON a." + tableName + "_no = b.board_no" +
+                "WHERE " + tableName + "_make_user = ?" +
+                "AND b.fixed_yn = 1";
+        ArrayList<BoardVO> list = new ArrayList<>();
+
+        try{
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setString(1, boardMakeUser);
 
             rs = pstmt.executeQuery();
 
@@ -790,7 +813,7 @@ public class BoardDAO {
             }
         } catch(Exception e){
             ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
-            errorMasterDAO.write("makeUser:"+makeUser, "pageNumber:"+pageNumber, "", "", "boardDAO.GetBoardList", e.getMessage().toString(), "");
+            errorMasterDAO.write("tableName:"+tableName, "", "", "", "boardDAO.getFixedList", e.getMessage().toString(), boardMakeUser);
             e.printStackTrace();
         }
         return list; //Database error

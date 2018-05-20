@@ -4,6 +4,15 @@ public class FixedBoardVO {
     private String makeUser;
     private String tableName;
     private int boardNo;
+    private int fixedYn;
+
+    public int getFixedYn() {
+        return fixedYn;
+    }
+
+    public void setFixedYn(int deleteYn) {
+        this.fixedYn = deleteYn;
+    }
 
     public String getMakeUser() {
         return makeUser;

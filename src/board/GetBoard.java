@@ -1,5 +1,7 @@
 package board;
 
+import common.CommonValidation;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import javax.servlet.RequestDispatcher;
@@ -23,20 +25,12 @@ public class GetBoard extends HttpServlet {
     }
 
     protected  void requestPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ////////// 변수선언 및 초기화
-        HttpSession session = request.getSession();
-
         // 서버에서는 특수한 경우에 발생할 수 있는 nullpointException에 대한 처리만 하였음.
-        String boardName = "";
-        if (request.getParameter("boardName") != null) boardName = request.getParameter("boardName");
+        String boardName = CommonValidation.boardNameValidation(request);
+        int boardNo = CommonValidation.boardNoValidation(request);
+        int viewFlag=CommonValidation.viewFlagValidation(request); //1: page redirect, 2: JSON Return
+        String sessionUserId = CommonValidation.sessionUserIdValidation(request);
 
-        int boardNo = 0;
-        if (request.getParameter("boardNo") != null) {
-            boardNo = Integer.parseInt(request.getParameter("boardNo"));
-        }
-
-        int viewFlag=1; //1: page redirect, 2: JSON Return
-        if (request.getParameter("viewFlag")!=null) viewFlag=Integer.parseInt(request.getParameter("viewFlag"));
         if (boardNo == 0) {
             PrintWriter script = response.getWriter();
             script.println("<script>");
@@ -44,7 +38,8 @@ public class GetBoard extends HttpServlet {
             script.println("location.href = 'board.jsp?boardName=" + boardName + "'");
             script.println("</script>");
         }
-        BoardVO boardVO = new BoardDAO(boardName).getBoardVO(boardNo);
+        BoardDAO boardDAO = new BoardDAO(boardName);
+        BoardVO boardVO = boardDAO.getBoardVO(boardNo);
 
         if(viewFlag==1){
             request.setAttribute("boardVO", boardVO);
@@ -71,6 +66,7 @@ public class GetBoard extends HttpServlet {
             boardVOJson.put("orgBoardNo", boardVO.getOrgBoardNo());
             boardVOJson.put("boardPassword", boardVO.getBoardPassword());
             boardVOJson.put("boardPriority", boardVO.getBoardPriority());
+            boardVOJson.put("fixedYn", boardDAO.getFixedYn(sessionUserId, boardName, boardNo));
 
             response.setContentType("text/html;charset=UTF-8");
             response.getWriter().write(boardVOJson.toString());

@@ -48,7 +48,9 @@
                 </tbody>
             </table>
             <div align="right" style="margin-bottom: 3px;">
-                <input type="checkbox" name="fixedYn" value="1" checked="checked"> 이 게시글을 상단에 고정시킬까요?
+                <label for="fixedYn">
+                    <input type="checkbox" id="fixedYn" name="fixedYn" value="1" checked="checked"> 이 게시글을 상단에 고정시킬까요?
+                </label>
             </div>
             <input type="button" onclick="contentSubmit()" class="btn btn-primary pull-right" value="작성완료">
         </form>
@@ -92,6 +94,7 @@
             else if ($("#boardAuthorize option:selected").val() == 2) $("#boardPassword").removeAttr('disabled');
         }
 
+        // writeFlag==1 : 신규작성 writeFlag==2 : 수정
         if(writeFlag==2){
             $.ajax({
                 type: "POST",
@@ -103,8 +106,9 @@
                     boardPasswordElement.value = data.boardPassword;
                     $('#summernote').summernote ('code', data.boardContent);
 
-                    if ($("#boardAuthorize option:selected").val() == 1) $("#boardPassword").attr('disabled', true);
-                    else if ($("#boardAuthorize option:selected").val() == 2) $("#boardPassword").removeAttr('disabled');
+                    if(data.fixedYn==2) $("#fixedYn").prop("checked", false);
+                    if (data.boardAuthorize == 1) $("#boardPassword").attr('disabled', true);
+                    else if (data.boardAuthorize == 2) $("#boardPassword").removeAttr('disabled');
                 }
                 , error: function (request, status, error) {
                     alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error + request.dataType);

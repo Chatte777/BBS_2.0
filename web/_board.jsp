@@ -31,8 +31,8 @@
                 <th style="text-align: center;">작성일</th>
             </tr>
             </thead>
-            <tbody id="boardListTbody">
-            </tbody>
+            <tbody id="fixedListTbody"></tbody>
+            <tbody id="boardListTbody"></tbody>
         </table>
 
         <div class="text-center">
@@ -61,10 +61,7 @@
             url: "GetMyBoardList.ajax?pageNumber="+currentPageNumber,
             dataType: "json",
             success: function (data) {
-                $("#boardListTbody").empty();
-                for (var i = 0; i < data.boardData.length; i++) {
-                    appendBoardListRow(data.boardData[i], data.etcInformation[i]);
-                }
+                appendBoardListRow(data.boardData, data.etcInformation);
                 pagination(currentPageNumber, data.pagination);
                 $.cookie('${boardName}' , currentPageNumber, { expires : 1000*60*60*24 });
             },
@@ -80,10 +77,7 @@
             url: "GetBoardList.ajax?boardName=${boardName}&pageNumber="+currentPageNumber,
             dataType: "json",
             success: function (data) {
-                $("#boardListTbody").empty();
-                for (var i = 0; i < data.boardData.length; i++) {
-                    appendBoardListRow(data.boardData[i], data.etcInformation[i]);
-                }
+                appendBoardListRow(data.boardData, data.etcInformation);
                 pagination(currentPageNumber, data.pagination);
                 $.cookie('${boardName}' , currentPageNumber, { expires : 1000*60*60*24 });
             },
@@ -100,142 +94,143 @@
 
     });
 
-    function appendBoardListRow(boardData, etcInformation){;
-        var boardReadCount = boardData.boardReadCount;
-        var boardTitle = boardData.boardTitle.replace(/\r\n/g, "<br>").replace(/\"/g, "〃").replace(/'/g, "＇");
-        var replyCnt = etcInformation.replyCnt;
-        var boardMakeUser =  boardData.boardMakeUser;
-        var boardAuthorize = boardData.boardAuthorize;
-        var isReboard = boardData.isReboard;
-        var tableName = boardData.tableName;
-        var boardPassword = boardData.boardPassword;
-        var boardColorFlag = etcInformation.boardColorFlag;
-        var replyColorFlag = etcInformation.replyColorFlag;
-        var boardNo = boardData.boardNo;
-        var boardMakeDt = boardData.boardMakeDt;
-        boardMakeDt = boardMakeDt.substring(0, 11) + boardMakeDt.substring(11, 13) + "시" + boardMakeDt.substring(14, 16) + "분";
-
+    function appendBoardListRow(boardData, etcInformation){
+        $("#boardListTbody").empty();
         var row = "";
 
-        if(isReboard==1){
-            row +=
-                "<tr>" +
-                "<td>"+boardReadCount+"</td>" +
-                "<td align=\"left\" colspan=\"2\">";
+        for(var i=0; i<boardData.length; i++){
+            var boardReadCount = boardData[i].boardReadCount;
+            var boardTitle = boardData[i].boardTitle.replace(/\r\n/g, "<br>").replace(/\"/g, "〃").replace(/'/g, "＇");
+            var replyCnt = etcInformation[i].replyCnt;
+            var boardMakeUser =  boardData[i].boardMakeUser;
+            var boardAuthorize = boardData[i].boardAuthorize;
+            var isReboard = boardData[i].isReboard;
+            var tableName = boardData[i].tableName;
+            var boardPassword = boardData[i].boardPassword;
+            var boardColorFlag = etcInformation[i].boardColorFlag;
+            var replyColorFlag = etcInformation[i].replyColorFlag;
+            var boardNo = boardData[i].boardNo;
+            var boardMakeDt = boardData[i].boardMakeDt;
+            boardMakeDt = boardMakeDt.substring(0, 11) + boardMakeDt.substring(11, 13) + "시" + boardMakeDt.substring(14, 16) + "분";
 
-            if(boardAuthorize==2) row += "<span class=\"glyphicon glyphicon-lock\" style=\"color: #bbbbbb;\">&nbsp;</span>";
+            if(isReboard==1){
+                row +=
+                    "<tr>" +
+                    "<td>"+boardReadCount+"</td>" +
+                    "<td align=\"left\" colspan=\"2\">";
 
-            row +=
-                "<span onclick=\"onClickBoardTitle('"+tableName+"', '"+boardNo+"', '"+boardAuthorize+"', '"+boardPassword+"')\"" +
-                "style=\"cursor: pointer;\">";
+                if(boardAuthorize==2) row += "<span class=\"glyphicon glyphicon-lock\" style=\"color: #bbbbbb;\">&nbsp;</span>";
 
-            switch (boardColorFlag){
-                case '1':
-                    row += "<span style=\"color: #DE2A45;\">"+boardTitle+"</span>";
-                    break;
-                case '2':
-                    row += "<span style=\"color: #10BF00;\">"+boardTitle+"</span>";
-                    break;
-                case '3':
-                    row += "<span style=\"color: #2865BF;\">"+boardTitle+"</span>";
-                    break;
-                case '4':
-                    row += "<span style=\"color: black;\">"+boardTitle+"</span>";
-                    break;
+                row +=
+                    "<span onclick=\"onClickBoardTitle('"+tableName+"', '"+boardNo+"', '"+boardAuthorize+"', '"+boardPassword+"')\"" +
+                    "style=\"cursor: pointer;\">";
+
+                switch (boardColorFlag){
+                    case '1':
+                        row += "<span style=\"color: #DE2A45;\">"+boardTitle+"</span>";
+                        break;
+                    case '2':
+                        row += "<span style=\"color: #10BF00;\">"+boardTitle+"</span>";
+                        break;
+                    case '3':
+                        row += "<span style=\"color: #2865BF;\">"+boardTitle+"</span>";
+                        break;
+                    case '4':
+                        row += "<span style=\"color: black;\">"+boardTitle+"</span>";
+                        break;
+                }
+
+                row +=
+                    "</span>" +
+                    "</td>" +
+                    "<td>";
+
+                switch (replyColorFlag){
+                    case '1':
+                        row += "<span style=\"color: #7A447A;\">"+replyCnt+"</span>";
+                        break;
+                    case '2':
+                        row += "<span style=\"color: #DE2A45;\">"+replyCnt+"</span>";
+                        break;
+                    case '3':
+                        row += "<span style=\"color: #F5762C;\">"+replyCnt+"</span>";
+                        break;
+                    case '4':
+                        row += "<span style=\"color: #10BF00;\">"+replyCnt+"</span>";
+                        break;
+                    case '5':
+                        row += "<span style=\"color: #2865BF;\">"+replyCnt+"</span>";
+                        break;
+                    case '6':
+                        row += "<span style=\"color: black;\">"+replyCnt+"</span>";
+                        break;
+                }
+
+                row +=
+                    "</td>" +
+                    "<td>" + boardMakeUser + "</td>" +
+                    "<td>" + boardMakeDt + "</td>" +
+                    "</tr>";
+            } else {
+                row +=
+                    "<tr style=\"height: 1px; font-size: 0.875em; background-color: #FEFEF2; margin: 1em;\">" +
+                    "<td>" + boardReadCount + "</td>" +
+                    "<td align=\"left\" colspan=\"2\">" +
+                    "<span class=\"glyphicon glyphicon-menu-right\" style=\"color: #bbbbbb;\">&nbsp;</span>";
+
+                if(boardAuthorize==2) row += "<span class=\"glyphicon glyphicon-lock\" style=\"color: #bbbbbb;\">&nbsp;</span>";
+
+                row +=
+                    "<span onclick=\"onClickBoardTitle('"+ tableName +"', '"+ boardNo +"', '"+ boardAuthorize +"', '"+boardPassword+"')\"" +
+                    "style=\"cursor: pointer;\">";
+
+                switch(boardColorFlag){
+                    case '1':
+                        row += "<span style=\"color: #DE2A45;\">"+boardTitle+"</span>";
+                        break;
+                    case '2':
+                        row += "<span style=\"color: #10BF00;\">"+boardTitle+"</span>";
+                        break;
+                    case '3':
+                        row += "<span style=\"color: #2865BF;\">"+boardTitle+"</span>";
+                        break;
+                    case '4':
+                        row += "<span style=\"color: black;\">"+boardTitle+"</span>";
+                        break;
+                }
+
+                row +=
+                    "</span>" +
+                    "</td>" +
+                    "<td>";
+
+                switch (replyColorFlag){
+                    case '1':
+                        row += "<span style=\"color: #7A447A;\">"+replyCnt+"</span>";
+                        break;
+                    case '2':
+                        row += "<span style=\"color: #DE2A45;\">"+replyCnt+"</span>";
+                        break;
+                    case '3':
+                        row += "<span style=\"color: #F5762C;\">"+replyCnt+"</span>";
+                        break;
+                    case '4':
+                        row += "<span style=\"color: #10BF00;\">"+replyCnt+"</span>";
+                        break;
+                    case '5':
+                        row += "<span style=\"color: #2865BF;\">"+replyCnt+"</span>";
+                        break;
+                    case '6':
+                        row += "<span style=\"color: black;\">"+replyCnt+"</span>";
+                        break;
+                }
+                row+=
+                    "</td>" +
+                    "<td>" + boardMakeUser + "</td>" +
+                    "<td>" + boardMakeDt + "</td>" +
+                    "</tr>";
             }
-
-            row +=
-                "</span>" +
-                "</td>" +
-                "<td>";
-
-            switch (replyColorFlag){
-                case '1':
-                    row += "<span style=\"color: #7A447A;\">"+replyCnt+"</span>";
-                    break;
-                case '2':
-                    row += "<span style=\"color: #DE2A45;\">"+replyCnt+"</span>";
-                    break;
-                case '3':
-                    row += "<span style=\"color: #F5762C;\">"+replyCnt+"</span>";
-                    break;
-                case '4':
-                    row += "<span style=\"color: #10BF00;\">"+replyCnt+"</span>";
-                    break;
-                case '5':
-                    row += "<span style=\"color: #2865BF;\">"+replyCnt+"</span>";
-                    break;
-                case '6':
-                    row += "<span style=\"color: black;\">"+replyCnt+"</span>";
-                    break;
-            }
-
-            row +=
-                "</td>" +
-                "<td>" + boardMakeUser + "</td>" +
-                "<td>" + boardMakeDt + "</td>" +
-                "</tr>";
-        } else {
-            row +=
-                "<tr style=\"height: 1px; font-size: 0.875em; background-color: #FEFEF2; margin: 1em;\">" +
-                "<td>" + boardReadCount + "</td>" +
-                "<td align=\"left\" colspan=\"2\">" +
-                "<span class=\"glyphicon glyphicon-menu-right\" style=\"color: #bbbbbb;\">&nbsp;</span>";
-
-            if(boardAuthorize==2) row += "<span class=\"glyphicon glyphicon-lock\" style=\"color: #bbbbbb;\">&nbsp;</span>";
-
-            row +=
-                "<span onclick=\"onClickBoardTitle('"+ tableName +"', '"+ boardNo +"', '"+ boardAuthorize +"', '"+boardPassword+"')\"" +
-                "style=\"cursor: pointer;\">";
-
-            switch(boardColorFlag){
-                case '1':
-                    row += "<span style=\"color: #DE2A45;\">"+boardTitle+"</span>";
-                    break;
-                case '2':
-                    row += "<span style=\"color: #10BF00;\">"+boardTitle+"</span>";
-                    break;
-                case '3':
-                    row += "<span style=\"color: #2865BF;\">"+boardTitle+"</span>";
-                    break;
-                case '4':
-                    row += "<span style=\"color: black;\">"+boardTitle+"</span>";
-                    break;
-            }
-
-            row +=
-                "</span>" +
-                "</td>" +
-                "<td>";
-
-            switch (replyColorFlag){
-                case '1':
-                    row += "<span style=\"color: #7A447A;\">"+replyCnt+"</span>";
-                    break;
-                case '2':
-                    row += "<span style=\"color: #DE2A45;\">"+replyCnt+"</span>";
-                    break;
-                case '3':
-                    row += "<span style=\"color: #F5762C;\">"+replyCnt+"</span>";
-                    break;
-                case '4':
-                    row += "<span style=\"color: #10BF00;\">"+replyCnt+"</span>";
-                    break;
-                case '5':
-                    row += "<span style=\"color: #2865BF;\">"+replyCnt+"</span>";
-                    break;
-                case '6':
-                    row += "<span style=\"color: black;\">"+replyCnt+"</span>";
-                    break;
-            }
-
-            row+=
-                "</td>" +
-                "<td>" + boardMakeUser + "</td>" +
-                "<td>" + boardMakeDt + "</td>" +
-                "</tr>";
         }
-
         $("#boardListTbody").append(row);
     }
 

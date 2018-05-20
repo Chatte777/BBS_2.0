@@ -101,9 +101,6 @@ public class GetBoardList extends HttpServlet {
             etcInformationJsonArr.add(etcInformationJsonObj);
         }
 
-
-
-
         for(int i=0; i<returnList.size(); i++){
             JSONObject returnJsonObject = new JSONObject();
             returnJsonObject.put("boardReadCount", returnList.get(i).getBoardReadCount());
@@ -118,15 +115,6 @@ public class GetBoardList extends HttpServlet {
             returnJsonArray.add(returnJsonObject);
         }
 
-        /*
-        request.setAttribute("etcInformationJson", etcInformationJsonArr);
-        request.setAttribute("boardList", returnJsonArray);
-        request.setAttribute("paginationJson", paginationJsonObj);
-
-
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("board.jsp");
-        requestDispatcher.forward(request, response);
-*/
         totalJsonObj.put("boardData", returnJsonArray);
         totalJsonObj.put("etcInformation", etcInformationJsonArr);
         totalJsonObj.put("pagination", paginationJsonObj );
