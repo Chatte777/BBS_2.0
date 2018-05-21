@@ -39,8 +39,9 @@
             <nav aria-label="...">
                 <ul class="pagination" id="pagination">
                 </ul>
-
+                <c:if test="${boardName!='myBoard'}">
                 <a href="boardWrite.jsp?boardName=${boardName}&writeFlag=1" class="btn btn-primary pull-right">글쓰기</a>
+                </c:if>
         </div>
     </div>
 </div>
