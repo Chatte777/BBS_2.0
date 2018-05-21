@@ -31,7 +31,7 @@
                 <th style="text-align: center;">작성일</th>
             </tr>
             </thead>
-            <tbody id="fixedListTbody"></tbody>
+            <tbody id="fixedBoardListTbody"></tbody>
             <tbody id="boardListTbody"></tbody>
         </table>
 
@@ -61,7 +61,7 @@
             url: "GetMyBoardList.ajax?pageNumber="+currentPageNumber,
             dataType: "json",
             success: function (data) {
-                appendBoardListRow(data.boardData, data.etcInformation);
+                appendBoardListRow(data.boardData, data.etcInformation, 1);
                 pagination(currentPageNumber, data.pagination);
                 $.cookie('${boardName}' , currentPageNumber, { expires : 1000*60*60*24 });
             },
@@ -77,9 +77,23 @@
             url: "GetBoardList.ajax?boardName=${boardName}&pageNumber="+currentPageNumber,
             dataType: "json",
             success: function (data) {
-                appendBoardListRow(data.boardData, data.etcInformation);
+                appendBoardListRow(data.boardData, data.etcInformation, 1);
                 pagination(currentPageNumber, data.pagination);
                 $.cookie('${boardName}' , currentPageNumber, { expires : 1000*60*60*24 });
+            },
+            error: function (request, status, error) {
+                alert(error);
+            }
+        });
+    }
+
+    function getFixedBoardList(){
+        $.ajax({
+            type: "POST",
+            url: "GetFixedBoardList.ajax?boardName=${boardName}",
+            dataType: "json",
+            success: function (data) {
+                appendBoardListRow(data.boardData, data.etcInformation, 2);
             },
             error: function (request, status, error) {
                 alert(error);
@@ -90,12 +104,17 @@
     $(document).ready(function myFunction() {
         if($.cookie('${boardName}')) _currentPageNumber=$.cookie('${boardName}');
         if(${param.boardName=='myBoard'}) getMyBoardList(_currentPageNumber);
-        else getBoardList(_currentPageNumber);
+        else {
+            getFixedBoardList();
+            getBoardList(_currentPageNumber);
+        }
 
     });
 
-    function appendBoardListRow(boardData, etcInformation){
+    //boardType==1 : fixedBoard, boardType==2 : normalBoard
+    function appendBoardListRow(boardData, etcInformation, boardType){
         $("#boardListTbody").empty();
+
         var row = "";
 
         for(var i=0; i<boardData.length; i++){
@@ -231,7 +250,12 @@
                     "</tr>";
             }
         }
-        $("#boardListTbody").append(row);
+
+        if(boardType==1) $("#boardListTbody").append(row);
+        else {
+            $("#fixedBoardListTbody").append(row);
+            $("#fixedBoardListTbody > tr").css("background-color", "violet");
+        }
     }
 
     function onClickBoardTitle(boardName, boardNo, boardAuthorize, boardPassword) {

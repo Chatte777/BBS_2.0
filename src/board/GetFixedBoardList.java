@@ -81,5 +81,5 @@ public class GetFixedBoardList extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         response.getWriter().write(totalJsonObj.toString());
     }
-    }
+
 }

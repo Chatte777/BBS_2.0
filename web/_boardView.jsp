@@ -81,7 +81,7 @@
 
     <form name="replyForm" id="replyForm">
         <table class="table table-condensed">
-        0    <tbody>
+            <tbody>
             <tr>
                 <td style="width: 90%;"><textarea class="form-control" placeholder="댓글" name="replyContent"
                                                   id="replyContent" maxlength="2048" style="height: 150px;"></textarea>

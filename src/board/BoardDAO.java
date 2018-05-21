@@ -724,7 +724,7 @@ public class BoardDAO {
     ///////// Fixed Board
     //////////////////
     public void writeFixedBoard(String boardMakeUser, String tableName, int boardNo){
-        String SQL = "INSERT INTO fixed_board VALUES(?,?,?,1) ON DUPLICATE KEY UPDATE board_no = ? ";
+        String SQL = "INSERT INTO fixed_board VALUES(?,?,?,1) ON DUPLICATE KEY UPDATE fixed_yn = 1 ";
         if(boardNo==0) boardNo = this._boardNo;
 
         try{
@@ -732,7 +732,6 @@ public class BoardDAO {
             pstmt.setString(1, boardMakeUser);
             pstmt.setString(2, tableName);
             pstmt.setInt(3, boardNo);
-            pstmt.setInt(4, boardNo);
 
             pstmt.executeUpdate();
             return;
@@ -792,11 +791,12 @@ public class BoardDAO {
 
     public ArrayList<BoardVO> getFixedList(String boardMakeUser, String tableName){
         String SQL = "SELECT * " +
-                "FROM "+ tableName + "_master a" +
-                "INNER JOIN fixed_board b" +
-                "ON a." + tableName + "_no = b.board_no" +
-                "WHERE " + tableName + "_make_user = ?" +
-                "AND b.fixed_yn = 1";
+                "FROM "+ tableName + "_master a " +
+                "INNER JOIN fixed_board b " +
+                "ON a." + tableName + "_no = b.board_no " +
+                "WHERE " + tableName + "_make_user = ? " +
+                "AND b.fixed_yn = 1 " +
+                "AND a." + tableName + "_delete_yn = 1";
         ArrayList<BoardVO> list = new ArrayList<>();
 
         try{
