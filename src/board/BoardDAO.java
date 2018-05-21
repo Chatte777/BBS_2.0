@@ -793,7 +793,9 @@ public class BoardDAO {
         String SQL = "SELECT * " +
                 "FROM "+ tableName + "_master a " +
                 "INNER JOIN fixed_board b " +
-                "ON a." + tableName + "_no = b.board_no " +
+                "ON a." + tableName + "_make_user = b.board_make_user " +
+                "AND a.table_name = b.table_name " +
+                "AND a." + tableName + "_no = b.board_no " +
                 "WHERE " + tableName + "_make_user = ? " +
                 "AND b.fixed_yn = 1 " +
                 "AND a." + tableName + "_delete_yn = 1";
