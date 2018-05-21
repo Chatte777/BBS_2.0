@@ -106,7 +106,7 @@
                     boardPasswordElement.value = data.boardPassword;
                     $('#summernote').summernote ('code', data.boardContent);
 
-                    if(data.fixedYn==2) $("#fixedYn").prop("checked", false);
+                    if(data.fixedYn!=1) $("#fixedYn").prop("checked", false);
                     if (data.boardAuthorize == 1) $("#boardPassword").attr('disabled', true);
                     else if (data.boardAuthorize == 2) $("#boardPassword").removeAttr('disabled');
                 }

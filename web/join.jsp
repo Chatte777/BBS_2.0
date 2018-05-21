@@ -19,7 +19,7 @@
 				<form method="post" action="joinAction.jsp">
 					<h3 style="text-align: center;">회원가입 화면</h3>
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="아이디" name="userId" maxlength="20">
+						<input type="text" class="form-control" placeholder="아이디" name="userId" maxlength="20" id="test">
 					</div>
 					<div class="form-group">
 						<input type="password" class="form-control" placeholder="비밀번호" name="userPassword" maxlength="20">
