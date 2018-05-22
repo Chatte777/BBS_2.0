@@ -49,7 +49,7 @@
             </table>
             <div align="right" style="margin-bottom: 3px;">
                 <label for="fixedYn">
-                    <input type="checkbox" id="fixedYn" name="fixedYn" value="1" checked="checked"> 이 게시글을 상단에 고정시킬까요?
+                    <input type="checkbox" id="fixedYn" name="fixedYn" value="1"> 이 게시글을 상단에 고정시킬까요?
                 </label>
             </div>
             <input type="button" onclick="contentSubmit()" class="btn btn-primary pull-right" value="작성완료">
@@ -106,7 +106,7 @@
                     boardPasswordElement.value = data.boardPassword;
                     $('#summernote').summernote ('code', data.boardContent);
 
-                    if(data.fixedYn!=1) $("#fixedYn").prop("checked", false);
+                    if(data.fixedYn==1) $("#fixedYn").prop("checked", true);
                     if (data.boardAuthorize == 1) $("#boardPassword").attr('disabled', true);
                     else if (data.boardAuthorize == 2) $("#boardPassword").removeAttr('disabled');
                 }
@@ -123,8 +123,12 @@
                 minHeight: null,             // set minimum height of editor
                 maxHeight: null,             // set maximum height of editor
                 focus: true,             // set focus to editable area after initializing summernote
-                onImageUpload: function (files, editor, welEditable) {
-                    sendFile(files[0], editor, welEditable);
+                callbacks: {
+                    onImageUpload: function (files, editor, welEditable) {
+                        for(var i = files.length - 1; i >= 0; i--) {
+                            sendFile(files[i], this);
+                        }
+                    }
                 },
                 lang: 'ko-KR',
                 placeholder: '이제 게시글에 사진을 업로드할 수 있습니다.',
@@ -165,20 +169,24 @@
 
 
     /* summernote에서 이미지 업로드시 실행할 함수 */
-    function sendFile(file, editor, welEditable) {
+    function sendFile(file, el) {
         // 파일 전송을 위한 폼생성
         data = new FormData();
         data.append("uploadFile", file);
         $.ajax({ // ajax를 통해 파일 업로드 처리
             data: data,
             type: "POST",
-            url: "./summernote_imageUpload.jsp",
+            url: "/ImageUpload",
+            //url: "./summernote_imageUpload.jsp",
             cache: false,
             contentType: false,
+            encType: 'multipart/form-data',
             processData: false,
             success: function (data) { // 처리가 성공할 경우
                 // 에디터에 이미지 출력
-                editor.insertImage(welEditable, data.url);
+                $(el).summernote('editor.insertImage', data);
+                $('#imageBoard > ul').append('<li><img src="'+data+'" width="480" height="auto"/></li>');
+                //editor.insertImage(welEditable, data.url);
             }
             , error: function (request, status, error) {
                 alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error + request.dataType);

@@ -280,7 +280,7 @@
                         var date = new Date();
                         var dateReformat =date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2) + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2) + ":" + ("0" + date.getSeconds()).slice(-2);
                         //replyContent는 입력한 값 그대로 가져오고
-                        var trContent = document.getElementById('replyContent').value;
+                        var trContent = document.getElementById('replyContent').value.replace(/\n/g, "<br>").replace(/\"/g, "〃").replace(/'/g, "＇");
                         //나머지 값들은 여기저기서 가져옴(DB에서 가져오는게 아니라 입력할 당시에 설정했던 값들로)
                         var trData = {replyDislikeCnt: '1', replyContent: trContent, replyMakeUser: '${userId}', replyLikeCnt: '1', replyMakeDt: dateReformat};
                         appendReplyListRow(trData);
