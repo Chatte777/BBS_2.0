@@ -23,7 +23,7 @@ public class ImageUpload extends HttpServlet {
     }
 
     protected void requestPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String uploadPath = "img/";
+        String uploadPath = "E:/tmp";
         int maxSize = 1024 * 1024 *     100;
         String encoding = "UTF-8";
         String fileName = "";
@@ -38,6 +38,6 @@ public class ImageUpload extends HttpServlet {
         }
 
         uploadPath = uploadPath + fileName;
-        response.getWriter().write("images/1.JPG");
+        response.getWriter().write(uploadPath);
     }
 }
