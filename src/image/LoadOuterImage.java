@@ -30,6 +30,5 @@ public class LoadOuterImage extends HttpServlet {
 
     protected void requestPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String imageId = request.getParameter("imageId");
-        String imageName = ImageDAO.
     }
 }

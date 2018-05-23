@@ -23,7 +23,8 @@ public class ImageUpload extends HttpServlet {
     }
 
     protected void requestPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String uploadPath = "E:/tmp";
+        //String uploadPath = "/testImage";
+        String uploadPath = "D:/tmpImage";
         int maxSize = 1024 * 1024 *     100;
         String encoding = "UTF-8";
         String fileName = "";
