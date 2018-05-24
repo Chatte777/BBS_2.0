@@ -2,6 +2,7 @@ package image;
 
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+import common.CommonValidation;
 import org.json.simple.JSONObject;
 
 import javax.servlet.ServletException;
@@ -9,7 +10,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+import java.io.*;
 import java.util.Enumeration;
 
 @WebServlet("/ImageUpload")
@@ -23,9 +25,9 @@ public class ImageUpload extends HttpServlet {
     }
 
     protected void requestPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //String uploadPath = "/testImage";
-        String uploadPath = "D:/tmpImage";
-        int maxSize = 1024 * 1024 *     100;
+        String boardName = CommonValidation.boardNameValidation(request);
+        String uploadPath = "/uploadImage/"+boardName;
+        int maxSize = 1024 * 1024 *100;
         String encoding = "UTF-8";
         String fileName = "";
 
@@ -38,7 +40,7 @@ public class ImageUpload extends HttpServlet {
             e.printStackTrace();
         }
 
-        uploadPath = uploadPath + fileName;
+        uploadPath = uploadPath + "/" + fileName;
         response.getWriter().write(uploadPath);
     }
 }
