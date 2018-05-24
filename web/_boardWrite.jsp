@@ -182,7 +182,7 @@
         $.ajax({ // ajax를 통해 파일 업로드 처리
             data: data,
             type: "POST",
-            url: "/ImageUpload",
+            url: "/ImageUpload.ajax?boardName=${param.boardName}",
             //url: "./summernote_imageUpload.jsp",
             cache: false,
             contentType: false,

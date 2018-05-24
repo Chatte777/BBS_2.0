@@ -14,7 +14,7 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.io.*;
 import java.util.Enumeration;
 
-@WebServlet("/ImageUpload")
+@WebServlet("/ImageUpload.ajax")
 public class ImageUpload extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         requestPro(request, response);
@@ -32,7 +32,7 @@ public class ImageUpload extends HttpServlet {
         String fileName = "";
 
         try{
-            MultipartRequest multipartRequest = new MultipartRequest(request, uploadPath, maxSize, encoding, new DefaultFileRenamePolicy());
+            MultipartRequest multipartRequest = new MultipartRequest(request, "E:/uploadImage/notify", maxSize, encoding, new DefaultFileRenamePolicy());
             Enumeration files = multipartRequest.getFileNames();
             String file = (String)files.nextElement();
             fileName = multipartRequest.getFilesystemName(file);
