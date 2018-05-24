@@ -24,8 +24,8 @@
                 <tbody>
                 <tr>
                     <td width="80%">
-                                <input type="text" class="form-control" placeholder="글 제목" name="boardTitle"
-                                       id="boardTitle" maxlength="50">
+                        <input type="text" class="form-control" placeholder="글 제목" name="boardTitle"
+                               id="boardTitle" maxlength="50">
                     </td>
                     <td width="10%">
                         <select class="form-control" name="boardAuthorize" id="boardAuthorize">
@@ -65,48 +65,48 @@
         var boardPasswordElement = document.getElementById("boardPassword");
 
         var boardName;
-        if(${param.boardName==null}) errorAlert('21');
+        if (${param.boardName==null}) errorAlert('21');
         else boardName = '${param.boardName}';
 
         var sessionId;
-        if(${sessionScope.userId==null}) errorAlert('1');
+        if (${sessionScope.userId==null}) errorAlert('1');
         else sessionId = '${sessionScope.userId}';
 
         var writeFlag;
-        if(${param.writeFlag==null}) writeFlag=1;
+        if (${param.writeFlag==null}) writeFlag = 1;
         else writeFlag = '${param.writeFlag}';
 
         var boardNo;
-        if(${param.boardNo==null}) boardNo=null;
-        else boardNo='${param.boardNo}';
+        if (${param.boardNo==null}) boardNo = null;
+        else boardNo = '${param.boardNo}';
 
-        var reloadFlag=0;
-        if($.cookie("reloadFlag")) reloadFlag = 1;
+        var reloadFlag = 0;
+        if ($.cookie("reloadFlag")) reloadFlag = 1;
 
 
-        if(reloadFlag==1){
+        if (reloadFlag == 1) {
             boardTitleElement.value = $.cookie("boardTitle");
             boardAuthorizeElement.value = $.cookie("boardAuthorize");
             boardPasswordElement.value = $.cookie("boardPassword");
-            $('#summernote').summernote ('code', $.cookie("boardContent"));
+            $('#summernote').summernote('code', $.cookie("boardContent"));
 
             if ($("#boardAuthorize option:selected").val() == 1) $("#boardPassword").attr('disabled', true);
             else if ($("#boardAuthorize option:selected").val() == 2) $("#boardPassword").removeAttr('disabled');
         }
 
         // writeFlag==1 : 신규작성 writeFlag==2 : 수정
-        if(writeFlag==2){
+        if (writeFlag == 2) {
             $.ajax({
                 type: "POST",
-                url: "GetBoard.do?boardName="+boardName+"&boardNo="+boardNo+"&viewFlag=2",
+                url: "GetBoard.do?boardName=" + boardName + "&boardNo=" + boardNo + "&viewFlag=2",
                 dataType: "JSON",
                 success: function (data) { // 처리가 성공할 경우
                     boardTitleElement.value = data.boardTitle;
                     boardAuthorizeElement.value = data.boardAuthorize;
                     boardPasswordElement.value = data.boardPassword;
-                    $('#summernote').summernote ('code', data.boardContent);
+                    $('#summernote').summernote('code', data.boardContent);
 
-                    if(data.fixedYn==1) $("#fixedYn").prop("checked", true);
+                    if (data.fixedYn == 1) $("#fixedYn").prop("checked", true);
                     if (data.boardAuthorize == 1) $("#boardPassword").attr('disabled', true);
                     else if (data.boardAuthorize == 2) $("#boardPassword").removeAttr('disabled');
                 }
@@ -125,9 +125,12 @@
                 focus: true,             // set focus to editable area after initializing summernote
                 callbacks: {
                     onImageUpload: function (files, editor, welEditable) {
-                        for(var i = files.length - 1; i >= 0; i--) {
+                        for (var i = files.length - 1; i >= 0; i--) {
                             sendFile(files[i], this);
                         }
+                    },
+                    onMediaDelete : function($target, editor, $editable) {
+                        alert($target.context.dataset.filename);
                     }
                 },
                 lang: 'ko-KR',
@@ -138,8 +141,11 @@
             });
     });
 
-    //게시글 비밀번호에 숫자만 입력할 수 있도록 정규식처리.
-    function onlyNumber(obj) {
+
+
+        //게시글 비밀번호에 숫자만 입력할 수 있도록 정규식처리.
+        function onlyNumber(obj)
+    {
         $(obj).keyup(function () {
             $(this).val($(this).val().replace(/[^0-9]/g, ""));
         });
@@ -158,9 +164,9 @@
         var boardNo = '${param.boardNo}';
 
         try {
-            if (writeFlag==1) document.boardForm.action = "BoardWrite.do?boardName=" + boardName+"&writeFlag=1";
-            else if (writeFlag==2) document.boardForm.action = "BoardWrite.do?boardName=" + boardName + "&boardNo=" + boardNo+"&writeFlag=2";
-            else if (writeFlag==3) document.boardForm.action = "BoardWrite.do?boardName=" + boardName + "&boardNo=" + boardNo+"&writeFlag=3";
+            if (writeFlag == 1) document.boardForm.action = "BoardWrite.do?boardName=" + boardName + "&writeFlag=1";
+            else if (writeFlag == 2) document.boardForm.action = "BoardWrite.do?boardName=" + boardName + "&boardNo=" + boardNo + "&writeFlag=2";
+            else if (writeFlag == 3) document.boardForm.action = "BoardWrite.do?boardName=" + boardName + "&boardNo=" + boardNo + "&writeFlag=3";
             document.boardForm.method = "post";
             document.boardForm.submit();
         } catch (e) {
@@ -185,7 +191,7 @@
             success: function (data) { // 처리가 성공할 경우
                 // 에디터에 이미지 출력
                 $(el).summernote('editor.insertImage', data);
-                $('#imageBoard > ul').append('<li><img src="'+data+'" width="480" height="auto"/></li>');
+                $('#imageBoard > ul').append('<li><img src="' + data + '" width="480" height="auto"/></li>');
                 //editor.insertImage(welEditable, data.url);
             }
             , error: function (request, status, error) {
