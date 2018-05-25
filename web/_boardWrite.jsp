@@ -128,10 +128,12 @@
                         for (var i = files.length - 1; i >= 0; i--) {
                             sendFile(files[i], this);
                         }
-                    },
-                    onMediaDelete : function($target, editor, $editable) {
-                        alert($target.context.dataset.filename);
                     }
+                    /*
+                    onMediaDelete: function ($target, editor, $editable) {
+                        alert($target[0].attributes.src.value.split("/")[2]);
+                    }
+                    */
                 },
                 lang: 'ko-KR',
                 placeholder: '이제 게시글에 사진을 업로드할 수 있습니다.',
@@ -141,11 +143,8 @@
             });
     });
 
-
-
-        //게시글 비밀번호에 숫자만 입력할 수 있도록 정규식처리.
-        function onlyNumber(obj)
-    {
+    //게시글 비밀번호에 숫자만 입력할 수 있도록 정규식처리.
+    function onlyNumber(obj) {
         $(obj).keyup(function () {
             $(this).val($(this).val().replace(/[^0-9]/g, ""));
         });

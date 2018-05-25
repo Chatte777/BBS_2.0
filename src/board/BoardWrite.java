@@ -8,6 +8,12 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @WebServlet("/BoardWrite.do")
 public class BoardWrite extends HttpServlet {
@@ -32,6 +38,7 @@ public class BoardWrite extends HttpServlet {
         String boardContent = CommonValidation.boardContentValidation(request);
         int writeFlag = CommonValidation.writeFlagValidation(request);
         int fixedYn = CommonValidation.fixedYnValidation(request);
+        Map<String, String> imgSrcMap = new HashMap<>();
 
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter script = response.getWriter();
@@ -67,6 +74,13 @@ public class BoardWrite extends HttpServlet {
                 result = boardDAO.write(boardTitle, sessionUserId, boardContent, boardAuthorize, boardNo, boardPassword);
             }
 
+            // uploadImageStatus 관리
+            List imgSrcList = getImgSrc(boardContent);
+            for(int i=0; i<imgSrcList.size(); i++){
+                //imgSrcMap.put(imgSrcList.get(i).split("/"));
+            }
+
+            // 상단고정글일 경우 fixed_board 테이블에 등록
             if(fixedYn==1) boardDAO.writeFixedBoard(sessionUserId, boardName, boardNo);
             else boardDAO.deleteFixedBoard(sessionUserId, boardName, boardNo);
 
@@ -107,6 +121,18 @@ public class BoardWrite extends HttpServlet {
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
 
+    public static List getImgSrc(String str) {
+        Pattern nonValidPattern = Pattern
+                .compile("<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>");
+
+        List result = new ArrayList();
+        Matcher matcher = nonValidPattern.matcher(str);
+        while (matcher.find()) {
+            result.add(matcher.group(1));
+        }
+
+        return result;
     }
 }
