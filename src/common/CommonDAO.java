@@ -73,4 +73,16 @@ public class CommonDAO {
         }
         return totalBoardCount;
     }
+
+    public int updateYn(String SQL){
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+
+            pstmt.executeUpdate();
+            return 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
 }

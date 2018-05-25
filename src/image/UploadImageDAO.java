@@ -6,6 +6,7 @@ import errorMaster.ErrorMasterDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class UploadImageDAO {
     private DbConn dbConn = new DbConn();
@@ -14,7 +15,7 @@ public class UploadImageDAO {
     private CommonDAO commonDAO = new CommonDAO();
 
     public void writeUploadImageStatus(String boardName, int boardNo, String fileName){
-        String SQL = "INSERT INTO upload_image_status VALUES(?,?,?,?,?,?)";
+        String SQL = "INSERT IGNORE INTO upload_image_status VALUES(?,?,?,?,?,?)";
 
         try{
             PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -57,6 +58,36 @@ public class UploadImageDAO {
             e.printStackTrace();
         }
         return; //Database error
+    }
+
+    public ArrayList<UploadImageStatus> getUploadImageList(String boardName, int boardNo){
+        String SQL = "SELECT * FROM upload_image_status WHERE board_name=? AND board_no=?";
+        ArrayList<UploadImageStatus> list = new ArrayList<>();
+
+        try{
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setString(1, boardName);
+            pstmt.setInt(2, boardNo);
+
+            rs = pstmt.executeQuery();
+
+            while (rs.next()){
+                UploadImageStatus uploadImageStatus = new UploadImageStatus();
+                uploadImageStatus.setBoardName(rs.getString(1));
+                uploadImageStatus.setBoardNo(rs.getInt(2));
+                uploadImageStatus.setFileName(rs.getString(3));
+                uploadImageStatus.setDeleteYn(rs.getInt(4));
+                uploadImageStatus.setInsertDttm(rs.getString(5));
+                uploadImageStatus.setUpdateDttm(rs.getString(6));
+
+                list.add(uploadImageStatus);
+            }
+        } catch(Exception e){
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("boardName:"+boardName, "boardNo:"+boardNo, "", "", "UploadImageDAO.getUploadImageList", e.getMessage().toString(), "");
+            e.printStackTrace();
+        }
+        return list; //Database error
     }
 
 }

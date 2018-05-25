@@ -1,6 +1,8 @@
 package board;
 
 import common.CommonValidation;
+import image.UploadImageDAO;
+import image.UploadImageStatus;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -59,22 +61,45 @@ public class BoardWrite extends HttpServlet {
                 else boardPassword = "0000";
             }
 
+            ////////// imageUploadStatus 처리
+            // imgsrc에서 넘어온 이미지 리스트
+            List<String> imgSrcList = getImgSrcList(boardContent);
+            int splitCount = imgSrcList.get(0).split("/").length;
+
+            // 기존에 DB에 등록되어있던 이미지 리스트
+            UploadImageDAO uploadImageDAO = new UploadImageDAO();
+            ArrayList<UploadImageStatus> imgListFromServer = uploadImageDAO.getUploadImageList(boardName, boardNo);
+
+
             //writeFlag==1 : 글 작성, writeFlag==2 : 글 수정, writeFlag==3 : 답글작성
+            // 답글 작성할 경우에도 이 모듈을 사용하기 때문에 boardNo에 대한 정보가 있음.
             if(writeFlag==1){
+                // writeUploadImageStatus 호출
+                for(int i=0; i<imgSrcList.size(); i++){
+                    uploadImageDAO.writeUploadImageStatus(boardName, boardNo, imgSrcList.get(i).split("/")[splitCount]);
+                }
                 // DAO.write 호출
                 result = boardDAO.write(boardTitle, sessionUserId, boardContent, boardAuthorize, boardNo, boardPassword);
             } else if(writeFlag==2){
-                // 답글 작성할 경우에도 이 모듈을 사용하기 때문에 boardNo에 대한 정보가 있음.
                 // boardNo가 비어있을 경우에는 '0'으로 처리하며 이 경우는 (답글이 아닌)원본글을 작성하는 경우.
                 result = boardDAO.update(boardNo, boardTitle, boardContent, boardAuthorize, boardPassword);
+                // DB에는 있는데 imgSrc에 없을 경우는 해당 이미지가 삭제되었다는 의미. delete 호출
+                // imgSrc의 fileName이 기존에 DB에 있던 fileName과 같을 수는 없다.(upload module에서 이미 처리). 따라서 '다르다'='db에 없다.'
+                for(int i=0; i<imgListFromServer.size(); i++){
+                    int differFlag=1;
+                    for(int j=0; j<imgSrcList.size(); j++){
+                        uploadImageDAO.writeUploadImageStatus(boardName, boardNo, imgSrcList.get(j).split("/")[splitCount]);
+                        if(imgListFromServer.get(i).equals(imgSrcList.get(j).split("/")[splitCount])) differFlag=2; break;
+                    }
+                    if(differFlag==1) uploadImageDAO.deleteUploadImageStatus(boardName, boardNo, imgListFromServer.get(i).getFileName());
+                }
             } else if(writeFlag==3){
+                // writeUploadImageStatus 호출
+                for(int i=0; i<imgSrcList.size(); i++){
+                    uploadImageDAO.writeUploadImageStatus(boardName, boardNo, imgSrcList.get(i).split("/")[splitCount]);
+                }
+                // DAO.write 호출
                 result = boardDAO.write(boardTitle, sessionUserId, boardContent, boardAuthorize, boardNo, boardPassword);
-            }
-
-            // imageUploadStatus 처리
-            List<String> imgSrcList = getImgSrcList(boardContent);
-            for(int i=0; i<imgSrcList.size(); i++){
-                int v=0;
             }
 
             // 상단 고정 게시글일 경우 fixedBoard 테이블에 insert
@@ -120,7 +145,7 @@ public class BoardWrite extends HttpServlet {
         }
     }
 
-    public static List getImgSrcList(String str) {
+    private List getImgSrcList(String str) {
         Pattern nonValidPattern = Pattern
                 .compile("<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>");
 

@@ -292,18 +292,8 @@ public class BoardDAO {
     }
 
     public int delete(int boardNo){
-        String SQL = "UPDATE "+ this.tableName +" SET "+ this.colDeleteYn +" =2 WHERE "+ this.colBoardNo +" = ?";
-        try{
-            PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setInt(1, boardNo);
-
-            return pstmt.executeUpdate();
-        } catch(Exception e){
-            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
-            errorMasterDAO.write("boardNo:"+boardNo, "", "", "", "boardDAO.delete", e.getMessage().toString(), "");
-            e.printStackTrace();
-        }
-        return -1; //Database error
+        String SQL = "UPDATE "+ this.tableName +" SET "+ this.colDeleteYn +" =2 WHERE "+ this.colBoardNo +" = "+ boardNo;
+        return commonDAO.updateYn(SQL); //Database error
     }
 
     public int getReplyCnt(int boardNo) {

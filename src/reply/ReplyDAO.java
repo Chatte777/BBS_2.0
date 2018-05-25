@@ -145,19 +145,8 @@ public class ReplyDAO {
 	}
 
 	public int delete(int boardNo, int replyNo){
-		String SQL = "UPDATE "+ this.boardName+"_reply" +" SET reply_delete_yn=0 WHERE "+ this.colNo +" = ? and reply_no = ?";
-		try{
-			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			pstmt.setInt(1, boardNo);
-			pstmt.setInt(2, replyNo);
-
-			return pstmt.executeUpdate();
-		} catch(Exception e){
-			ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
-			errorMasterDAO.write("boardNo:"+boardNo, "replyNo:"+replyNo, "", "", "replyDAO.delete", e.getMessage().toString(), "");
-			e.printStackTrace();
-		}
-		return -1; //Database error
+		String SQL = "UPDATE "+ this.boardName+"_reply" +" SET reply_delete_yn=0 WHERE "+ this.colNo +" = "+boardNo+" and reply_no = "+replyNo;
+		return commonDAO.updateYn(SQL);
 	}
 
 	public int deleteFail(int boardNo, int replyNo){

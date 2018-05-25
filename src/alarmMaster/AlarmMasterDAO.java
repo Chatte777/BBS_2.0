@@ -294,45 +294,23 @@ public class AlarmMasterDAO {
     }
 
     public int updateAlarmReadYn(int alarmNo) {
-        String SQL = "UPDATE alarm_master SET alarm_read_yn = 2 WHERE alarm_no = ?";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setInt(1, alarmNo);
-
-            pstmt.executeUpdate();
-
-            return 1;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return -1;
+        String SQL = "UPDATE alarm_master SET alarm_read_yn = 2 WHERE alarm_no = " + alarmNo;
+        return commonDAO.updateYn(SQL);
     }
 
     public int updateAlarmAllReadYn(String alarmTargetUser) {
-        String SQL = "UPDATE alarm_master SET alarm_read_yn = 2 WHERE alarm_target_user = ?";
-        return updateYnAlarmTargetUser(SQL, alarmTargetUser);
+        String SQL = "UPDATE alarm_master SET alarm_read_yn = 2 WHERE alarm_target_user = " + alarmTargetUser;
+        return commonDAO.updateYn(SQL);
     }
 
     public int updateAlarmAllDeleteYn(String alarmTargetUser) {
-        String SQL = "UPDATE alarm_master SET alarm_delete_yn = 2 WHERE alarm_target_user = ?";
-        return updateYnAlarmTargetUser(SQL, alarmTargetUser);
+        String SQL = "UPDATE alarm_master SET alarm_delete_yn = 2 WHERE alarm_target_user = " + alarmTargetUser;
+        return commonDAO.updateYn(SQL);
     }
 
-    public int updateAlarmDeleteYn(int alarmNo, String alarmTargetUser) {
-        String SQL = "UPDATE alarm_master SET alarm_delete_yn = 2 WHERE alarm_no = ?";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setInt(1, alarmNo);
-
-            pstmt.executeUpdate();
-
-            return 1;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return -1;
+    public int updateAlarmDeleteYn(int alarmNo) {
+        String SQL = "UPDATE alarm_master SET alarm_delete_yn = 2 WHERE alarm_no = " + alarmNo;
+        return commonDAO.updateYn(SQL);
     }
 
     public int getAlarmCount(String alarmTargetUser) {
@@ -353,23 +331,6 @@ public class AlarmMasterDAO {
                 alarmCount = rs.getInt(1);
             }
             return alarmCount;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
-
-    ////////////////////
-    //////////공통모듈
-    ////////////////////
-    private int updateYnAlarmTargetUser(String SQL, String alarmTargetUser){
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setString(1, alarmTargetUser);
-
-            pstmt.executeUpdate();
-
-            return 1;
         } catch (Exception e) {
             e.printStackTrace();
         }
