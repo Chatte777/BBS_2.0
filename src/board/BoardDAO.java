@@ -94,6 +94,7 @@ public class BoardDAO {
             boardVO.setOrgBoardNo(rs.getInt(16));
             boardVO.setBoardPassword(rs.getString(17));
             boardVO.setBoardPriority(rs.getInt(18));
+            boardVO.setImageCount(rs.getInt(19));
         }catch (Exception e){
             ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
             errorMasterDAO.write("boardVO:"+boardVO, "rs:"+rs, "", "", "boardDAO.setBoardVO", e.getMessage().toString(), "");
@@ -103,13 +104,12 @@ public class BoardDAO {
     }
 
 
-    public int write(String boardTitle, String boardMakeUser, String boardContent, int boardAuthorize, int boardNo, String boardPassword){
+    public int write(String boardTitle, String boardMakeUser, String boardContent, int boardAuthorize, int boardNo, String boardPassword, int imageCount, int writeFlag){
         CommonDAO commonDAO = new CommonDAO();
         CommonDAO.writeContentLog("boardWrite", boardContent);
 
-        String SQL = "INSERT INTO "+ this.tableName +" VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String SQL = "INSERT INTO "+ this.tableName +" VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         int tmpNextNo = getNext();
-        if(boardNo==0) this._boardNo = tmpNextNo;
 
         if("".equals(boardTitle)) boardTitle = "<span style=\"color:lightgray;\">제목을 작성하지 않은 글입니다._"+boardContent.replaceAll("<br>", "&nbsp;").replaceAll("<p>", "&nbsp;").replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "").substring(0,20)+"</span>";
 
@@ -128,13 +128,13 @@ public class BoardDAO {
             pstmt.setInt(11, 1);  //boardDeleteYn
             pstmt.setInt(12, boardAuthorize);  //boardAuthorize
             pstmt.setInt(13, 0);  //boardReadCount
-            if(boardNo==0)pstmt.setInt(14,1);  //boardNo가 0이면 원본글임. isReboard
-            else pstmt.setInt(14, 2);
+            if(writeFlag==3)pstmt.setInt(14,2);  //writeFlag가 3이면 원본글임. isReboard
+            else pstmt.setInt(14, 1);
             pstmt.setInt(15, 1);  //hasReboard
-            if(boardNo==0)pstmt.setInt(16,0);  //orgBoardNo
-            else pstmt.setInt(16, boardNo);
+            pstmt.setInt(16, boardNo); //orgBoardNo
             pstmt.setString(17, boardPassword);
             pstmt.setInt(18, 0);
+            pstmt.setInt(19, imageCount);
 
             if(boardNo!=0) {
                 boardContent = boardContent.replaceAll("<br>", "&nbsp;").replaceAll("<p>", "&nbsp;").replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
@@ -267,15 +267,16 @@ public class BoardDAO {
         return null;
     }
 
-    public int update(int boardNo, String boardTitle, String boardContent, int boardAuthorize, String boardPassword){
-        String SQL = "UPDATE "+ this.tableName +" SET "+ this.colTitle +" =?, "+ this.colContent +" =?, "+ this.colAuthorize +" =?, "+ this.colBoardPassword + "= ? WHERE "+ this.colBoardNo +" =?";
+    public int update(int boardNo, String boardTitle, String boardContent, int boardAuthorize, String boardPassword, int imageCount){
+        String SQL = "UPDATE "+ this.tableName +" SET "+ this.colTitle +" =?, "+ this.colContent +" =?, "+ this.colAuthorize +" =?, "+ this.colBoardPassword + "= ? , image_count = ? WHERE "+ this.colBoardNo +" =?";
         try{
             PreparedStatement pstmt = conn.prepareStatement(SQL);
             pstmt.setString(1, boardTitle);
             pstmt.setString(2, boardContent);
             pstmt.setInt(3, boardAuthorize);
             pstmt.setString(4, boardPassword);
-            pstmt.setInt(5, boardNo);
+            pstmt.setInt(5, imageCount);
+            pstmt.setInt(6, boardNo);
 
 
             pstmt.executeUpdate();
@@ -285,7 +286,7 @@ public class BoardDAO {
             CommonDAO.writeContentLog("boardUpdate", boardContent);
 
             ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
-            errorMasterDAO.write("boardNo:"+boardNo, "boardTitle"+boardTitle, "boardAuthorize:"+boardAuthorize, "boardContent:"+boardContent, "boardDAO.getBoardNo", e.getMessage().toString(), "boardDAO.update");
+            errorMasterDAO.write("boardNo:"+boardNo, "boardTitle"+boardTitle, "boardAuthorize:"+boardAuthorize, "boardContent:"+boardContent, "boardDAO.boardUpdate", e.getMessage().toString(), "");
             e.printStackTrace();
         }
         return -1; //Database error

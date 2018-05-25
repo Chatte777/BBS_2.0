@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -51,6 +52,7 @@ public class BoardWrite extends HttpServlet {
             script.println("location.href = 'login.jsp'");
         } else {
             BoardDAO boardDAO = new BoardDAO(boardName);
+            if(boardNo==0) boardNo = boardDAO.getNext();
 
             // 게시글 비밀번호 처리
             if(boardAuthorize==2){
@@ -63,49 +65,52 @@ public class BoardWrite extends HttpServlet {
 
             ////////// imageUploadStatus 처리
             // imgsrc에서 넘어온 이미지 리스트
-            List<String> imgSrcList = getImgSrcList(boardContent);
-            int splitCount = imgSrcList.get(0).split("/").length;
-
+            List<String> listFromSrc = getImgSrcList(boardContent);
+            int splitCount=0;
+            int imageCount=listFromSrc.size();
+            // '/'로 쪼갠 배열의 갯수를 구하기 위해 하나의 시범 데이터를 '/'로 쪼개서 몇개의 셀이 나오는지 확인한다.
+            if(listFromSrc!=null && listFromSrc.size()!=0) splitCount = listFromSrc.get(0).split("/").length;
+            for(int i=0; i<listFromSrc.size(); i++){ // src에서 fileName만 발라내기. '/'로 쪼갠 결과물 중 제일 마지막 셀.
+                listFromSrc.set(i, listFromSrc.get(i).split("/")[splitCount-1]);
+            }
             // 기존에 DB에 등록되어있던 이미지 리스트
             UploadImageDAO uploadImageDAO = new UploadImageDAO();
-            ArrayList<UploadImageStatus> imgListFromServer = uploadImageDAO.getUploadImageList(boardName, boardNo);
-
+            ArrayList<UploadImageStatus> listFromServer = uploadImageDAO.getUploadImageList(boardName, boardNo);
+            // DB의 리스트 - src의 리스트 차집합 구하기
+            List<String> subtractList = getSubtractList(listFromServer, listFromSrc);
 
             //writeFlag==1 : 글 작성, writeFlag==2 : 글 수정, writeFlag==3 : 답글작성
             // 답글 작성할 경우에도 이 모듈을 사용하기 때문에 boardNo에 대한 정보가 있음.
             if(writeFlag==1){
                 // writeUploadImageStatus 호출
-                for(int i=0; i<imgSrcList.size(); i++){
-                    uploadImageDAO.writeUploadImageStatus(boardName, boardNo, imgSrcList.get(i).split("/")[splitCount]);
+                for(int i=0; i<listFromSrc.size(); i++){
+                    uploadImageDAO.writeUploadImageStatus(boardName, boardNo, listFromSrc.get(i));
                 }
-                // DAO.write 호출
-                result = boardDAO.write(boardTitle, sessionUserId, boardContent, boardAuthorize, boardNo, boardPassword);
+                // boardDAO.write 호출
+                result = boardDAO.write(boardTitle, sessionUserId, boardContent, boardAuthorize, boardNo, boardPassword, imageCount, writeFlag);
             } else if(writeFlag==2){
-                // boardNo가 비어있을 경우에는 '0'으로 처리하며 이 경우는 (답글이 아닌)원본글을 작성하는 경우.
-                result = boardDAO.update(boardNo, boardTitle, boardContent, boardAuthorize, boardPassword);
-                // DB에는 있는데 imgSrc에 없을 경우는 해당 이미지가 삭제되었다는 의미. delete 호출
-                // imgSrc의 fileName이 기존에 DB에 있던 fileName과 같을 수는 없다.(upload module에서 이미 처리). 따라서 '다르다'='db에 없다.'
-                for(int i=0; i<imgListFromServer.size(); i++){
-                    int differFlag=1;
-                    for(int j=0; j<imgSrcList.size(); j++){
-                        uploadImageDAO.writeUploadImageStatus(boardName, boardNo, imgSrcList.get(j).split("/")[splitCount]);
-                        if(imgListFromServer.get(i).equals(imgSrcList.get(j).split("/")[splitCount])) differFlag=2; break;
-                    }
-                    if(differFlag==1) uploadImageDAO.deleteUploadImageStatus(boardName, boardNo, imgListFromServer.get(i).getFileName());
+                // DB의 리스트 - src의 리스트 차집합 = 삭제된 이미지. 삭제처리한다.
+                for(int i=0; i<subtractList.size(); i++){
+                    uploadImageDAO.deleteUploadImageStatus(boardName, boardNo, subtractList.get(i));
                 }
+                // src에 들어온 이미지 = 등록할 이미지. 등록처리한다. 중복일 경우는 insert Ignore
+                // 서로 다른 파일인데 파일명이 중복으로 들어올 수는 없음. (upload Image 모듈에서 처리완료)
+                for(int i=0; i<listFromSrc.size(); i++){
+                    uploadImageDAO.writeUploadImageStatus(boardName, boardNo, listFromSrc.get(i));
+                }
+                result = boardDAO.update(boardNo, boardTitle, boardContent, boardAuthorize, boardPassword, imageCount);
             } else if(writeFlag==3){
                 // writeUploadImageStatus 호출
-                for(int i=0; i<imgSrcList.size(); i++){
-                    uploadImageDAO.writeUploadImageStatus(boardName, boardNo, imgSrcList.get(i).split("/")[splitCount]);
+                for(int i=0; i<listFromSrc.size(); i++){
+                    uploadImageDAO.writeUploadImageStatus(boardName, boardNo, listFromSrc.get(i));
                 }
                 // DAO.write 호출
-                result = boardDAO.write(boardTitle, sessionUserId, boardContent, boardAuthorize, boardNo, boardPassword);
+                result = boardDAO.write(boardTitle, sessionUserId, boardContent, boardAuthorize, boardNo, boardPassword, imageCount, writeFlag);
             }
 
             // 상단 고정 게시글일 경우 fixedBoard 테이블에 insert
             if(fixedYn==1) boardDAO.writeFixedBoard(sessionUserId, boardName, boardNo);
             else boardDAO.deleteFixedBoard(sessionUserId, boardName, boardNo);
-
 
             // 실패했을 경우 작성한 값들을 쿠키에 임시 저장 및 reoloadFlag를 1로 변경.
             if (result == -1) {
@@ -156,5 +161,21 @@ public class BoardWrite extends HttpServlet {
         }
 
         return result;
+    }
+
+    private List<String> getSubtractList(List<UploadImageStatus> listFromServer, List<String> listFromSrc){
+        HashSet<String> hashSetFromServer = new HashSet<>();
+        for(int i=0; i<listFromServer.size(); i++){
+            hashSetFromServer.add(listFromServer.get(i).getFileName());
+        }
+
+        HashSet<String> hashSetFromSrc = new HashSet<>();
+        for(int i=0; i<listFromSrc.size(); i++){
+            hashSetFromSrc.add(listFromSrc.get(i));
+        }
+
+        hashSetFromServer.removeAll(hashSetFromSrc);
+        List<String> returnList = new ArrayList<>(hashSetFromServer);
+        return returnList;
     }
 }

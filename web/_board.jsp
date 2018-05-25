@@ -131,6 +131,7 @@
             var replyColorFlag = etcInformation[i].replyColorFlag;
             var boardNo = boardData[i].boardNo;
             var boardMakeDt = boardData[i].boardMakeDt;
+            var imageCount = boardData[i].imageCount;
             boardMakeDt = boardMakeDt.substring(0, 11) + boardMakeDt.substring(11, 13) + "시" + boardMakeDt.substring(14, 16) + "분";
 
             if(isReboard==1){
@@ -159,6 +160,8 @@
                         row += "<span style=\"color: black;\">"+boardTitle+"</span>";
                         break;
                 }
+
+                if(imageCount > 0) row += "&nbsp;&nbsp;<span class=\"glyphicon glyphicon-picture\" style=\"color: darkblue;\">&nbsp;</span>";
 
                 row +=
                     "</span>" +
@@ -218,6 +221,8 @@
                         row += "<span style=\"color: black;\">"+boardTitle+"</span>";
                         break;
                 }
+
+                if(imageCount > 0) row += "&nbsp;&nbsp;<span class=\"glyphicon glyphicon-picture\" style=\"color: darkblue;\">&nbsp;</span>";
 
                 row +=
                     "</span>" +

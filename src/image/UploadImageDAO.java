@@ -39,7 +39,7 @@ public class UploadImageDAO {
     }
 
     public void deleteUploadImageStatus(String boardName, int boardNo, String fileName){
-        String SQL = "UPDATE upload_image_status SET delete_yn=2 and update_dttm=? where board_name=? and board_no = ? and file_name = ?";
+        String SQL = "UPDATE upload_image_status SET delete_yn=2, update_dttm=? where board_name=? and board_no = ? and file_name = ?";
 
         try{
             PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -61,7 +61,7 @@ public class UploadImageDAO {
     }
 
     public ArrayList<UploadImageStatus> getUploadImageList(String boardName, int boardNo){
-        String SQL = "SELECT * FROM upload_image_status WHERE board_name=? AND board_no=?";
+        String SQL = "SELECT * FROM upload_image_status WHERE board_name=? AND board_no=? AND delete_yn=1";
         ArrayList<UploadImageStatus> list = new ArrayList<>();
 
         try{

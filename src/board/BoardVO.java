@@ -19,6 +19,15 @@ public class BoardVO {
     private int orgBoardNo;
     private String boardPassword;
     private int boardPriority;
+    private int imageCount;
+
+    public int getImageCount() {
+        return imageCount;
+    }
+
+    public void setImageCount(int imageCount) {
+        this.imageCount = imageCount;
+    }
 
     public String getTableName() {
         return tableName;
