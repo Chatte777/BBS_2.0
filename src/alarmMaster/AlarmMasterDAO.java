@@ -1,6 +1,7 @@
 package alarmMaster;
 
 import board.BoardVO;
+import common.CommonDAO;
 import dbConn.DbConn;
 import reply.ReplyVO;
 
@@ -15,6 +16,7 @@ public class AlarmMasterDAO {
     private Connection conn;
     private DbConn dbConn = new DbConn();
     private ResultSet rs;
+    private CommonDAO commonDAO = new CommonDAO();
 
     public AlarmMasterDAO() {
         conn = dbConn.getDbConnection();
@@ -124,23 +126,7 @@ public class AlarmMasterDAO {
                 " WHERE alarm_delete_yn = 1 " +
                 " AND alarm_target_user = ? ";
 
-        try {
-            //조건에 맞는 전체 게시글 갯수
-            int totalBoardCount = 1;
-
-            PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setString(1, alarmTargetUser);
-
-            rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                totalBoardCount = rs.getInt(1);
-            }
-            return totalBoardCount;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return -1;
+        return commonDAO.getTotalBoardIndex(SQL, alarmTargetUser);
     }
 
     public boolean isNextPage(int pageNumber, String alarmTargetUser) {
@@ -325,34 +311,12 @@ public class AlarmMasterDAO {
 
     public int updateAlarmAllReadYn(String alarmTargetUser) {
         String SQL = "UPDATE alarm_master SET alarm_read_yn = 2 WHERE alarm_target_user = ?";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setString(1, alarmTargetUser);
-
-            pstmt.executeUpdate();
-
-            return 1;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return -1;
+        return updateYnAlarmTargetUser(SQL, alarmTargetUser);
     }
 
     public int updateAlarmAllDeleteYn(String alarmTargetUser) {
         String SQL = "UPDATE alarm_master SET alarm_delete_yn = 2 WHERE alarm_target_user = ?";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setString(1, alarmTargetUser);
-
-            pstmt.executeUpdate();
-
-            return 1;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return -1;
+        return updateYnAlarmTargetUser(SQL, alarmTargetUser);
     }
 
     public int updateAlarmDeleteYn(int alarmNo, String alarmTargetUser) {
@@ -389,6 +353,23 @@ public class AlarmMasterDAO {
                 alarmCount = rs.getInt(1);
             }
             return alarmCount;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    ////////////////////
+    //////////공통모듈
+    ////////////////////
+    private int updateYnAlarmTargetUser(String SQL, String alarmTargetUser){
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setString(1, alarmTargetUser);
+
+            pstmt.executeUpdate();
+
+            return 1;
         } catch (Exception e) {
             e.printStackTrace();
         }

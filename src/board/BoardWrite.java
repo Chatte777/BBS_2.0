@@ -8,6 +8,10 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @WebServlet("/BoardWrite.do")
 public class BoardWrite extends HttpServlet {
@@ -67,6 +71,13 @@ public class BoardWrite extends HttpServlet {
                 result = boardDAO.write(boardTitle, sessionUserId, boardContent, boardAuthorize, boardNo, boardPassword);
             }
 
+            // imageUploadStatus 처리
+            List<String> imgSrcList = getImgSrcList(boardContent);
+            for(int i=0; i<imgSrcList.size(); i++){
+                int v=0;
+            }
+
+            // 상단 고정 게시글일 경우 fixedBoard 테이블에 insert
             if(fixedYn==1) boardDAO.writeFixedBoard(sessionUserId, boardName, boardNo);
             else boardDAO.deleteFixedBoard(sessionUserId, boardName, boardNo);
 
@@ -107,6 +118,18 @@ public class BoardWrite extends HttpServlet {
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
 
+    public static List getImgSrcList(String str) {
+        Pattern nonValidPattern = Pattern
+                .compile("<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>");
+
+        List result = new ArrayList();
+        Matcher matcher = nonValidPattern.matcher(str);
+        while (matcher.find()) {
+            result.add(matcher.group(1));
+        }
+
+        return result;
     }
 }

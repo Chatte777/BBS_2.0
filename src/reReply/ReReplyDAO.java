@@ -15,6 +15,8 @@ public class ReReplyDAO {
     private Connection conn;
     private DbConn dbConn = new DbConn();
     private ResultSet rs;
+    private CommonDAO commonDAO = new CommonDAO();
+
     private String boardName;
     private String tableName;
     private String colBoardNo;
@@ -46,23 +48,6 @@ public class ReReplyDAO {
             e.printStackTrace();
         }
         return reReplyVO;
-    }
-
-    public String getDate() {
-        String SQL = "select now()";
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(SQL);
-            rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getString(1);
-            }
-        } catch (Exception e) {
-            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
-            errorMasterDAO.write("", "", "", "", "reReplyDAO.getDate", e.getMessage().toString(), "");
-            e.printStackTrace();
-        }
-        return ""; // Database error
     }
 
     public int getNext(int boardNo, int replyNo) {
@@ -107,7 +92,7 @@ public class ReReplyDAO {
             pstmt.setInt(3, tmpNextNo);
             pstmt.setString(4, reReplyContent);
             pstmt.setString(5, replyMakeUser);
-            pstmt.setString(6, getDate());
+            pstmt.setString(6, commonDAO.getDate());
             pstmt.setInt(7, 1);
             pstmt.setInt(8, 1);
             pstmt.setInt(9, 1);
