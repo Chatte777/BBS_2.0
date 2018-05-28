@@ -80,6 +80,7 @@ public class GetMyBoardList extends HttpServlet {
             boardJsonObject.put("tableName", myBoardList.get(i).getTableName());
             boardJsonObject.put("boardPassword", myBoardList.get(i).getBoardPassword());
             boardJsonObject.put("boardNo", myBoardList.get(i).getBoardNo());
+            boardJsonObject.put("imageCount", myBoardList.get(i).getImageCount());
             boardJsonArray.add(boardJsonObject);
         }
 

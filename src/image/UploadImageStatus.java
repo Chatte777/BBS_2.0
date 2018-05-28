@@ -5,8 +5,8 @@ public class UploadImageStatus {
     private int boardNo;
     private String fileName;
     private int deleteYn;
-    private String insertTime;
-    private String updateTime;
+    private String insertDttm;
+    private String updateDttm;
 
     public String getBoardName() {
         return boardName;
@@ -40,19 +40,19 @@ public class UploadImageStatus {
         this.deleteYn = deleteYn;
     }
 
-    public String getInsertTime() {
-        return insertTime;
+    public String getInsertDttm() {
+        return insertDttm;
     }
 
-    public void setInsertTime(String insertTime) {
-        this.insertTime = insertTime;
+    public void setInsertDttm(String insertDttm) {
+        this.insertDttm = insertDttm;
     }
 
-    public String getUpdateTime() {
-        return updateTime;
+    public String getUpdateDttm() {
+        return updateDttm;
     }
 
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
+    public void setUpdateDttm(String updateDttm) {
+        this.updateDttm = updateDttm;
     }
 }

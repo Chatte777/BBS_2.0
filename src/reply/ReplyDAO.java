@@ -10,10 +10,10 @@ import errorMaster.ErrorMasterDAO;
 import common.*;
 
 public class ReplyDAO {
-
 	private Connection conn;
 	private DbConn dbConn = new DbConn();
 	private ResultSet rs;
+	private CommonDAO commonDAO = new CommonDAO();
 	private String boardName;
 	private String colNo;
 	
@@ -23,27 +23,9 @@ public class ReplyDAO {
 
 		conn = dbConn.getDbConnection();
 	}
-	
-	public String getDate(){
-		String SQL = "select now()";
-		try{
-			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			rs = pstmt.executeQuery();
-			
-			if(rs.next()){
-				return rs.getString(1);
-			}
-		} catch(Exception e){
-			ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
-			errorMasterDAO.write("", "", "", "", "replyDAO.getDate", e.getMessage().toString(), "");
 
-			e.printStackTrace();
-		}
-		return ""; //Database error
-	}
-	
 	public int getNext(int boardNo){
-		String SQL = "SELECT count(1) FROM "+ this.boardName+"_reply" +" WHERE "+ this.colNo +" = ?";
+		String SQL = "SELECT reply_no FROM "+ this.boardName+"_reply" +" WHERE "+ this.colNo +" = ?";
 		try{
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			pstmt.setInt(1, boardNo);
@@ -93,7 +75,7 @@ public class ReplyDAO {
 			pstmt.setInt(2, tmpNextNo);
 			pstmt.setString(3, replyContent);
 			pstmt.setString(4,replyMakeUser);
-			pstmt.setString(5, getDate());
+			pstmt.setString(5, commonDAO.getDate());
 			pstmt.setInt(6,1);
 			pstmt.setInt(7,1);
 			pstmt.setInt(8,1);
@@ -163,19 +145,8 @@ public class ReplyDAO {
 	}
 
 	public int delete(int boardNo, int replyNo){
-		String SQL = "UPDATE "+ this.boardName+"_reply" +" SET reply_delete_yn=0 WHERE "+ this.colNo +" = ? and reply_no = ?";
-		try{
-			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			pstmt.setInt(1, boardNo);
-			pstmt.setInt(2, replyNo);
-
-			return pstmt.executeUpdate();
-		} catch(Exception e){
-			ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
-			errorMasterDAO.write("boardNo:"+boardNo, "replyNo:"+replyNo, "", "", "replyDAO.delete", e.getMessage().toString(), "");
-			e.printStackTrace();
-		}
-		return -1; //Database error
+		String SQL = "UPDATE "+ this.boardName+"_reply" +" SET reply_delete_yn=0 WHERE "+ this.colNo +" = "+boardNo+" and reply_no = "+replyNo;
+		return commonDAO.updateYn(SQL);
 	}
 
 	public int deleteFail(int boardNo, int replyNo){

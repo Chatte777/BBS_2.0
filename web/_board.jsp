@@ -131,6 +131,7 @@
             var replyColorFlag = etcInformation[i].replyColorFlag;
             var boardNo = boardData[i].boardNo;
             var boardMakeDt = boardData[i].boardMakeDt;
+            var imageCount = boardData[i].imageCount;
             boardMakeDt = boardMakeDt.substring(0, 11) + boardMakeDt.substring(11, 13) + "시" + boardMakeDt.substring(14, 16) + "분";
 
             if(isReboard==1){
@@ -142,7 +143,7 @@
                 if(boardAuthorize==2) row += "<span class=\"glyphicon glyphicon-lock\" style=\"color: #bbbbbb;\">&nbsp;</span>";
 
                 row +=
-                    "<span onclick=\"onClickBoardTitle('"+tableName+"', '"+boardNo+"', '"+boardAuthorize+"', '"+boardPassword+"')\"" +
+                    "<span onclick=\"onClickBoardTitle('"+tableName+"', '"+boardNo+"', '"+boardAuthorize+"', '"+boardPassword+"', '1')\"" +
                     "style=\"cursor: pointer;\">";
 
                 switch (boardColorFlag){
@@ -160,10 +161,14 @@
                         break;
                 }
 
+                if(imageCount > 0) row += "&nbsp;&nbsp;<span class=\"glyphicon glyphicon-picture\" style=\"color: darkblue;\">&nbsp;</span>";
+
                 row +=
                     "</span>" +
                     "</td>" +
-                    "<td>";
+                    "<td>" +
+                    "<span onclick=\"onClickBoardTitle('"+tableName+"', '"+boardNo+"', '"+boardAuthorize+"', '"+boardPassword+"', '2')\"" +
+                    "style=\"cursor: pointer;\">";
 
                 switch (replyColorFlag){
                     case '1':
@@ -187,6 +192,7 @@
                 }
 
                 row +=
+                    "</span>" +
                     "</td>" +
                     "<td>" + boardMakeUser + "</td>" +
                     "<td>" + boardMakeDt + "</td>" +
@@ -219,10 +225,14 @@
                         break;
                 }
 
+                if(imageCount > 0) row += "&nbsp;&nbsp;<span class=\"glyphicon glyphicon-picture\" style=\"color: darkblue;\">&nbsp;</span>";
+
                 row +=
                     "</span>" +
                     "</td>" +
-                    "<td>";
+                    "<td>" +
+                    "<span onclick=\"onClickBoardTitle('"+tableName+"', '"+boardNo+"', '"+boardAuthorize+"', '"+boardPassword+"', '2')\"" +
+                    "style=\"cursor: pointer;\">";
 
                 switch (replyColorFlag){
                     case '1':
@@ -245,6 +255,7 @@
                         break;
                 }
                 row+=
+                    "</span>" +
                     "</td>" +
                     "<td>" + boardMakeUser + "</td>" +
                     "<td>" + boardMakeDt + "</td>" +
@@ -259,13 +270,14 @@
         }
     }
 
-    function onClickBoardTitle(boardName, boardNo, boardAuthorize, boardPassword) {
-        if (boardAuthorize == 1) location.href = "GetBoard.do?boardName=" + boardName + "&boardNo=" + boardNo+"&viewFlag=1";
+    // clickType=1 : 게시글제목 클릭. 단순 페이지이동. clcikType=2 : 댓글갯수 클릭. 페이지 이동 후페이지 하단 포커스
+    function onClickBoardTitle(boardName, boardNo, boardAuthorize, boardPassword, clickType) {
+        if (boardAuthorize == 1) location.href = "GetBoard.do?boardName=" + boardName + "&boardNo=" + boardNo+"&viewFlag=1&clickType="+clickType;
         else if (boardAuthorize == 2) {
             var inputPassword = prompt("비밀번호를 입력하세요.(4자리 이하의 숫자)", "0000");
 
             if (inputPassword != null) {
-                if (boardPassword == inputPassword) location.href = "GetBoard.do?boardName=" + boardName + "&boardNo=" + boardNo + "&boardPassword=" + inputPassword+"&viewFlag=1";
+                if (boardPassword == inputPassword) location.href = "GetBoard.do?boardName=" + boardName + "&boardNo=" + boardNo + "&boardPassword=" + inputPassword+"&viewFlag=1&clickType"+clickType;
                 else {
                     alert("비밀번호 오류입니다.");
                 }

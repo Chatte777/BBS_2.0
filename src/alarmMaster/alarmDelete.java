@@ -21,10 +21,9 @@ public class alarmDelete extends HttpServlet {
 
     protected void requestPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int alarmNo = CommonValidation.alarmNoValidation(request);
-        String alarmTargetUser = CommonValidation.alarmTargetUserValidation(request);
 
         AlarmMasterDAO alarmMasterDAO = new AlarmMasterDAO();
-        int result = alarmMasterDAO.updateAlarmDeleteYn(alarmNo, alarmTargetUser);
+        int result = alarmMasterDAO.updateAlarmDeleteYn(alarmNo);
         if(result==1) response.getWriter().write("1");
     }
 }

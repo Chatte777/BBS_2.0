@@ -27,12 +27,13 @@ public class ImageUpload extends HttpServlet {
     protected void requestPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String boardName = CommonValidation.boardNameValidation(request);
         String uploadPath = "/uploadImage/"+boardName;
+        //String uploadPath = "images";
         int maxSize = 1024 * 1024 *100;
         String encoding = "UTF-8";
         String fileName = "";
 
         try{
-            MultipartRequest multipartRequest = new MultipartRequest(request, "E:/uploadImage/notify", maxSize, encoding, new DefaultFileRenamePolicy());
+            MultipartRequest multipartRequest = new MultipartRequest(request, "D:/uploadImage/"+boardName, maxSize, encoding, new DefaultFileRenamePolicy());
             Enumeration files = multipartRequest.getFileNames();
             String file = (String)files.nextElement();
             fileName = multipartRequest.getFilesystemName(file);

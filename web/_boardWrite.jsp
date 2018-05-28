@@ -130,8 +130,8 @@
                         }
                     }
                     /*
-                    onMediaDelete: function ($target, editor, $editable) {
-                        alert($target[0].attributes.src.value.split("/")[2]);
+                    onMediaDelete : function($target, editor, $editable) {
+                        alert($target.context.dataset.filename);
                     }
                     */
                 },

@@ -6,16 +6,17 @@ import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
 import dbConn.*;
 import alarmMaster.*;
 import errorMaster.*;
 import common.*;
 
 public class BoardDAO {
-
     private Connection conn;
     private DbConn dbConn=new DbConn();
     private ResultSet rs;
+    private CommonDAO commonDAO = new CommonDAO();
     
     private String boardName;
     private String tableName;
@@ -53,22 +54,7 @@ public class BoardDAO {
         conn=dbConn.getDbConnection();
     }
 
-    public String getDate(){
-        String SQL = "select now()";
-        try{
-            PreparedStatement pstmt = conn.prepareStatement(SQL);
-            rs = pstmt.executeQuery();
 
-            if(rs.next()){
-                return rs.getString(1);
-            }
-        } catch(Exception e){
-            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
-            errorMasterDAO.write("", "", "", "", "boardDAO.getDate", e.getMessage().toString(), "");
-            e.printStackTrace();
-        }
-        return ""; //Database error
-    }
 
     public int getNext(){
         String SQL = "SELECT " + this.colBoardNo + " FROM "+ this.tableName +" ORDER BY "+ this.colBoardNo +" DESC";
@@ -108,6 +94,7 @@ public class BoardDAO {
             boardVO.setOrgBoardNo(rs.getInt(16));
             boardVO.setBoardPassword(rs.getString(17));
             boardVO.setBoardPriority(rs.getInt(18));
+            boardVO.setImageCount(rs.getInt(19));
         }catch (Exception e){
             ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
             errorMasterDAO.write("boardVO:"+boardVO, "rs:"+rs, "", "", "boardDAO.setBoardVO", e.getMessage().toString(), "");
@@ -117,12 +104,12 @@ public class BoardDAO {
     }
 
 
-    public int write(String boardTitle, String boardMakeUser, String boardContent, int boardAuthorize, int boardNo, String boardPassword){
+    public int write(String boardTitle, String boardMakeUser, String boardContent, int boardAuthorize, int boardNo, String boardPassword, int imageCount, int writeFlag){
+        CommonDAO commonDAO = new CommonDAO();
         CommonDAO.writeContentLog("boardWrite", boardContent);
 
-        String SQL = "INSERT INTO "+ this.tableName +" VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String SQL = "INSERT INTO "+ this.tableName +" VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         int tmpNextNo = getNext();
-        if(boardNo==0) this._boardNo = tmpNextNo;
 
         if("".equals(boardTitle)) boardTitle = "<span style=\"color:lightgray;\">제목을 작성하지 않은 글입니다._"+boardContent.replaceAll("<br>", "&nbsp;").replaceAll("<p>", "&nbsp;").replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "").substring(0,20)+"</span>";
 
@@ -134,20 +121,20 @@ public class BoardDAO {
             pstmt.setInt(4, 1);  //boardTm
             pstmt.setString(5, boardContent);  //boardContent
             pstmt.setString(6, boardMakeUser);  //boardMakeUser
-            pstmt.setString(7, getDate());  //boardMakeDt
+            pstmt.setString(7, commonDAO.getDate());  //boardMakeDt
             pstmt.setInt(8, 1);  //boardReplyCnt
             pstmt.setInt(9, 1);  //boardLikeCnt
             pstmt.setInt(10, 1);  //boardDislikeCnt
             pstmt.setInt(11, 1);  //boardDeleteYn
             pstmt.setInt(12, boardAuthorize);  //boardAuthorize
             pstmt.setInt(13, 0);  //boardReadCount
-            if(boardNo==0)pstmt.setInt(14,1);  //boardNo가 0이면 원본글임. isReboard
-            else pstmt.setInt(14, 2);
+            if(writeFlag==3)pstmt.setInt(14,2);  //writeFlag가 3이면 원본글임. isReboard
+            else pstmt.setInt(14, 1);
             pstmt.setInt(15, 1);  //hasReboard
-            if(boardNo==0)pstmt.setInt(16,0);  //orgBoardNo
-            else pstmt.setInt(16, boardNo);
+            pstmt.setInt(16, boardNo); //orgBoardNo
             pstmt.setString(17, boardPassword);
             pstmt.setInt(18, 0);
+            pstmt.setInt(19, imageCount);
 
             if(boardNo!=0) {
                 boardContent = boardContent.replaceAll("<br>", "&nbsp;").replaceAll("<p>", "&nbsp;").replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "");
@@ -177,25 +164,7 @@ public class BoardDAO {
                 + " WHERE " + this.colDeleteYn + " = 1"
                 + " AND ("+ this.colAuthorize +"= 1 OR ("+ this.colAuthorize +"=2 and "+ this.colMakeUser +"=?))";
 
-        try{
-            //조건에 맞는 전체 게시글 갯수
-            int totalBoardCount =1;
-
-            PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setString(1, makeUser);
-
-            rs = pstmt.executeQuery();
-
-            while(rs.next()){
-                totalBoardCount = rs.getInt(1);
-            }
-            return totalBoardCount;
-        } catch(Exception e){
-            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
-            errorMasterDAO.write("makeUser:"+makeUser, "", "", "", "boardDAO.getTotalBoardIndex", e.getMessage().toString(), "");
-            e.printStackTrace();
-        }
-        return -1;
+        return commonDAO.getTotalBoardIndex(SQL, makeUser);
     }
 
     public ArrayList<BoardVO> getList(int pageNumber, String makeUser){
@@ -298,15 +267,16 @@ public class BoardDAO {
         return null;
     }
 
-    public int update(int boardNo, String boardTitle, String boardContent, int boardAuthorize, String boardPassword){
-        String SQL = "UPDATE "+ this.tableName +" SET "+ this.colTitle +" =?, "+ this.colContent +" =?, "+ this.colAuthorize +" =?, "+ this.colBoardPassword + "= ? WHERE "+ this.colBoardNo +" =?";
+    public int update(int boardNo, String boardTitle, String boardContent, int boardAuthorize, String boardPassword, int imageCount){
+        String SQL = "UPDATE "+ this.tableName +" SET "+ this.colTitle +" =?, "+ this.colContent +" =?, "+ this.colAuthorize +" =?, "+ this.colBoardPassword + "= ? , image_count = ? WHERE "+ this.colBoardNo +" =?";
         try{
             PreparedStatement pstmt = conn.prepareStatement(SQL);
             pstmt.setString(1, boardTitle);
             pstmt.setString(2, boardContent);
             pstmt.setInt(3, boardAuthorize);
             pstmt.setString(4, boardPassword);
-            pstmt.setInt(5, boardNo);
+            pstmt.setInt(5, imageCount);
+            pstmt.setInt(6, boardNo);
 
 
             pstmt.executeUpdate();
@@ -316,25 +286,15 @@ public class BoardDAO {
             CommonDAO.writeContentLog("boardUpdate", boardContent);
 
             ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
-            errorMasterDAO.write("boardNo:"+boardNo, "boardTitle"+boardTitle, "boardAuthorize:"+boardAuthorize, "boardContent:"+boardContent, "boardDAO.getBoardNo", e.getMessage().toString(), "boardDAO.update");
+            errorMasterDAO.write("boardNo:"+boardNo, "boardTitle"+boardTitle, "boardAuthorize:"+boardAuthorize, "boardContent:"+boardContent, "boardDAO.boardUpdate", e.getMessage().toString(), "");
             e.printStackTrace();
         }
         return -1; //Database error
     }
 
     public int delete(int boardNo){
-        String SQL = "UPDATE "+ this.tableName +" SET "+ this.colDeleteYn +" =2 WHERE "+ this.colBoardNo +" = ?";
-        try{
-            PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setInt(1, boardNo);
-
-            return pstmt.executeUpdate();
-        } catch(Exception e){
-            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
-            errorMasterDAO.write("boardNo:"+boardNo, "", "", "", "boardDAO.delete", e.getMessage().toString(), "");
-            e.printStackTrace();
-        }
-        return -1; //Database error
+        String SQL = "UPDATE "+ this.tableName +" SET "+ this.colDeleteYn +" =2 WHERE "+ this.colBoardNo +" = "+ boardNo;
+        return commonDAO.updateYn(SQL); //Database error
     }
 
     public int getReplyCnt(int boardNo) {
@@ -384,88 +344,12 @@ public class BoardDAO {
 
     public int getReplyColor(int boardNo) {
         String SQL = "SELECT reply_make_dt from "+ this.replyTableName +" WHERE "+ this.colBoardNo +"=? and reply_delete_yn=1 ORDER BY reply_no DESC LIMIT 1";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setInt(1, boardNo);
-
-            rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-                String replyTime = rs.getString(1);
-                Date replyTimeDt = formatter.parse(replyTime);
-
-                Date nowTimeDt = new Date();
-
-                long gap = (nowTimeDt.getTime() - replyTimeDt.getTime()) / 1000;
-
-                long hourGap = gap / 60 / 60;
-                long reminder = ((long) (gap / 60) % 60);
-                long minuteGap = reminder;
-                long secondGap = gap % 60;
-
-                int gapFlag = 0;
-
-                if (hourGap < 1) {
-                    if (minuteGap < 1) {
-                        if (secondGap <= 30) gapFlag = 1; // 30초-보라색
-                        else gapFlag = 2;
-                    } else if (minuteGap <= 3)  gapFlag = 2; // 3분-빨간색
-                    else if (minuteGap <= 10) gapFlag = 3; // 10분-주황색
-                    else if (minuteGap <= 30) gapFlag = 4; // 30분-초록색
-                    else gapFlag = 5;
-                } else if (hourGap <= 2) gapFlag = 5; // 2시간-파란색
-                else gapFlag = 6; // 검정색
-
-                return gapFlag;
-            }
-        } catch (Exception e) {
-            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
-            errorMasterDAO.write("boardNo:"+boardNo, "", "", "", "boardDAO.getReplyColor", e.getMessage().toString(), "");
-            e.printStackTrace();
-        }
-        return -1;
+        return getReplyColorFlag(SQL, boardNo);
     }
 
     public int getBoardColor(int boardNo) {
         String SQL = "SELECT "+ this.colMakeDt +" from "+ this.tableName +" WHERE "+ this.colBoardNo +"=? and "+ this.colDeleteYn +" =1 ORDER BY "+ this.colBoardNo +" DESC LIMIT 1";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setInt(1, boardNo);
-
-            rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-                String boardMakeTime = rs.getString(1);
-                Date boardMakeTimeDt = formatter.parse(boardMakeTime);
-
-                Date nowTimeDt = new Date();
-
-                long gap = (nowTimeDt.getTime() - boardMakeTimeDt.getTime()) / 1000;
-
-                long hourGap = gap / 60 / 60;
-                long reminder = ((long) (gap / 60) % 60);
-
-                int gapFlag = 0;
-
-                if (hourGap < 2) {gapFlag=1;} // 2시간-빨간색
-                else if (hourGap < 10) gapFlag = 2; // 10시간-초록색
-                else if (hourGap < 24) gapFlag = 3; // 24시간-파란색
-                else gapFlag = 4; // 검정색
-
-                return gapFlag;
-            }
-        } catch (Exception e) {
-            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
-            errorMasterDAO.write("boardNo:"+boardNo, "", "", "", "boardDAO.getBoardColor", e.getMessage().toString(), "");
-            e.printStackTrace();
-        }
-        return -1;
+        return getBoardColorFlag(SQL, boardNo);
     }
 
     public ArrayList<BoardVO> getReboardList(String makeUser, int boardNo){
@@ -571,49 +455,7 @@ public class BoardDAO {
 
     public int getMyReplyColor(String tableName, int boardNo) {
         String SQL = "SELECT reply_make_dt from "+ tableName +"_reply WHERE "+ tableName + "_no=? and reply_delete_yn=1 ORDER BY reply_no DESC LIMIT 1";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setInt(1, boardNo);
-
-            rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-                String replyTime = rs.getString(1);
-                Date replyTimeDt = formatter.parse(replyTime);
-
-                Date nowTimeDt = new Date();
-
-                long gap = (nowTimeDt.getTime() - replyTimeDt.getTime()) / 1000;
-
-                long hourGap = gap / 60 / 60;
-                long reminder = ((long) (gap / 60) % 60);
-                long minuteGap = reminder;
-                long secondGap = gap % 60;
-
-                int gapFlag = 0;
-
-                if (hourGap < 1) {
-                    if (minuteGap < 1) {
-                        if (secondGap <= 30) gapFlag = 1; // 30초-보라색
-                        else gapFlag = 2;
-                    } else if (minuteGap <= 3)  gapFlag = 2; // 3분-빨간색
-                    else if (minuteGap <= 10) gapFlag = 3; // 10분-주황색
-                    else if (minuteGap <= 30) gapFlag = 4; // 30분-초록색
-                    else gapFlag = 5;
-                } else if (hourGap <= 2) gapFlag = 5; // 2시간-파란색
-                else gapFlag = 6; // 검정색
-
-                return gapFlag;
-            }
-        } catch (Exception e) {
-            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
-            errorMasterDAO.write("boardNo:"+boardNo, "tableName"+tableName, "", "", "boardDAO.getMyReplyColor", e.getMessage().toString(), "");
-            e.printStackTrace();
-        }
-        return -1;
+        return getReplyColorFlag(SQL, boardNo);
     }
 
     public ArrayList<BoardVO> getMyList(int pageNumber, String makeUser){
@@ -683,41 +525,7 @@ public class BoardDAO {
 
     public int getMyBoardColor(String tableName, int boardNo) {
         String SQL = "SELECT "+ tableName +"_make_dt from "+ tableName +"_master WHERE "+ tableName + "_no =? and "+ tableName + "_delete_yn =1 ORDER BY "+ tableName +"_no DESC LIMIT 1";
-
-        try {
-            PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setInt(1, boardNo);
-
-            rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-                String boardMakeTime = rs.getString(1);
-                Date boardMakeTimeDt = formatter.parse(boardMakeTime);
-
-                Date nowTimeDt = new Date();
-
-                long gap = (nowTimeDt.getTime() - boardMakeTimeDt.getTime()) / 1000;
-
-                long hourGap = gap / 60 / 60;
-                long reminder = ((long) (gap / 60) % 60);
-
-                int gapFlag = 0;
-
-                if (hourGap < 2) {gapFlag=1;} // 2시간-빨간색
-                else if (hourGap < 10) gapFlag = 2; // 10시간-초록색
-                else if (hourGap < 24) gapFlag = 3; // 24시간-파란색
-                else gapFlag = 4; // 검정색
-
-                return gapFlag;
-            }
-        } catch (Exception e) {
-            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
-            errorMasterDAO.write("boardNo:"+boardNo, "", "", "", "boardDAO.getBoardColor", e.getMessage().toString(), "");
-            e.printStackTrace();
-        }
-        return -1;
+        return getBoardColorFlag(SQL, boardNo);
     }
 
     //////////////////
@@ -819,5 +627,89 @@ public class BoardDAO {
             e.printStackTrace();
         }
         return list; //Database error
+    }
+
+    ////////////////////
+    ////////// 공통모듈
+    ///////////////////
+
+    private int getReplyColorFlag(String SQL, int boardNo) {
+        int gapFlag=0;
+
+        try{
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setInt(1, boardNo);
+
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                String replyTime = rs.getString(1);
+                Date replyTimeDt = formatter.parse(replyTime);
+
+                Date nowTimeDt = new Date();
+
+                long gap = (nowTimeDt.getTime() - replyTimeDt.getTime()) / 1000;
+
+                long hourGap = gap / 60 / 60;
+                long reminder = ((long) (gap / 60) % 60);
+                long minuteGap = reminder;
+                long secondGap = gap % 60;
+
+                if (hourGap < 1) {
+                    if (minuteGap < 1) {
+                        if (secondGap <= 30) gapFlag = 1; // 30초-보라색
+                        else gapFlag = 2;
+                    } else if (minuteGap <= 3) gapFlag = 2; // 3분-빨간색
+                    else if (minuteGap <= 10) gapFlag = 3; // 10분-주황색
+                    else if (minuteGap <= 30) gapFlag = 4; // 30분-초록색
+                    else gapFlag = 5;
+                } else if (hourGap <= 2) gapFlag = 5; // 2시간-파란색
+                else gapFlag = 6; // 검정색
+            }
+        }catch (Exception e){
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("SQL: "+SQL, "boardNo: "+boardNo, "", "", "boardDAO.getReplyColorFlag", e.getMessage().toString(), "");
+            e.printStackTrace();
+        }
+        return gapFlag;
+    }
+
+    private int getBoardColorFlag(String SQL, int boardNo){
+        int gapFlag = 0;
+
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(SQL);
+            pstmt.setInt(1, boardNo);
+
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                String boardMakeTime = rs.getString(1);
+                Date boardMakeTimeDt = formatter.parse(boardMakeTime);
+
+                Date nowTimeDt = new Date();
+
+                long gap = (nowTimeDt.getTime() - boardMakeTimeDt.getTime()) / 1000;
+
+                long hourGap = gap / 60 / 60;
+                //long reminder = ((long) (gap / 60) % 60);
+
+                if (hourGap < 2) {gapFlag=1;} // 2시간-빨간색
+                else if (hourGap < 10) gapFlag = 2; // 10시간-초록색
+                else if (hourGap < 24) gapFlag = 3; // 24시간-파란색
+                else gapFlag = 4; // 검정색
+
+                return gapFlag;
+            }
+        } catch (Exception e) {
+            ErrorMasterDAO errorMasterDAO = new ErrorMasterDAO();
+            errorMasterDAO.write("boardNo:"+boardNo, "", "", "", "boardDAO.getBoardColor", e.getMessage().toString(), "");
+            e.printStackTrace();
+        }
+        return gapFlag;
     }
 }
