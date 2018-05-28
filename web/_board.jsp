@@ -270,14 +270,14 @@
         }
     }
 
-    // clickType=1 : 게시글제목 클릭. 단순 페이지이동. clcikType=2 : 댓글갯수 클릭. 페이지 이동 후페이지 하단 포커스
-    function onClickBoardTitle(boardName, boardNo, boardAuthorize, boardPassword, clickType) {
-        if (boardAuthorize == 1) location.href = "GetBoard.do?boardName=" + boardName + "&boardNo=" + boardNo+"&viewFlag=1&clickType="+clickType;
+    // linkType=1 : 게시글제목 클릭. 단순 페이지이동. linkType=2 : 댓글갯수 클릭. 페이지 이동 후페이지 하단 포커스
+    function onClickBoardTitle(boardName, boardNo, boardAuthorize, boardPassword, linkType) {
+        if (boardAuthorize == 1) location.href = "GetBoard.do?boardName=" + boardName + "&boardNo=" + boardNo+"&viewFlag=1&linkType="+linkType;
         else if (boardAuthorize == 2) {
             var inputPassword = prompt("비밀번호를 입력하세요.(4자리 이하의 숫자)", "0000");
 
             if (inputPassword != null) {
-                if (boardPassword == inputPassword) location.href = "GetBoard.do?boardName=" + boardName + "&boardNo=" + boardNo + "&boardPassword=" + inputPassword+"&viewFlag=1&clickType"+clickType;
+                if (boardPassword == inputPassword) location.href = "GetBoard.do?boardName=" + boardName + "&boardNo=" + boardNo + "&boardPassword=" + inputPassword+"&viewFlag=1&linkType"+linkType;
                 else {
                     alert("비밀번호 오류입니다.");
                 }

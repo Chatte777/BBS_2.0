@@ -59,6 +59,7 @@
             </tbody>
         </table>
         <div style="margin-bottom: 10px;" align="right">
+            <a href="/board.jsp?boardName=${boardName}" class="btn btn-primary">목록</a>
             <c:choose>
                 <c:when test="${userId==boardVO.boardMakeUser}">
                     <a href="/boardWrite.jsp?boardName=${boardName}&boardNo=${boardVO.boardNo}&writeFlag=2" class="btn btn-primary">수정</a>
@@ -87,7 +88,7 @@
                                                   id="replyContent" maxlength="2048" style="height: 150px;"></textarea>
                 </td>
                 <td style="width: 10%; vertical-align: bottom;" align="center">
-                    <input type="button" onclick="replySubmit()" class="btn btn-primary pull-right" value="댓글작성">
+                    <input type="button" onclick="replySubmit()" class="btn btn-primary pull-right" id="replySubmit" value="댓글작성">
                 </td>
             </tr>
             </tbody>
@@ -164,6 +165,11 @@
                 alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
             }
         });
+
+        if(${param.linkType==2}){
+            var offset = $('#replyContent').offset();
+            $('html, body').animate({scrollTop : offset.top}, 400);
+        }
     }
 
     function getReReplyList(replyNo) {
