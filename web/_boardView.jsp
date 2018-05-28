@@ -60,18 +60,12 @@
         </table>
         <div style="margin-bottom: 10px;" align="right">
             <a href="/board.jsp?boardName=${boardName}" class="btn btn-primary">목록</a>
-            <c:choose>
-                <c:when test="${userId==boardVO.boardMakeUser}">
+                <c:if test="${userId==boardVO.boardMakeUser}">
                     <a href="/boardWrite.jsp?boardName=${boardName}&boardNo=${boardVO.boardNo}&writeFlag=2" class="btn btn-primary">수정</a>
                     <a onclick="return confirm('정말 삭제하시려는거 맞죠?')"
                        href="BoardDelete.do?boardName=${boardName}&boardNo=${boardVO.boardNo}"
                        class="btn btn-primary">삭제</a>&nbsp;
-                </c:when>
-                <c:otherwise>
-                    <a href="#" class="btn btn-primary" style="background:gray;">수정</a>
-                    <a href="#" class="btn btn-primary" style="background:gray;">삭제</a>&nbsp;
-                </c:otherwise>
-            </c:choose>
+                </c:if>
         </div>
 
         <table class="table table-striped">
